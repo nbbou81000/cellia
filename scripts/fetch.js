@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 
 const __dirname    = path.dirname(fileURLToPath(import.meta.url));
 const IS_DEV       = process.argv.includes('--dev');
-const MAX_ARTICLES = IS_DEV ? 3 : 20;
+const MAX_ARTICLES = IS_DEV ? 3 : 10;
 const WINDOW_HOURS = 48;
 const GROQ_MODEL   = 'llama-3.1-8b-instant';
 const GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions';
