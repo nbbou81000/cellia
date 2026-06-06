@@ -1,0 +1,94 @@
+name: CelliA — Veille quotidienne
+
+on:
+  schedule:
+    - cron: '0 4 * * *'    # 6h Paris
+    - cron: '0 7 * * *'    # 9h Paris
+    - cron: '0 10 * * *'   # 12h Paris
+    - cron: '0 14 * * *'   # 16h Paris
+    - cron: '0 18 * * *'   # 20h Paris
+  workflow_dispatch:
+    inputs:
+      dev_mode:
+        description: 'Mode dev (3 articles)'
+        required: false
+        default: 'false'
+        type: boolean
+
+jobs:
+  fetch-and-deploy:
+    name: Fetch RSS → Groq → Deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        working-directory: scripts
+        run: npm install
+
+      - name: Fetch & rewrite
+        working-directory: scripts
+        env:
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+        run: |
+          if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
+            node fetch.js --dev
+          else
+            node fetch.js
+          fi
+
+      - name: Verify
+        run: |
+          if [ ! -f dist/articles.json ]; then exit 1; fi
+          COUNT=$(node -e "console.log(require('./dist/articles.json').count)")
+          echo "✓ $COUNT articles"
+
+      - name: Commit articles.json
+        run: |
+          git config user.name  "CelliA Bot"
+          git config user.email "cellia-bot@noreply.github.com"
+          git add dist/articles.json
+          if git diff --staged --quiet; then
+            echo "Rien à commiter"
+          else
+            git commit -m "chore: articles $(date -u '+%Y-%m-%d %H:%M')"
+            git push
+          fi
+
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v3
+        with:
+          publish-dir: '.'
+          production-branch: main
+          production-deploy: true
+          deploy-message: "CelliA ${{ github.run_id }}"
+          enable-pull-request-comment: false
+          enable-commit-comment: false
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID:    ${{ secrets.NETLIFY_SITE_ID }}
+        timeout-minutes: 5
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "## CelliA" >> $GITHUB_STEP_SUMMARY
+          if [ -f dist/articles.json ]; then
+            COUNT=$(node -e "console.log(require('./dist/articles.json').count)")
+            DATE=$(node -e "console.log(require('./dist/articles.json').generated_at)")
+            echo "✅ **$COUNT articles** — \`$DATE\`" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Échec" >> $GITHUB_STEP_SUMMARY
+          fi
