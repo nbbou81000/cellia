@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-06-06T19:29:49.220Z",
+  "generated_at": "2026-06-06T19:38:16.250Z",
   "count": 26,
   "articles": [
     {
@@ -134,7 +134,7 @@
       "url": "https://www.numerama.com/sciences/2268011-cet-oiseau-brille-dans-lultraviolet-et-on-ne-sait-pas-pourquoi.html",
       "source": "numerama.com",
       "date": "2026-06-06T15:02:00.000Z",
-      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
       "snippet": "Le casoar est un oiseau qui impressionne avec son allure de dinosaure. Mais il y a encore plus étrange : sa crête qui ressemble à un casque brille dans l'ultraviolet. Une particularité qui n'est pas encore complètement comprise par les scientifiques.",
       "category": "hardware",
       "lang": "fr",
@@ -162,7 +162,7 @@
       "url": "https://www.bleepingcomputer.com/news/security/critical-everest-forms-pro-flaw-exploited-to-take-over-wordpress-sites/",
       "source": "bleepingcomputer.com",
       "date": "2026-06-06T14:09:26.000Z",
-      "image": "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
       "snippet": "Hackers are actively exploiting a critical vulnerability (CVE-2026-3300) in the Everest Forms Pro plugin, which lets them take complete control of a WordPress website. [...]",
       "category": "secu",
       "lang": "en",
