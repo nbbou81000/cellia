@@ -1,0 +1,13 @@
+{
+  "name": "cellia-fetch",
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "fetch": "node fetch.js",
+    "dev":   "node fetch.js --dev"
+  },
+  "dependencies": {
+    "rss-parser": "^3.13.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}
