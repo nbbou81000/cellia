@@ -144,7 +144,7 @@ async function fetchFeed(source, keywords, config) {
 async function fetchFullText(article) {
   try {
     const controller = new AbortController();
-    const timeout    = setTimeout(() => controller.abort(), 12000);
+    const timeout    = setTimeout(() => controller.abort(), 5000);
     const res = await fetch(article.url, {
       signal: controller.signal,
       headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CelliA-Bot/1.0)' }
@@ -154,7 +154,6 @@ async function fetchFullText(article) {
     if (!res.ok) return article.snippet;
     const html = await res.text();
 
-    // Extraire les <p> depuis <article> ou <main> ou body
     let container = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)?.[1]
       || html.match(/<main[^>]*>([\s\S]*?)<\/main>/i)?.[1]
       || html;
@@ -165,9 +164,10 @@ async function fetchFullText(article) {
     while ((m = re.exec(container)) !== null) {
       const text = cleanText(m[1]);
       if (text.length > 40) paragraphs.push(text);
+      if (paragraphs.length >= 8) break; // max 8 paragraphes
     }
 
-    const full = paragraphs.join(' ').slice(0, 4000);
+    const full = paragraphs.join(' ').slice(0, 2000);
     return full.length >= 200 ? full : article.snippet;
   } catch {
     return article.snippet;
