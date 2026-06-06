@@ -342,7 +342,7 @@ async function main() {
       article.readingTime = result.readingTime;
       newCount++;
       ok(`  Réécrit : ${article.title.slice(0, 50)}`);
-      await sleep(1500);
+      await sleep(3000);
     }
     delete article.fullText; // Pas besoin dans le JSON final
   }
@@ -384,4 +384,4 @@ main().catch(e => {
   err(`Erreur fatale : ${e.message}`);
   console.error(e);
   process.exit(1);
-});      
+});
