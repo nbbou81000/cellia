@@ -1,0 +1,48 @@
+{
+  "generated_at": "2026-06-06T07:00:00.000Z",
+  "count": 3,
+  "articles": [
+    {
+      "id": "demo001abc",
+      "title": "GPT-5 dépasse toutes les attentes sur les benchmarks de raisonnement",
+      "url": "https://techcrunch.com",
+      "source": "techcrunch.com",
+      "date": "2026-06-06T05:30:00.000Z",
+      "image": "https://images.unsplash.com/photo-1677442135703-1787eea5ce01?w=400&q=75&auto=format",
+      "snippet": "OpenAI vient de lâcher GPT-5 dans la nature, et les premiers benchmarks font peur. Le modèle atomise ses prédécesseurs sur tous les tests de raisonnement logique et mathématique.",
+      "summary": "OpenAI vient de lâcher GPT-5 dans la nature, et les premiers benchmarks font peur. Le modèle atomise ses prédécesseurs sur tous les tests de raisonnement.",
+      "body": "<p>OpenAI vient de lâcher GPT-5 dans la nature, et les premiers benchmarks font peur. Le modèle atomise ses prédécesseurs sur tous les tests de raisonnement logique et mathématique.</p><h2>Des chiffres qui donnent le tournis</h2><p>Sur MMLU, GPT-5 atteint <strong>97,8%</strong> de précision, soit plus de 10 points au-dessus de GPT-4o. En mathématiques de niveau compétition (AIME), il résout maintenant <strong>78% des problèmes</strong> — un score que la plupart des humains n'atteignent jamais.</p><p>Ce qui est intéressant, c'est que les gains ne viennent pas d'une simple augmentation de paramètres. OpenAI parle d'une nouvelle architecture de « raisonnement en chaîne » qui permet au modèle de se corriger lui-même en temps réel.</p>",
+      "category": "ai",
+      "lang": "en",
+      "readingTime": 2
+    },
+    {
+      "id": "demo002def",
+      "title": "Faille critique dans OpenSSH : 14 millions de serveurs exposés",
+      "url": "https://www.bleepingcomputer.com",
+      "source": "bleepingcomputer.com",
+      "date": "2026-06-06T04:00:00.000Z",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
+      "snippet": "Une vulnérabilité d'exécution de code à distance dans OpenSSH permettrait à un attaquant non authentifié de prendre le contrôle total d'un serveur Linux. Patche dispo, cours mettre à jour.",
+      "summary": "Une faille d'exécution de code à distance dans OpenSSH expose 14 millions de serveurs Linux. Le patch est disponible — mets à jour maintenant.",
+      "body": "<p>Bon, les gars, on va pas se mentir : c'est une de ces vulnérabilités qui font mal. Une faille d'exécution de code à distance dans OpenSSH — le truc qu'il y a sur <strong>absolument tous les serveurs Linux</strong> de la planète.</p><h2>Ce qui se passe concrètement</h2><p>La CVE-2026-6241 touche les versions d'OpenSSH antérieures à 9.9p2. Un attaquant non authentifié peut exploiter une race condition dans le processus de gestion des connexions pour exécuter du code arbitraire en tant que <strong>root</strong>.</p><p>Selon Shodan, environ 14 millions de serveurs seraient exposés. Le patch est disponible depuis ce matin — <strong>mets à jour immédiatement</strong> avec <code>apt upgrade openssh-server</code> ou l'équivalent sur ta distrib.</p>",
+      "category": "secu",
+      "lang": "en",
+      "readingTime": 2
+    },
+    {
+      "id": "demo003ghi",
+      "title": "Raspberry Pi 6 : premiers benchmarks — une bête de course à 80€",
+      "url": "https://www.raspberrypi.com/news",
+      "source": "raspberrypi.com",
+      "date": "2026-06-05T14:00:00.000Z",
+      "image": "https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&q=75&auto=format",
+      "snippet": "La fondation Raspberry Pi a officiellement présenté le Pi 6 avec un Cortex-A720, 16 Go de RAM en option et un GPU Vulkan-compatible. Les benchmarks montrent des performances jusqu'à 3x supérieures au Pi 5.",
+      "summary": "Le Raspberry Pi 6 est officiel : Cortex-A720, 16 Go de RAM possible, GPU Vulkan. Les benchmarks montrent des perfs jusqu'à 3× supérieures au Pi 5 pour 80€.",
+      "body": "<p>La fondation Raspberry Pi vient d'officialiser le Pi 6, et c'est une sacrée mise à niveau. On passe sur un <strong>Cortex-A720</strong> gravé en 16nm, qui apporte des gains d'efficacité énergétique significatifs en plus de la puissance brute.</p><h2>Les specs qui impressionnent</h2><p>Côté RAM, on monte jusqu'à <strong>16 Go de LPDDR5</strong> dans la config haut de gamme (toujours soudée sur la carte, pas de slot). Le GPU intégré est enfin compatible Vulkan 1.3, ce qui ouvre la porte aux émulateurs modernes et au machine learning local.</p><p>En benchmarks synthétiques, le Pi 6 est <strong>2,8 à 3,2× plus rapide</strong> que le Pi 5 selon les tâches. En pratique, ça se ressent vraiment sur la compilation de code et les tâches de vision par ordinateur.</p>",
+      "category": "maker",
+      "lang": "en",
+      "readingTime": 2
+    }
+  ]
+}
