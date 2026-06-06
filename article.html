@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CelliA — Article</title>
+  <meta name="description" content="Article de veille tech CelliA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,800&display=swap">
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-ui: 'Bricolage Grotesque', sans-serif;
+      --bg: #eef1f8;
+      --text-hi: #0d0f18;
+      --text-body: #525a6e;
+      --text-dim: #9aa0b4;
+      --text-dimmer: #bcc2d0;
+      --red: #e8352a;
+      --red-glow: rgba(232,53,42,0.18);
+      --red-dim: rgba(232,53,42,0.55);
+      --border: rgba(255,255,255,0.75);
+      --border-soft: rgba(180,190,215,0.35);
+      --glass-card: rgba(255,255,255,0.45);
+      --glass-hover: rgba(255,255,255,0.68);
+      --glass-nav: rgba(238,241,248,0.70);
+      --glass-panel: rgba(240,243,252,0.82);
+      --shadow-md: rgba(100,120,200,0.08);
+      --shadow-lg: rgba(100,120,200,0.16);
+      --inset-hi: rgba(255,255,255,0.85);
+      --reflet: rgba(255,255,255,0.90);
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1c22;
+      --text-hi: #f0f2f8;
+      --text-body: #b0b8cc;
+      --text-dim: #6a7288;
+      --text-dimmer: #3e4456;
+      --red: #ff5a4e;
+      --red-glow: rgba(255,90,78,0.20);
+      --red-dim: rgba(255,90,78,0.55);
+      --border: rgba(255,255,255,0.09);
+      --border-soft: rgba(255,255,255,0.06);
+      --glass-card: rgba(255,255,255,0.05);
+      --glass-hover: rgba(255,255,255,0.09);
+      --glass-nav: rgba(20,22,30,0.80);
+      --glass-panel: rgba(22,24,32,0.92);
+      --shadow-md: rgba(0,0,0,0.30);
+      --shadow-lg: rgba(0,0,0,0.55);
+      --inset-hi: rgba(255,255,255,0.07);
+      --reflet: rgba(255,255,255,0.05);
+    }
+
+    /* Lisibilité corps article en dark */
+    [data-theme="dark"] .article-body        { color: #aab4cc; }
+    [data-theme="dark"] .article-body p      { color: #aab4cc; }
+    [data-theme="dark"] .article-body h2     { color: #e8ecf8; }
+    [data-theme="dark"] .article-body strong { color: #dde4f4; }
+    [data-theme="dark"] .article-title       { color: #f0f2f8; }
+    [data-theme="dark"] .article-summary     { color: #9aa4be; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text-hi);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ── Ambient ── */
+    .ambient {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      transition: background 0.5s;
+    }
+    [data-theme="light"] .ambient {
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -5%, rgba(180,200,255,0.38) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 85% 15%, rgba(200,185,255,0.22) 0%, transparent 55%);
+    }
+    [data-theme="dark"] .ambient {
+      background:
+        radial-gradient(ellipse 80% 55% at 50% -8%, rgba(80,100,200,0.12) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 20%, rgba(100,80,180,0.08) 0%, transparent 55%);
+    }
+
+    /* ── Navbar ── */
+    .navbar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      height: 60px;
+      background: var(--glass-nav);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-inner {
+      max-width: 780px; margin: 0 auto;
+      padding: 0 24px; height: 60px;
+      display: flex; align-items: center; gap: 14px;
+    }
+
+    .nav-back {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 13px; font-weight: 600;
+      color: var(--text-dim);
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 9px;
+      padding: 6px 12px;
+      transition: color 0.15s, background 0.15s;
+      cursor: pointer;
+    }
+    .nav-back:hover { color: var(--text-hi); background: var(--glass-hover); }
+
+    .nav-logo {
+      display: flex; align-items: center; gap: 9px;
+      font-size: 17px; font-weight: 800; letter-spacing: -0.03em;
+      color: var(--text-hi); white-space: nowrap;
+    }
+
+    .pulse {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 0 var(--red-glow);
+      animation: pulse-ring 2.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0   var(--red-glow); }
+      60%  { box-shadow: 0 0 0 7px rgba(232,53,42,0); }
+      100% { box-shadow: 0 0 0 0   rgba(232,53,42,0); }
+    }
+
+    .nav-prefs-btn {
+      margin-left: auto;
+      background: var(--glass-card); border: 1px solid var(--border-soft);
+      border-radius: 9px; color: var(--text-dim); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px;
+      transition: background 0.15s, color 0.15s;
+    }
+    .nav-prefs-btn:hover { background: var(--glass-hover); color: var(--text-hi); }
+
+    /* ── Reading progress ── */
+    #progress-bar {
+      position: fixed; top: 60px; left: 0;
+      height: 2px; width: 0%;
+      background: var(--red);
+      z-index: 99;
+      transition: width 0.1s linear;
+    }
+
+    /* ── Layout article ── */
+    .article-wrap {
+      position: relative; z-index: 1;
+      max-width: 780px; margin: 0 auto;
+      padding: 80px 24px 80px;
+    }
+
+    /* ── Hero image ── */
+    .article-hero {
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 36px;
+      box-shadow: 0 8px 40px var(--shadow-lg);
+      aspect-ratio: 16/7;
+      background: var(--text-dimmer);
+      position: relative;
+    }
+
+    .article-hero img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .article-hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(0,0,0,0.3) 0%, transparent 50%);
+    }
+
+    /* ── Méta ── */
+    .article-meta {
+      display: flex; align-items: center; gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .badge {
+      font-size: 9.5px; font-weight: 700;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      padding: 4px 9px; border-radius: 6px;
+    }
+
+    .badge-cat { color: #fff; }
+    .cat-ai       .badge-cat { background: #6366f1; }
+    .cat-secu     .badge-cat { background: #ef4444; }
+    .cat-hardware .badge-cat { background: #f97316; }
+    .cat-maker    .badge-cat { background: #22c55e; }
+    .cat-web      .badge-cat { background: #3b82f6; }
+    .cat-science  .badge-cat { background: #a855f7; }
+    .cat-auto     .badge-cat { background: #14b8a6; }
+
+    .article-source {
+      font-size: 12px; font-weight: 600; color: var(--text-dim);
+    }
+    .meta-dot { font-size: 12px; color: var(--text-dimmer); }
+    .article-date { font-size: 12px; color: var(--text-dim); }
+    .article-read { font-size: 12px; color: var(--text-dimmer); }
+
+    /* ── Titre ── */
+    .article-title {
+      font-size: clamp(22px, 3.5vw, 34px);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.2;
+      color: var(--text-hi);
+      margin-bottom: 18px;
+    }
+
+    /* ── Résumé / accroche ── */
+    .article-summary {
+      font-size: 17px;
+      line-height: 1.65;
+      color: var(--text-body);
+      font-weight: 400;
+      border-left: 3px solid var(--red);
+      padding-left: 18px;
+      margin-bottom: 32px;
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Séparateur ── */
+    .article-divider {
+      border: none; border-top: 1px solid var(--border-soft);
+      margin: 32px 0;
+    }
+
+    /* ── Corps de l'article ── */
+    .article-body {
+      font-size: 16px;
+      line-height: 1.75;
+      color: var(--text-body);
+    }
+
+    .article-body p {
+      margin-bottom: 20px;
+    }
+
+    .article-body h2 {
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      color: var(--text-hi);
+      margin: 32px 0 12px;
+    }
+
+    .article-body strong {
+      font-weight: 700;
+      color: var(--text-hi);
+    }
+
+    /* ── Actions ── */
+    .article-actions {
+      display: flex; align-items: center; gap: 10px;
+      margin-top: 40px; padding-top: 28px;
+      border-top: 1px solid var(--border-soft);
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--red); color: #fff;
+      border: none; border-radius: 11px;
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      padding: 10px 18px; cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.15s, transform 0.15s;
+    }
+    .btn-primary:hover { opacity: 0.88; transform: translateY(-1px); }
+
+    .btn-ghost {
+      display: inline-flex; align-items: center; gap: 7px;
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 11px;
+      font-family: var(--font-ui); font-size: 13px; font-weight: 600;
+      color: var(--text-body);
+      padding: 9px 16px; cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+    }
+    .btn-ghost:hover { background: var(--glass-hover); color: var(--text-hi); }
+
+    .actions-spacer { flex: 1; }
+
+    /* ── Articles suivants ── */
+    .related-section {
+      margin-top: 56px;
+    }
+
+    .section-header {
+      display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 11px; font-weight: 700;
+      letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-dim);
+    }
+    .section-line { flex: 1; height: 1px; background: var(--border-soft); }
+
+    .related-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px;
+    }
+
+    .related-card {
+      background: var(--glass-card);
+      border: 1px solid var(--border);
+      border-radius: 14px; overflow: hidden; cursor: pointer;
+      transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 2px 10px var(--shadow-md);
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .related-card:nth-child(1) { animation-delay: 0.05s; }
+    .related-card:nth-child(2) { animation-delay: 0.10s; }
+    .related-card:nth-child(3) { animation-delay: 0.15s; }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(12px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .related-card:hover {
+      background: var(--glass-hover); transform: translateY(-2px);
+      box-shadow: 0 6px 24px var(--shadow-lg);
+    }
+
+    .related-img {
+      width: 100%; aspect-ratio: 16/9; object-fit: cover;
+      display: block; background: var(--text-dimmer);
+    }
+
+    .related-body { padding: 12px; }
+    .related-source { font-size: 10px; font-weight: 600; color: var(--text-dim); margin-bottom: 4px; }
+    .related-title {
+      font-size: 13px; font-weight: 700; color: var(--text-hi);
+      line-height: 1.3; letter-spacing: -0.02em;
+      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+    }
+
+    /* ── État vide ── */
+    .state-message {
+      text-align: center; padding: 80px 20px; color: var(--text-dim);
+    }
+    .state-icon { font-size: 48px; margin-bottom: 20px; display: block; }
+    .state-message h2 { font-size: 22px; font-weight: 700; color: var(--text-hi); margin-bottom: 10px; }
+    .state-message p  { font-size: 15px; line-height: 1.6; max-width: 380px; margin: 0 auto; }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .related-grid { grid-template-columns: 1fr; }
+      .article-title { font-size: 24px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="ambient"></div>
+
+  <!-- ═══ NAVBAR ════ -->
+  <nav class="navbar">
+    <div class="nav-inner">
+      <a href="/" class="nav-back">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <path d="M8 2L4 6l4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        Retour
+      </a>
+      <a href="/" class="nav-logo">
+        <svg width="110" height="32" viewBox="0 0 110 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CelliA">
+          <g>
+            <circle cx="16" cy="16" r="13" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.35"/>
+            <path d="M5.5 16 A10.5 10.5 0 0 1 16 5.5" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <path d="M26.5 16 A10.5 10.5 0 0 1 16 26.5" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <line x1="16" y1="9" x2="16" y2="23" stroke="var(--red-dim)" stroke-width="1" stroke-linecap="round"/>
+            <line x1="9" y1="16" x2="23" y2="16" stroke="var(--red-dim)" stroke-width="1" stroke-linecap="round"/>
+            <circle cx="16" cy="16" r="3.5" fill="var(--red)" opacity="0.9"/>
+            <circle cx="16" cy="16" r="1.8" fill="#fff" opacity="0.95"/>
+            <circle cx="16" cy="16" r="3.5" fill="var(--red)" opacity="0">
+              <animate attributeName="r" values="3.5;10;3.5" dur="2.4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.5;0;0.5" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+          <text x="36" y="21.5" font-family="'Bricolage Grotesque', sans-serif" font-size="17" font-weight="800" letter-spacing="-0.04em" fill="var(--text-hi)">Celli</text>
+          <text x="82" y="21.5" font-family="'Bricolage Grotesque', sans-serif" font-size="17" font-weight="800" letter-spacing="-0.04em" fill="var(--red)">A</text>
+        </svg>
+      </a>
+      <button class="nav-prefs-btn" id="cp-trigger" aria-label="Préférences">
+        <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+          <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+          <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+        </svg>
+      </button>
+    </div>
+  </nav>
+
+  <div id="progress-bar"></div>
+
+  <!-- ═══ ARTICLE ════ -->
+  <div class="article-wrap" id="article-wrap">
+    <div class="state-message" id="loading-state">
+      <span class="state-icon">⏳</span>
+      <h2>Chargement…</h2>
+      <p>Récupération de l'article.</p>
+    </div>
+  </div>
+
+  <script src="prefs.js"></script>
+  <script>
+    const FEED_URL = '/dist/articles.json';
+
+    function getParam(name) {
+      return new URLSearchParams(window.location.search).get(name);
+    }
+
+    function safeText(t) {
+      return (t || '').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    }
+
+    function formatDate(iso) {
+      return new Date(iso).toLocaleDateString('fr-FR', {
+        day:'numeric', month:'long', year:'numeric',
+        hour:'2-digit', minute:'2-digit'
+      });
+    }
+
+    // ── Barre de progression lecture ──────────────────────────────────────
+    function initProgress() {
+      const bar = document.getElementById('progress-bar');
+      window.addEventListener('scroll', () => {
+        const docH = document.documentElement.scrollHeight - window.innerHeight;
+        const pct  = docH > 0 ? Math.min(100, (window.scrollY / docH) * 100) : 0;
+        bar.style.width = pct + '%';
+      }, { passive: true });
+    }
+
+    // ── Rendu de l'article ────────────────────────────────────────────────
+    function renderArticle(article, allArticles) {
+      const wrap = document.getElementById('article-wrap');
+      const cat  = article.category || 'web';
+      const CAT_LABELS = { ai:'IA', secu:'Sécu', hardware:'Hardware', maker:'Maker', web:'Web', science:'Science', auto:'Tech' };
+
+      // Mise à jour du titre de la page
+      document.title = `${article.title} — CelliA`;
+
+      // Articles suggérés (même catégorie, hors article courant)
+      const related = allArticles
+        .filter(a => a.id !== article.id && a.category === cat)
+        .slice(0, 3);
+
+      const relatedHTML = related.length ? `
+        <div class="related-section">
+          <div class="section-header">
+            <span class="section-title">Sur le même sujet</span>
+            <div class="section-line"></div>
+          </div>
+          <div class="related-grid">
+            ${related.map(r => `
+              <div class="related-card" onclick="location.href='article.html?id=${r.id}'">
+                <img class="related-img" src="${r.image||''}" alt="" loading="lazy" onerror="this.style.display='none'">
+                <div class="related-body">
+                  <div class="related-source">${safeText(r.source)}</div>
+                  <div class="related-title">${safeText(r.title)}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+      ` : '';
+
+      wrap.innerHTML = `
+        <div class="cat-${cat}">
+
+          <div class="article-hero">
+            <img src="${article.image||''}" alt="" onerror="this.style.display='none'">
+            <div class="article-hero-overlay"></div>
+          </div>
+
+          <div class="article-meta">
+            <span class="badge badge-cat">${safeText(CAT_LABELS[cat] || cat)}</span>
+            <span class="article-source">${safeText(article.source)}</span>
+            <span class="meta-dot">·</span>
+            <span class="article-date">${formatDate(article.date)}</span>
+            <span class="meta-dot">·</span>
+            <span class="article-read">${article.readingTime || 1} min de lecture</span>
+          </div>
+
+          <h1 class="article-title">${safeText(article.title)}</h1>
+
+          <p class="article-summary">${safeText(article.summary || article.snippet || '')}</p>
+
+          <hr class="article-divider">
+
+          <div class="article-body">
+            ${article.body || '<p>' + safeText(article.snippet || '') + '</p>'}
+          </div>
+
+          <div class="article-actions">
+            <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="btn-primary">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <path d="M2 10L10 2M10 2H5M10 2v5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+              Lire la source
+            </a>
+            <button class="btn-ghost" onclick="navigator.share ? navigator.share({title:${JSON.stringify(article.title)}, url:location.href}) : navigator.clipboard.writeText(location.href)">
+              <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+                <circle cx="9" cy="2" r="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <circle cx="9" cy="10" r="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <circle cx="2" cy="6" r="1.5" stroke="currentColor" stroke-width="1.3"/>
+                <path d="M7.5 2.8L3.5 5.2M7.5 9.2L3.5 6.8" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+              </svg>
+              Partager
+            </button>
+            <span class="actions-spacer"></span>
+            <a href="/" class="btn-ghost">← Retour à l'accueil</a>
+          </div>
+
+          ${relatedHTML}
+        </div>
+      `;
+
+      initProgress();
+    }
+
+    // ── Chargement ────────────────────────────────────────────────────────
+    async function loadArticle() {
+      const id = getParam('id');
+      if (!id) {
+        document.getElementById('article-wrap').innerHTML = `
+          <div class="state-message">
+            <span class="state-icon">🔗</span>
+            <h2>Article introuvable</h2>
+            <p>Aucun identifiant fourni dans l'URL.</p>
+            <br><a href="/" style="color:var(--red)">← Retourner à l'accueil</a>
+          </div>`;
+        return;
+      }
+
+      try {
+        const res  = await fetch(FEED_URL + '?t=' + Date.now());
+        const data = await res.json();
+        const all  = data.articles || [];
+        const art  = all.find(a => a.id === id);
+
+        if (!art) {
+          document.getElementById('article-wrap').innerHTML = `
+            <div class="state-message">
+              <span class="state-icon">🔍</span>
+              <h2>Article non trouvé</h2>
+              <p>L'article demandé n'existe plus ou a expiré.</p>
+              <br><a href="/" style="color:var(--red)">← Retourner à l'accueil</a>
+            </div>`;
+          return;
+        }
+
+        renderArticle(art, all);
+      } catch (e) {
+        document.getElementById('article-wrap').innerHTML = `
+          <div class="state-message">
+            <span class="state-icon">⚡</span>
+            <h2>Données non disponibles</h2>
+            <p>Lance <code>node scripts/fetch.js</code> pour générer les articles.</p>
+            <br><a href="/" style="color:var(--red)">← Retourner à l'accueil</a>
+          </div>`;
+      }
+    }
+
+    loadArticle();
+  </script>
+</body>
+</html>

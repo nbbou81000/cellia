@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CelliA — Veille Tech</title>
+  <meta name="description" content="Veille technologique quotidienne — IA, Sécurité, Hardware, Maker, Web, Science.">
+  <meta property="og:title" content="CelliA — Veille Tech">
+  <meta property="og:description" content="Veille technologique quotidienne réécrite par IA.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,800&display=swap">
+
+  <style>
+    /* ═══════════════════════════════════════════════════════════════
+       RESET & VARIABLES
+    ═══════════════════════════════════════════════════════════════ */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --font-ui: 'Bricolage Grotesque', sans-serif;
+      --bg: #eef1f8;
+      --text-hi: #0d0f18;
+      --text-body: #525a6e;
+      --text-dim: #9aa0b4;
+      --text-dimmer: #bcc2d0;
+      --red: #e8352a;
+      --red-glow: rgba(232,53,42,0.18);
+      --red-dim: rgba(232,53,42,0.55);
+      --border: rgba(255,255,255,0.75);
+      --border-soft: rgba(180,190,215,0.35);
+      --glass-card: rgba(255,255,255,0.45);
+      --glass-hover: rgba(255,255,255,0.68);
+      --glass-nav: rgba(238,241,248,0.70);
+      --glass-panel: rgba(240,243,252,0.82);
+      --shadow-md: rgba(100,120,200,0.08);
+      --shadow-lg: rgba(100,120,200,0.16);
+      --inset-hi: rgba(255,255,255,0.85);
+      --reflet: rgba(255,255,255,0.90);
+      --radius-card: 18px;
+      --radius-sm: 10px;
+    }
+
+    [data-theme="dark"] {
+      --bg: #1a1c22;
+      --text-hi: #f0f2f8;
+      --text-body: #b0b8cc;
+      --text-dim: #6a7288;
+      --text-dimmer: #3e4456;
+      --red: #ff5a4e;
+      --red-glow: rgba(255,90,78,0.20);
+      --red-dim: rgba(255,90,78,0.55);
+      --border: rgba(255,255,255,0.09);
+      --border-soft: rgba(255,255,255,0.06);
+      --glass-card: rgba(255,255,255,0.05);
+      --glass-hover: rgba(255,255,255,0.09);
+      --glass-nav: rgba(20,22,30,0.80);
+      --glass-panel: rgba(22,24,32,0.92);
+      --shadow-md: rgba(0,0,0,0.30);
+      --shadow-lg: rgba(0,0,0,0.55);
+      --inset-hi: rgba(255,255,255,0.07);
+      --reflet: rgba(255,255,255,0.05);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       BASE
+    ═══════════════════════════════════════════════════════════════ */
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font-ui);
+      background: var(--bg);
+      color: var(--text-hi);
+      min-height: 100vh;
+      transition: background 0.3s, color 0.3s;
+      overflow-x: hidden;
+    }
+
+    a { color: inherit; text-decoration: none; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOND AMBIENT
+    ═══════════════════════════════════════════════════════════════ */
+    .ambient {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      transition: background 0.5s;
+    }
+
+    [data-theme="light"] .ambient {
+      background:
+        radial-gradient(ellipse 90% 55% at 50% -5%, rgba(180,200,255,0.38) 0%, transparent 65%),
+        radial-gradient(ellipse 55% 45% at 85% 15%, rgba(200,185,255,0.22) 0%, transparent 55%),
+        radial-gradient(ellipse 45% 40% at 10% 75%, rgba(150,190,255,0.18) 0%, transparent 55%);
+    }
+
+    [data-theme="dark"] .ambient {
+      background:
+        radial-gradient(ellipse 80% 55% at 50% -8%, rgba(90,110,180,0.10) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 85% 20%, rgba(110,90,160,0.07) 0%, transparent 55%);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       NAVBAR
+    ═══════════════════════════════════════════════════════════════ */
+    .navbar {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      height: 60px;
+      background: var(--glass-nav);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      transition: background 0.3s, border-color 0.3s;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 17px;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      color: var(--text-hi);
+      white-space: nowrap;
+    }
+
+    .pulse {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--red);
+      box-shadow: 0 0 0 0 var(--red-glow);
+      animation: pulse-ring 2.2s ease-in-out infinite;
+      flex-shrink: 0;
+    }
+
+    @keyframes pulse-ring {
+      0%   { box-shadow: 0 0 0 0   var(--red-glow); }
+      60%  { box-shadow: 0 0 0 7px rgba(232,53,42,0); }
+      100% { box-shadow: 0 0 0 0   rgba(232,53,42,0); }
+    }
+
+    .nav-search {
+      flex: 1;
+      max-width: 320px;
+      position: relative;
+      display: flex;
+      align-items: center;
+    }
+
+    .nav-search svg {
+      position: absolute;
+      left: 11px;
+      color: var(--text-dim);
+      pointer-events: none;
+    }
+
+    .nav-search input {
+      width: 100%;
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 9px;
+      color: var(--text-hi);
+      font-family: var(--font-ui);
+      font-size: 13px;
+      outline: none;
+      padding: 7px 12px 7px 30px;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .nav-search input::placeholder { color: var(--text-dim); }
+    .nav-search input:focus {
+      background: var(--glass-hover);
+      border-color: var(--red-dim);
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2px;
+      margin-left: auto;
+    }
+
+    .nav-link {
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--text-dim);
+      padding: 5px 10px;
+      border-radius: 7px;
+      transition: color 0.15s, background 0.15s;
+      white-space: nowrap;
+    }
+
+    .nav-link:hover { color: var(--text-hi); background: var(--glass-card); }
+    .nav-link.active { color: var(--red); }
+
+    .nav-prefs-btn {
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 9px;
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px; height: 34px;
+      margin-left: 6px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .nav-prefs-btn:hover {
+      background: var(--glass-hover);
+      color: var(--text-hi);
+      border-color: var(--border);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       TICKER
+    ═══════════════════════════════════════════════════════════════ */
+    .ticker-item {
+      padding: 0 28px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--red);
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      height: 32px;
+    }
+
+    .ticker-dot {
+      width: 4px; height: 4px;
+      border-radius: 50%;
+      background: var(--red-dim);
+      flex-shrink: 0;
+    }
+
+    .ticker-title { color: var(--text-body); font-weight: 500; }
+
+    @keyframes ticker {
+      0%   { transform: translateX(0); }
+      100% { transform: translateX(-50%); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       LAYOUT PRINCIPAL
+    ═══════════════════════════════════════════════════════════════ */
+    .content-wrap {
+      position: relative;
+      z-index: 1;
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 32px 24px 80px;
+    }
+
+    /* Hero header */
+    .hero {
+      padding: 28px 0 24px;
+    }
+
+    .hero-label {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--red);
+      margin-bottom: 8px;
+    }
+
+    .hero-date {
+      font-size: 28px;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--text-hi);
+      line-height: 1.1;
+    }
+
+    .hero-sub {
+      font-size: 14px;
+      color: var(--text-dim);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       GRILLE ARTICLES
+    ═══════════════════════════════════════════════════════════════ */
+    .grid-featured {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 14px;
+    }
+
+    .grid-main {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CARDS
+    ═══════════════════════════════════════════════════════════════ */
+    .card {
+      background: var(--glass-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-card);
+      overflow: hidden;
+      cursor: pointer;
+      transition: background 0.2s, box-shadow 0.2s, transform 0.2s, border-color 0.2s;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      box-shadow: 0 2px 12px var(--shadow-md);
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: var(--radius-card);
+      background: linear-gradient(135deg, var(--reflet) 0%, transparent 40%);
+      opacity: 0.5;
+      pointer-events: none;
+    }
+
+    .card:hover {
+      background: var(--glass-hover);
+      box-shadow: 0 8px 32px var(--shadow-lg);
+      transform: translateY(-2px);
+      border-color: var(--border);
+    }
+
+    /* Card image */
+    .card-img {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      display: block;
+      background: var(--text-dimmer);
+      transition: opacity 0.3s;
+    }
+
+    .card-img.loaded { opacity: 1; }
+
+    /* Badges */
+    .card-badges {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 9.5px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      border-radius: 6px;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+
+    .badge-cat {
+      background: rgba(0,0,0,0.55);
+      color: #fff;
+    }
+
+    .badge-new {
+      background: var(--red);
+      color: #fff;
+    }
+
+    /* Card body */
+    .card-body {
+      padding: 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .card-meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 11px;
+      color: var(--text-dim);
+      font-weight: 500;
+    }
+
+    .card-source {
+      font-weight: 600;
+      color: var(--text-dim);
+    }
+
+    .card-dot { opacity: 0.4; }
+    .card-time { }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-hi);
+      line-height: 1.35;
+      letter-spacing: -0.02em;
+    }
+
+    .card-summary {
+      font-size: 13px;
+      color: var(--text-body);
+      line-height: 1.58;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+
+    /* Boost lisibilité dark */
+    [data-theme="dark"] .card-title   { color: #e8ecf8; }
+    [data-theme="dark"] .card-summary { color: #9aa4be; }
+    [data-theme="dark"] .card-source  { color: #7a84a0; }
+    [data-theme="dark"] .card-time    { color: #5a6278; }
+    [data-theme="dark"] .card-read    { color: #5a6278; }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 4px;
+    }
+
+    .card-read {
+      font-size: 11px;
+      color: var(--text-dim);
+    }
+
+    .card-arrow {
+      width: 26px; height: 26px;
+      border-radius: 50%;
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text-dim);
+      font-size: 12px;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+    }
+
+    .card:hover .card-arrow {
+      background: var(--red);
+      border-color: var(--red);
+      color: #fff;
+    }
+
+    /* Card featured (grande) */
+    .card-featured .card-title   { font-size: 18px; }
+    .card-featured .card-summary { -webkit-line-clamp: 4; }
+    .card-featured .card-body    { padding: 20px; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       CATÉGORIES — couleurs subtiles
+    ═══════════════════════════════════════════════════════════════ */
+    .cat-ai       { --cat-color: #6366f1; }
+    .cat-secu     { --cat-color: #ef4444; }
+    .cat-hardware { --cat-color: #f97316; }
+    .cat-maker    { --cat-color: #22c55e; }
+    .cat-web      { --cat-color: #3b82f6; }
+    .cat-science  { --cat-color: #a855f7; }
+    .cat-auto     { --cat-color: #14b8a6; }
+
+    .badge-cat { background: var(--cat-color, rgba(0,0,0,0.55)) !important; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SKELETON / LOADING
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes shimmer {
+      0%   { background-position: -400px 0; }
+      100% { background-position: 400px 0; }
+    }
+
+    .skeleton {
+      background: linear-gradient(90deg,
+        var(--glass-card) 25%,
+        var(--glass-hover) 50%,
+        var(--glass-card) 75%
+      );
+      background-size: 800px 100%;
+      animation: shimmer 1.5s ease-in-out infinite;
+      border-radius: 8px;
+    }
+
+    .skel-img  { aspect-ratio: 16/9; width: 100%; border-radius: 0; }
+    .skel-line { height: 14px; margin-bottom: 8px; }
+    .skel-title { height: 18px; width: 85%; margin-bottom: 10px; }
+    .skel-p    { height: 12px; width: 95%; margin-bottom: 6px; }
+    .skel-p:last-child { width: 70%; }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ÉTAT VIDE / ERREUR
+    ═══════════════════════════════════════════════════════════════ */
+    .state-message {
+      grid-column: 1 / -1;
+      text-align: center;
+      padding: 60px 20px;
+      color: var(--text-dim);
+    }
+
+    .state-message .state-icon {
+      font-size: 40px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .state-message h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-hi);
+      margin-bottom: 8px;
+    }
+
+    .state-message p {
+      font-size: 14px;
+      line-height: 1.6;
+      max-width: 380px;
+      margin: 0 auto;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SECTION HEADERS
+    ═══════════════════════════════════════════════════════════════ */
+    .section-header {
+      display: flex;
+      align-items: baseline;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .section-title {
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dim);
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-soft);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FOOTER
+    ═══════════════════════════════════════════════════════════════ */
+    .footer {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: 0 24px 40px;
+      color: var(--text-dimmer);
+      font-size: 12px;
+    }
+
+    .footer a { color: var(--text-dim); }
+    .footer a:hover { color: var(--red); }
+
+    /* ═══════════════════════════════════════════════════════════════
+       RESPONSIVE
+    ═══════════════════════════════════════════════════════════════ */
+    @media (max-width: 800px) {
+      .grid-featured { grid-template-columns: 1fr; }
+      .grid-main     { grid-template-columns: 1fr 1fr; }
+      .nav-links .nav-link:not([data-nav="all"]):not([data-nav="ai"]):not([data-nav="secu"]) {
+        display: none;
+      }
+    }
+
+    @media (max-width: 560px) {
+      .grid-main { grid-template-columns: 1fr; }
+      .nav-search { display: none; }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       ANIMATIONS ENTRÉE
+    ═══════════════════════════════════════════════════════════════ */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .card { animation: fadeUp 0.4s ease both; }
+
+    /* Délais en cascade */
+    .card:nth-child(1)  { animation-delay: 0.05s; }
+    .card:nth-child(2)  { animation-delay: 0.10s; }
+    .card:nth-child(3)  { animation-delay: 0.15s; }
+    .card:nth-child(4)  { animation-delay: 0.20s; }
+    .card:nth-child(5)  { animation-delay: 0.25s; }
+    .card:nth-child(6)  { animation-delay: 0.30s; }
+    .card:nth-child(7)  { animation-delay: 0.35s; }
+    .card:nth-child(8)  { animation-delay: 0.40s; }
+    .card:nth-child(9)  { animation-delay: 0.45s; }
+    .card:nth-child(10) { animation-delay: 0.50s; }
+  </style>
+</head>
+<body>
+  <!-- Fond ambient -->
+  <div class="ambient"></div>
+
+  <!-- ═══ NAVBAR ════════════════════════════════════════════════════════════ -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-inner" style="max-width:1000px;margin:0 auto;padding:0 28px;height:60px;display:flex;align-items:center;gap:12px">
+      <a href="/" class="nav-logo">
+        <svg width="110" height="32" viewBox="0 0 110 32" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="CelliA">
+          <!-- Icône : signal radar / veille -->
+          <g>
+            <!-- Arc externe pulsant -->
+            <circle cx="16" cy="16" r="13" stroke="var(--red)" stroke-width="1.2" stroke-dasharray="3 3" opacity="0.35"/>
+            <!-- Arc moyen -->
+            <path d="M5.5 16 A10.5 10.5 0 0 1 16 5.5" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <path d="M26.5 16 A10.5 10.5 0 0 1 16 26.5" stroke="var(--red)" stroke-width="1.5" stroke-linecap="round" opacity="0.6"/>
+            <!-- Croix centrale -->
+            <line x1="16" y1="9" x2="16" y2="23" stroke="var(--red-dim)" stroke-width="1" stroke-linecap="round"/>
+            <line x1="9" y1="16" x2="23" y2="16" stroke="var(--red-dim)" stroke-width="1" stroke-linecap="round"/>
+            <!-- Point central lumineux -->
+            <circle cx="16" cy="16" r="3.5" fill="var(--red)" opacity="0.9"/>
+            <circle cx="16" cy="16" r="1.8" fill="#fff" opacity="0.95"/>
+            <!-- Pulse animé -->
+            <circle cx="16" cy="16" r="3.5" fill="var(--red)" opacity="0">
+              <animate attributeName="r" values="3.5;10;3.5" dur="2.4s" repeatCount="indefinite"/>
+              <animate attributeName="opacity" values="0.5;0;0.5" dur="2.4s" repeatCount="indefinite"/>
+            </circle>
+          </g>
+          <!-- Texte "CelliA" -->
+          <text x="36" y="21.5" font-family="'Bricolage Grotesque', sans-serif" font-size="17" font-weight="800" letter-spacing="-0.04em" fill="var(--text-hi)">Celli</text>
+          <text x="82" y="21.5" font-family="'Bricolage Grotesque', sans-serif" font-size="17" font-weight="800" letter-spacing="-0.04em" fill="var(--red)">A</text>
+        </svg>
+      </a>
+      <div class="nav-search">
+        <svg width="13" height="13" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5">
+          <circle cx="7" cy="7" r="5"/><path d="m11 11 3 3" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Rechercher..." autocomplete="off">
+      </div>
+      <div class="nav-links">
+        <a href="#" class="nav-link active" data-nav="all">Tout</a>
+        <a href="#" class="nav-link" data-nav="ai">IA</a>
+        <a href="#" class="nav-link" data-nav="secu">Sécu</a>
+        <a href="#" class="nav-link" data-nav="hardware">Hardware</a>
+        <a href="#" class="nav-link" data-nav="maker">Maker</a>
+        <a href="#" class="nav-link" data-nav="web">Web</a>
+        <a href="#" class="nav-link" data-nav="science">Science</a>
+        <button class="nav-prefs-btn" id="cp-trigger" aria-label="Préférences">
+          <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
+            <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/>
+            <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- ═══ TICKER ════════════════════════════════════════════════════════════ -->
+  <div class="ticker-wrap" id="ticker-wrap" style="margin-top:60px;display:none;overflow:hidden;height:32px;background:rgba(232,53,42,0.06);border-bottom:1px solid rgba(232,53,42,0.12)">
+    <div class="ticker-inner" id="ticker-inner" style="display:flex;white-space:nowrap;animation:ticker 30s linear infinite"></div>
+  </div>
+
+  <!-- ═══ CONTENU PRINCIPAL ════════════════════════════════════════════════ -->
+  <div id="no-ticker-spacer" style="margin-top:60px"></div>
+
+  <main class="content-wrap">
+    <div class="hero">
+      <div class="hero-label" id="hero-label">Veille quotidienne</div>
+      <div class="hero-date" id="hero-date">Chargement...</div>
+      <div class="hero-sub" id="hero-sub">Actualité tech réécrite en français</div>
+    </div>
+
+    <div class="section-header">
+      <span class="section-title">À la une</span>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="grid-featured" id="grid-featured">
+      <!-- Skeletons featured -->
+      <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
+      <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
+    </div>
+
+    <div class="section-header" style="margin-top:8px">
+      <span class="section-title">Toutes les actus</span>
+      <div class="section-line"></div>
+      <span id="article-count" style="font-size:11px;color:var(--text-dimmer);font-weight:600"></span>
+    </div>
+
+    <div class="grid-main" id="grid-main">
+      <!-- Skeletons -->
+      <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
+      <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
+      <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <p>CelliA — veille tech générée à <span id="footer-time">—</span> · <a href="/feed">JSON</a> · <a href="https://github.com" target="_blank">GitHub</a></p>
+  </footer>
+
+  <!-- ═══ SCRIPTS ══════════════════════════════════════════════════════════ -->
+  <script src="prefs.js"></script>
+  <script>
+    // ── Constantes ─────────────────────────────────────────────────────────
+    const FEED_URL    = '/dist/articles.json';
+    const CAT_LABELS  = { all:'Tout', ai:'IA', secu:'Sécu', hardware:'Hardware', maker:'Maker', web:'Web', science:'Science', auto:'Tech' };
+
+    let allArticles   = [];
+    let activeFilter  = 'all';
+    let searchQuery   = '';
+
+    // ── Utilitaires ────────────────────────────────────────────────────────
+    function timeAgo(iso) {
+      const diff = Date.now() - new Date(iso).getTime();
+      const h    = Math.floor(diff / 3600000);
+      const m    = Math.floor(diff / 60000);
+      if (h >= 24) return `${Math.floor(h/24)}j`;
+      if (h >= 1)  return `${h}h`;
+      if (m >= 1)  return `${m} min`;
+      return 'à l\'instant';
+    }
+
+    function isNew(iso) {
+      return (Date.now() - new Date(iso).getTime()) < 3 * 3600000; // < 3h
+    }
+
+    function catClass(cat) {
+      return `cat-${cat || 'web'}`;
+    }
+
+    function safeText(t) {
+      return (t || '').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ── Rendu d'une card ───────────────────────────────────────────────────
+    function renderCard(article, featured = false) {
+      const div = document.createElement('div');
+      div.className = `card ${catClass(article.category)} ${featured ? 'card-featured' : ''}`;
+      div.setAttribute('data-id', article.id);
+      div.setAttribute('data-cat', article.category || 'web');
+
+      const timeStr = timeAgo(article.date);
+      const newBadge = isNew(article.date) ? `<span class="badge badge-new">NEW</span>` : '';
+      const catLabel = CAT_LABELS[article.category] || article.category || 'Tech';
+
+      div.innerHTML = `
+        <div style="position:relative">
+          <img class="card-img"
+               src="${article.image || ''}"
+               alt=""
+               loading="lazy"
+               onerror="this.style.display='none'"
+          >
+          <div class="card-badges">
+            <span class="badge badge-cat">${safeText(catLabel)}</span>
+            ${newBadge}
+          </div>
+        </div>
+        <div class="card-body">
+          <div class="card-meta">
+            <span class="card-source">${safeText(article.source)}</span>
+            <span class="card-dot">·</span>
+            <span class="card-time">${timeStr}</span>
+          </div>
+          <h2 class="card-title">${safeText(article.title)}</h2>
+          <p class="card-summary">${safeText(article.summary || article.snippet || '')}</p>
+          <div class="card-footer">
+            <span class="card-read">${article.readingTime || 1} min de lecture</span>
+            <span class="card-arrow">→</span>
+          </div>
+        </div>
+      `;
+
+      div.addEventListener('click', () => {
+        window.location.href = `article.html?id=${article.id}`;
+      });
+
+      return div;
+    }
+
+    // ── Rendu grille ───────────────────────────────────────────────────────
+    function renderGrid() {
+      const gFeat = document.getElementById('grid-featured');
+      const gMain = document.getElementById('grid-main');
+      const count = document.getElementById('article-count');
+
+      let filtered = allArticles;
+
+      if (activeFilter !== 'all') {
+        filtered = filtered.filter(a => a.category === activeFilter);
+      }
+
+      if (searchQuery.length >= 2) {
+        const q = searchQuery.toLowerCase();
+        filtered = filtered.filter(a =>
+          (a.title   || '').toLowerCase().includes(q) ||
+          (a.summary || '').toLowerCase().includes(q) ||
+          (a.source  || '').toLowerCase().includes(q)
+        );
+      }
+
+      gFeat.innerHTML = '';
+      gMain.innerHTML = '';
+
+      if (!filtered.length) {
+        gMain.innerHTML = `
+          <div class="state-message">
+            <span class="state-icon">🔍</span>
+            <h3>Aucun résultat</h3>
+            <p>Essaie un autre filtre ou modifie ta recherche.</p>
+          </div>`;
+        count.textContent = '';
+        return;
+      }
+
+      count.textContent = `${filtered.length} article${filtered.length > 1 ? 's' : ''}`;
+
+      // 2 articles featured, reste dans la grille principale
+      const featuredItems = filtered.slice(0, 2);
+      const mainItems     = filtered.slice(2);
+
+      featuredItems.forEach(a => gFeat.appendChild(renderCard(a, true)));
+      mainItems.forEach(a   => gMain.appendChild(renderCard(a, false)));
+    }
+
+    // ── Ticker ─────────────────────────────────────────────────────────────
+    function buildTicker(articles) {
+      const wrap  = document.getElementById('ticker-wrap');
+      const inner = document.getElementById('ticker-inner');
+      const spacer = document.getElementById('no-ticker-spacer');
+      if (!articles.length) return;
+
+      spacer.style.display = 'none';
+      wrap.style.display   = 'block';
+
+      const fresh  = articles.filter(a => isNew(a.date)).slice(0, 8);
+      const items  = fresh.length ? fresh : articles.slice(0, 6);
+      const html   = items.map(a =>
+        `<span class="ticker-item">
+           <span class="ticker-dot"></span>
+           <span class="ticker-title">${safeText(a.title)}</span>
+         </span>`
+      ).join('');
+
+      // Doubler pour scroll infini
+      inner.innerHTML = html + html;
+    }
+
+    // ── Hero ───────────────────────────────────────────────────────────────
+    function updateHero(generatedAt, count) {
+      const d = new Date(generatedAt);
+      const dateStr = d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long', year:'numeric' });
+      const timeStr = d.toLocaleTimeString('fr-FR', { hour:'2-digit', minute:'2-digit' });
+
+      document.getElementById('hero-date').textContent =
+        dateStr.charAt(0).toUpperCase() + dateStr.slice(1);
+      document.getElementById('hero-sub').textContent  =
+        `${count} article${count>1?'s':''} · Mis à jour à ${timeStr}`;
+      document.getElementById('footer-time').textContent = timeStr;
+    }
+
+    // ── Fetch & init ───────────────────────────────────────────────────────
+    async function loadArticles() {
+      try {
+        const res  = await fetch(FEED_URL + '?t=' + Date.now());
+        const data = await res.json();
+
+        allArticles = data.articles || [];
+        updateHero(data.generated_at, data.count);
+        buildTicker(allArticles);
+        renderGrid();
+
+        document.getElementById('hero-label').textContent = '● En direct';
+      } catch (e) {
+        document.getElementById('grid-main').innerHTML = `
+          <div class="state-message">
+            <span class="state-icon">⚡</span>
+            <h3>Données non disponibles</h3>
+            <p>Lance <code>node scripts/fetch.js</code> pour générer les articles, puis déploie sur Netlify.</p>
+          </div>`;
+        document.getElementById('grid-featured').innerHTML = '';
+        document.getElementById('hero-date').textContent = 'CelliA';
+        document.getElementById('hero-sub').textContent  = 'Aucune donnée chargée';
+      }
+    }
+
+    // ── Filtres ────────────────────────────────────────────────────────────
+    document.querySelectorAll('[data-nav]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        document.querySelectorAll('[data-nav]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        activeFilter = link.dataset.nav;
+        renderGrid();
+      });
+    });
+
+    // ── Recherche ──────────────────────────────────────────────────────────
+    let searchDebounce;
+    document.getElementById('search-input').addEventListener('input', e => {
+      clearTimeout(searchDebounce);
+      searchDebounce = setTimeout(() => {
+        searchQuery = e.target.value.trim();
+        renderGrid();
+      }, 250);
+    });
+
+    // ── GO ─────────────────────────────────────────────────────────────────
+    loadArticles();
+  </script>
+</body>
+</html>
