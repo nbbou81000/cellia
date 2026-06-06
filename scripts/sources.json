@@ -1,0 +1,38 @@
+{
+  "sources": [
+    { "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "category": "ai", "lang": "en", "tech_only": false },
+    { "url": "https://huggingface.co/blog/feed.xml", "category": "ai", "lang": "en", "tech_only": false },
+    { "url": "https://bair.berkeley.edu/blog/feed.xml", "category": "ai", "lang": "en", "tech_only": false },
+    { "url": "https://www.deepmind.com/blog/rss.xml", "category": "ai", "lang": "en", "tech_only": false },
+    { "url": "https://feeds.feedburner.com/TheHackersNews", "category": "secu", "lang": "en", "tech_only": false },
+    { "url": "https://www.bleepingcomputer.com/feed/", "category": "secu", "lang": "en", "tech_only": false },
+    { "url": "https://googleprojectzero.blogspot.com/feeds/posts/default", "category": "secu", "lang": "en", "tech_only": false },
+    { "url": "https://portswigger.net/blog/rss", "category": "secu", "lang": "en", "tech_only": false },
+    { "url": "https://www.schneier.com/feed/atom", "category": "secu", "lang": "en", "tech_only": false },
+    { "url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "category": "hardware", "lang": "en", "tech_only": false },
+    { "url": "https://www.numerama.com/feed/", "category": "hardware", "lang": "fr", "tech_only": true },
+    { "url": "https://hackaday.com/blog/feed/", "category": "maker", "lang": "en", "tech_only": false },
+    { "url": "https://www.raspberrypi.com/news/feed/", "category": "maker", "lang": "en", "tech_only": false },
+    { "url": "https://css-tricks.com/feed/", "category": "web", "lang": "en", "tech_only": false },
+    { "url": "https://github.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
+    { "url": "https://stackoverflow.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
+    { "url": "https://changelog.com/feed", "category": "web", "lang": "en", "tech_only": false },
+    { "url": "https://korben.info/feed", "category": "auto", "lang": "fr", "tech_only": true },
+    { "url": "https://next.ink/feed", "category": "auto", "lang": "fr", "tech_only": true },
+    { "url": "https://www.silicon.fr/feed", "category": "auto", "lang": "fr", "tech_only": true },
+    { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true }
+  ],
+  "keywords": {
+    "ai":       ["ai","artificial intelligence","machine learning","llm","gpt","gemini","claude","mistral","neural","deep learning","openai","anthropic","intelligence artificielle","modèle","transformer","benchmark","inference","agent","multimodal","alignment"],
+    "secu":     ["security","vulnerability","exploit","malware","ransomware","breach","zero-day","cve","hack","phishing","cybersecurity","faille","sécurité","attaque","patch","encryption","leak","pentest","botnet","rootkit"],
+    "hardware": ["chip","gpu","cpu","processor","apple","nvidia","amd","intel","tsmc","semiconductor","hardware","benchmark","puce","processeur","datacenter","arm","fpga","transistor"],
+    "maker":    ["raspberry","arduino","esp32","maker","diy","circuit","3d print","pcb","microcontroller","gpio","fpga","solder","breadboard","hack","mod","retro","emulator"],
+    "web":      ["javascript","typescript","css","html","react","vue","node","browser","api","framework","open source","github","npm","frontend","backend","wasm","rust","python","deno","bun"],
+    "science":  ["science","research","study","brain","neuroscience","quantum","physics","biology","climate","space","nasa","recherche","étude","quantique","espace","découverte","arxiv"]
+  },
+  "exclude_keywords": [
+    "star wars","marvel","film","cinéma","série","netflix","disney",
+    "musique","album","concert","sport","football","recette","cuisine",
+    "politique","élection","économie","bourse","immobilier","mode","beauté"
+  ]
+}
