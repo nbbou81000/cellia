@@ -172,6 +172,27 @@ async function fetchFullText(article) {
 }
 
 // ─── rewriteWithGemini ───────────────────────────────────────────────────────
+async function callGeminiAPI(prompt, systemPrompt) {
+  const response = await fetch(`${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`, {
+    method:  'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      system_instruction: {
+        parts: [{ text: systemPrompt }]
+      },
+      contents: [{
+        parts: [{ text: prompt }]
+      }],
+      generationConfig: {
+        temperature:     0.85,
+        maxOutputTokens: 1400,
+        topP:            0.95,
+      }
+    })
+  });
+  return response;
+}
+
 async function rewriteWithGemini(article) {
   if (!process.env.GEMINI_API_KEY) {
     warn('GEMINI_API_KEY manquante — fallback snippet');
@@ -221,23 +242,14 @@ Source : ${article.source}
 Contenu : ${article.fullText || article.snippet}`;
 
   try {
-    const response = await fetch(`${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`, {
-      method:  'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        system_instruction: {
-          parts: [{ text: systemPrompt }]
-        },
-        contents: [{
-          parts: [{ text: userPrompt }]
-        }],
-        generationConfig: {
-          temperature:     0.85,
-          maxOutputTokens: 1400,
-          topP:            0.95,
-        }
-      })
-    });
+    let response = await callGeminiAPI(userPrompt, systemPrompt);
+
+    // Retry automatique sur 429 — attente 30s
+    if (response.status === 429) {
+      warn(`Rate limit 429 [${article.id}] — retry dans 30s...`);
+      await sleep(30000);
+      response = await callGeminiAPI(userPrompt, systemPrompt);
+    }
 
     if (!response.ok) {
       const body = await response.text();
