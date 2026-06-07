@@ -235,7 +235,7 @@ RÈGLES :
 
 FORMAT EXACT À RESPECTER (rien en dehors) :
 TITRE_FR: [titre en français percutant, max 90 caractères]
-ACCROCHE: [1 à 2 phrases d'entrée qui donnent envie de lire, ton Korben]
+ACCROCHE: [1 phrase maximum, 20 mots max, accroche punchy style Korben]
 |||BODY|||
 [corps complet en HTML : <p>, <h2>, <strong>]
 
@@ -289,10 +289,37 @@ function extractText(provider, data) {
 }
 
 // ─── Parsing de la réponse (format commun aux 3 providers) ──────────────────
+function truncateToSentences(text, maxChars = 260) {
+  if (text.length <= maxChars) return text;
+  // Coupe à la fin de la 2e phrase, sans dépasser maxChars
+  const sentences = text.match(/[^.!?]+[.!?]+/g) || [];
+  let out = '';
+  for (const s of sentences) {
+    if ((out + s).length > maxChars) break;
+    out += s;
+  }
+  return out.trim() || text.slice(0, maxChars).trim() + '…';
+}
+
+function ensureParagraphs(html) {
+  // Si le body n'a aucune balise <p>, on enveloppe les blocs de texte
+  if (!html.includes('<p')) {
+    return html
+      .split(/\n\n+/)
+      .map(b => b.trim())
+      .filter(Boolean)
+      .map(b => `<p>${b}</p>`)
+      .join('\n');
+  }
+  // Supprimer un éventuel <strong> qui enveloppe tout le contenu
+  const unwrapped = html.replace(/^<strong>([\s\S]+)<\/strong>$/i, '$1').trim();
+  return unwrapped;
+}
+
 function parseResponse(text, article) {
   let titleFR = article.title;
   const titleMatch = text.match(/^TITRE_FR:\s*(.+)/m);
-  if (titleMatch) titleFR = titleMatch[1].trim();
+  if (titleMatch) titleFR = titleMatch[1].trim().replace(/^["«]|["»]$/g, '');
 
   let summary = article.snippet;
   let body    = `<p>${article.snippet}</p>`;
@@ -300,16 +327,33 @@ function parseResponse(text, article) {
   if (text.includes('|||BODY|||')) {
     const parts  = text.split('|||BODY|||');
     const before = parts[0];
-    body         = parts[1].trim().replace(/```html?/g, '').replace(/```/g, '').trim();
+    const rawBody = parts[1]?.trim().replace(/```html?/g, '').replace(/```/g, '').trim() || '';
 
-    const accrocheMatch = before.match(/ACCROCHE:\s*([\s\S]+?)(?=\|\|\|BODY\|\|\||$)/);
+    body = ensureParagraphs(rawBody) || `<p>${article.snippet}</p>`;
+
+    // Chercher l'ACCROCHE explicite
+    const accrocheMatch = before.match(/ACCROCHE:\s*([\s\S]+?)(?:\n{2,}|$)/);
     if (accrocheMatch) {
-      summary = accrocheMatch[1].trim();
+      summary = truncateToSentences(cleanText(accrocheMatch[1]));
     } else {
-      const firstP = body.match(/<p>([\s\S]*?)<\/p>/);
-      if (firstP) summary = cleanText(firstP[1]).slice(0, 200);
+      // Fallback : première phrase du body
+      const firstP = rawBody.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
+      if (firstP) summary = truncateToSentences(cleanText(firstP[1]));
     }
+  } else {
+    // Pas de séparateur — prendre les premières phrases comme accroche,
+    // le reste comme body
+    const clean = cleanText(text).replace(/^TITRE_FR:[^\n]+\n?/m, '').trim();
+    summary = truncateToSentences(clean);
+    body    = clean
+      .split(/\n\n+/)
+      .filter(Boolean)
+      .map(b => `<p>${b}</p>`)
+      .join('\n') || `<p>${article.snippet}</p>`;
   }
+
+  // Sécurité finale : jamais un résumé > 300 chars
+  if (summary.length > 300) summary = summary.slice(0, 297) + '…';
 
   const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
   const readingTime = Math.max(1, Math.round(wordCount / 200));
