@@ -1,7 +1,21 @@
 {
-  "generated_at": "2026-06-07T06:25:14.063Z",
-  "count": 35,
+  "generated_at": "2026-06-07T07:16:26.338Z",
+  "count": 36,
   "articles": [
+    {
+      "id": "3083596cba",
+      "title": "Deux jours de speed dating de voitures électriques pour une question existentielle sans réponse",
+      "url": "https://www.numerama.com/vroom/2268957-deux-jours-de-speed-dating-automobile-pour-une-question-existentielle-quest-ce-quun-bon-ve.html",
+      "source": "numerama.com",
+      "date": "2026-06-07T06:23:00.000Z",
+      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
+      "snippet": "Autonomie, recharge, consommation, performances… et si aucun de ces critères ne suffisait réellement à définir une bonne voiture électrique ? Dans l'édito de la newsletter Watt Else du 4 juin, c'est l'heure des questions métaphysiques.",
+      "category": "hardware",
+      "lang": "fr",
+      "summary": "Autonomie, recharge, consommation, performances… et si aucun de ces critères ne suffisait réellement à définir une bonne voiture électrique ? Dans l'édito de la newsletter Watt Else du 4 juin, c'est l'heure des questions métaphysiques.",
+      "body": "<p>Autonomie, recharge, consommation, performances… et si aucun de ces critères ne suffisait réellement à définir une bonne voiture électrique ? Dans l'édito de la newsletter Watt Else du 4 juin, c'est l'heure des questions métaphysiques.</p>",
+      "readingTime": 1
+    },
     {
       "id": "fd15e7f9c2",
       "title": "La démocratie selon Condorcet",
@@ -36,7 +50,7 @@
       "url": "https://www.numerama.com/pop-culture/2268935-critique-des-maitres-de-lunivers-nouvelle-gamme-de-forfaits-chez-orange-et-toutes-les-annonces-ps5-le-recap-de-la-semaine.html",
       "source": "numerama.com",
       "date": "2026-06-07T04:30:00.000Z",
-      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
       "snippet": "Beaucoup de pop culture cette semaine sur Numerama et pour cause, c'était une suite de conférences des grands du jeu vidéo.",
       "category": "hardware",
       "lang": "fr",
