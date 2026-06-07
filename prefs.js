@@ -3,11 +3,12 @@
   'use strict';
 
   const CELLIA_FONTS = [
-    { id: 'editorial', label: 'Éditoriale',  family: "'Bricolage Grotesque', sans-serif", google: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800' },
-    { id: 'claude',    label: 'Claude',       family: "'DM Sans', sans-serif",             google: 'DM+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400' },
-    { id: 'classique', label: 'Classique',    family: "'Lora', serif",                     google: 'Lora:ital,wght@0,400;0,600;1,400' },
-    { id: 'technique', label: 'Technique',    family: "'JetBrains Mono', monospace",       google: 'JetBrains+Mono:wght@300;400;600' },
-    { id: 'raffinee',  label: 'Raffinée',     family: "'Playfair Display', serif",         google: 'Playfair+Display:ital,wght@0,400;0,700;1,400' },
+    { id: 'editorial',  label: 'Éditoriale',   family: "'Bricolage Grotesque', sans-serif", google: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800' },
+    { id: 'claude',     label: 'Claude',        family: "'DM Sans', sans-serif",             google: 'DM+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400' },
+    { id: 'classique',  label: 'Classique',     family: "'Lora', serif",                     google: 'Lora:ital,wght@0,400;0,600;1,400' },
+    { id: 'technique',  label: 'Technique',     family: "'JetBrains Mono', monospace",       google: 'JetBrains+Mono:wght@300;400;600' },
+    { id: 'raffinee',   label: 'Raffinée',      family: "'Playfair Display', serif",         google: 'Playfair+Display:ital,wght@0,400;0,700;1,400' },
+    { id: 'dyslexic',   label: 'OpenDyslexic',  family: "'OpenDyslexic', sans-serif",        cdn:    'https://fonts.cdnfonts.com/css/opendyslexic' },
   ];
 
   // ── État initial ──────────────────────────────────────────────────────────
@@ -38,7 +39,10 @@
     const link = document.createElement('link');
     link.id   = id;
     link.rel  = 'stylesheet';
-    link.href = `https://fonts.googleapis.com/css2?family=${font.google}&display=swap`;
+    // Certaines polices (ex: OpenDyslexic) ne sont pas sur Google Fonts
+    link.href = font.cdn
+      ? font.cdn
+      : `https://fonts.googleapis.com/css2?family=${font.google}&display=swap`;
     document.head.appendChild(link);
   }
 
