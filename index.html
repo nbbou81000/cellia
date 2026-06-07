@@ -733,8 +733,72 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
-       FOOTER
+       BOUTON RETOUR EN HAUT
     ═══════════════════════════════════════════════════════════════ */
+    .btn-top {
+      position: fixed;
+      bottom: 28px;
+      right: 24px;
+      z-index: 200;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: var(--glass-panel);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      color: var(--text-dim);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transform: translateY(12px);
+      pointer-events: none;
+      transition: opacity 0.25s, transform 0.25s, background 0.15s, color 0.15s;
+      box-shadow: 0 4px 20px var(--shadow-lg);
+    }
+    .btn-top.visible {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+    .btn-top:hover {
+      background: var(--glass-hover);
+      color: var(--red);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       BOUTON VOIR PLUS
+    ═══════════════════════════════════════════════════════════════ */
+    .voir-plus-wrap {
+      text-align: center;
+      padding: 32px 0 12px;
+    }
+    .btn-voir-plus {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 14px;
+      color: var(--text-body);
+      cursor: pointer;
+      font-family: var(--font-ui);
+      font-size: 14px;
+      font-weight: 600;
+      padding: 13px 36px;
+      transition: background 0.15s, border-color 0.15s, color 0.15s, transform 0.15s;
+    }
+    .btn-voir-plus:hover {
+      background: var(--glass-hover);
+      border-color: var(--border);
+      color: var(--text-hi);
+      transform: translateY(-1px);
+    }
+    [data-theme="dark"] .btn-voir-plus { color: #9aa4be; }
+    [data-theme="dark"] .btn-voir-plus:hover { color: #f0f2f8; }
+    .voir-plus-wrap.hidden { display: none; }
     .footer {
       position: relative;
       z-index: 1;
@@ -903,7 +967,24 @@
       <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
       <div class="card"><div class="skeleton skel-img"></div><div class="card-body"><div class="skeleton skel-line" style="width:40%"></div><div class="skeleton skel-title"></div><div class="skeleton skel-p"></div><div class="skeleton skel-p"></div></div></div>
     </div>
+
+    <!-- Voir plus -->
+    <div class="voir-plus-wrap hidden" id="voir-plus-wrap">
+      <button class="btn-voir-plus" id="btn-voir-plus">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+          <path d="M7 2v10M2 7l5 5 5-5"/>
+        </svg>
+        Voir plus d'articles
+      </button>
+    </div>
   </main>
+
+  <!-- Bouton retour en haut -->
+  <button class="btn-top" id="btn-top" aria-label="Retour en haut">
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+      <path d="M3 10l5-5 5 5"/>
+    </svg>
+  </button>
 
   <footer class="footer">
     <p>CelliA — veille tech générée à <span id="footer-time">—</span> · <a href="/feed">JSON</a> · <a href="https://github.com" target="_blank">GitHub</a></p>
@@ -990,10 +1071,14 @@
     }
 
     // ── Rendu grille ───────────────────────────────────────────────────────
+    const PAGE_SIZE   = 12;
+    let   visibleCount = PAGE_SIZE;
+
     function renderGrid() {
-      const gFeat = document.getElementById('grid-featured');
-      const gMain = document.getElementById('grid-main');
-      const count = document.getElementById('article-count');
+      const gFeat    = document.getElementById('grid-featured');
+      const gMain    = document.getElementById('grid-main');
+      const count    = document.getElementById('article-count');
+      const vpWrap   = document.getElementById('voir-plus-wrap');
 
       let filtered = allArticles;
 
@@ -1021,17 +1106,22 @@
             <p>Essaie un autre filtre ou modifie ta recherche.</p>
           </div>`;
         count.textContent = '';
+        vpWrap.classList.add('hidden');
         return;
       }
 
       count.textContent = `${filtered.length} article${filtered.length > 1 ? 's' : ''}`;
 
-      // 2 articles featured, reste dans la grille principale
+      // 2 featured (toujours visibles) + mainItems paginés
       const featuredItems = filtered.slice(0, 2);
-      const mainItems     = filtered.slice(2);
+      const mainItems     = filtered.slice(2, 2 + visibleCount);
+      const hasMore       = filtered.length > 2 + visibleCount;
 
       featuredItems.forEach(a => gFeat.appendChild(renderCard(a, true)));
-      mainItems.forEach(a   => gMain.appendChild(renderCard(a, false)));
+      mainItems.forEach(a     => gMain.appendChild(renderCard(a, false)));
+
+      // Bouton voir plus
+      vpWrap.classList.toggle('hidden', !hasMore);
     }
 
     // ── Ticker ─────────────────────────────────────────────────────────────
@@ -1102,10 +1192,25 @@
         e.preventDefault();
         document.querySelectorAll('[data-nav]').forEach(l => l.classList.remove('active'));
         link.classList.add('active');
-        activeFilter = link.dataset.nav;
+        activeFilter  = link.dataset.nav;
+        visibleCount  = PAGE_SIZE; // reset pagination
         renderGrid();
       });
     });
+
+    // ── Voir plus ──────────────────────────────────────────────────────────
+    document.getElementById('btn-voir-plus').addEventListener('click', () => {
+      visibleCount += PAGE_SIZE;
+      renderGrid();
+      // Pas de scroll forcé — l'utilisateur reste là où il est
+    });
+
+    // ── Retour en haut ─────────────────────────────────────────────────────
+    const btnTop = document.getElementById('btn-top');
+    window.addEventListener('scroll', () => {
+      btnTop.classList.toggle('visible', window.scrollY > 300);
+    }, { passive: true });
+    btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     // ── Éphéméride ────────────────────────────────────────────────────────
     function renderEphemeris(ephemeris) {
@@ -1138,7 +1243,8 @@
     let searchDebounce;
 
     function applySearch(value) {
-      searchQuery = value.trim();
+      searchQuery  = value.trim();
+      visibleCount = PAGE_SIZE; // reset pagination à chaque nouvelle recherche
       searchClear.classList.toggle('visible', value.length > 0);
       renderGrid();
       if (searchQuery.length >= 2) {
