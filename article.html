@@ -589,6 +589,13 @@
               </svg>
               Lire la source
             </a>
+            <button class="btn-ghost" id="btn-save-article">
+              <svg width="12" height="13" viewBox="0 0 13 16" fill="none"
+                   stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M1.5 1.5h10v13l-5-3.5-5 3.5V1.5z"/>
+              </svg>
+              <span id="save-label">Sauvegarder</span>
+            </button>
             <button class="btn-ghost" onclick="navigator.share ? navigator.share({title:${JSON.stringify(article.title)}, url:location.href}) : navigator.clipboard.writeText(location.href)">
               <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
                 <circle cx="9" cy="2" r="1.5" stroke="currentColor" stroke-width="1.3"/>
@@ -607,6 +614,33 @@
       `;
 
       initProgress();
+
+      // ── Bouton sauvegarder ────────────────────────────────────────────────
+      const SAVED_KEY  = 'cellia-saved';
+      const getSaved   = () => { try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; } };
+      const isSavedNow = () => getSaved().includes(article.id);
+
+      const btnSave  = document.getElementById('btn-save-article');
+      const saveLabel = document.getElementById('save-label');
+      const svgPath   = btnSave.querySelector('path');
+
+      function refreshSaveBtn() {
+        const saved = isSavedNow();
+        saveLabel.textContent = saved ? 'Sauvegardé ✓' : 'Sauvegarder';
+        btnSave.style.color   = saved ? 'var(--red)' : '';
+        btnSave.style.borderColor = saved ? 'var(--red-dim)' : '';
+        svgPath.setAttribute('fill', saved ? 'currentColor' : 'none');
+      }
+
+      refreshSaveBtn();
+
+      btnSave.addEventListener('click', () => {
+        const list = getSaved();
+        const idx  = list.indexOf(article.id);
+        if (idx === -1) list.push(article.id); else list.splice(idx, 1);
+        localStorage.setItem(SAVED_KEY, JSON.stringify(list));
+        refreshSaveBtn();
+      });
 
       // ── Animation typewriter sur le corps de l'article ──────────────────
       const bodyEl   = wrap.querySelector('#article-body-anim');

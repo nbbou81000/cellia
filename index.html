@@ -733,6 +733,46 @@
     }
 
     /* ═══════════════════════════════════════════════════════════════
+       BOOKMARK (SAUVEGARDER POUR PLUS TARD)
+    ═══════════════════════════════════════════════════════════════ */
+    .card-bookmark {
+      position: absolute;
+      top: 10px; right: 10px;
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      background: rgba(0,0,0,0.45);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.15);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 2;
+      transition: background 0.2s, transform 0.2s;
+      color: rgba(255,255,255,0.80);
+    }
+    .card-bookmark:hover  { background: rgba(0,0,0,0.65); transform: scale(1.12); }
+    .card-bookmark.saved  { background: var(--red); border-color: var(--red); color: #fff; }
+    .card-bookmark.saved:hover { opacity: 0.85; }
+
+    @keyframes bookmarkPop {
+      0%   { transform: scale(1); }
+      45%  { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+    .card-bookmark.pop { animation: bookmarkPop 0.28s ease; }
+
+    /* Lien "Favoris" dans la nav */
+    .nav-link[data-nav="saved"] { position: relative; }
+    .nav-saved-count {
+      position: absolute; top: -4px; right: -4px;
+      background: var(--red); color: #fff;
+      font-size: 9px; font-weight: 800;
+      border-radius: 99px; padding: 1px 4px;
+      min-width: 15px; text-align: center; line-height: 1.4;
+      display: none;
+    }
+    .nav-saved-count.visible { display: block; }
+
+    /* ═══════════════════════════════════════════════════════════════
        BOUTON RETOUR EN HAUT
     ═══════════════════════════════════════════════════════════════ */
     .btn-top {
@@ -897,6 +937,9 @@
         <a href="#" class="nav-link" data-nav="maker">Maker</a>
         <a href="#" class="nav-link" data-nav="web">Web</a>
         <a href="#" class="nav-link" data-nav="science">Science</a>
+        <a href="#" class="nav-link" data-nav="saved" style="position:relative">
+          🔖 <span class="nav-saved-count" id="nav-saved-count"></span>
+        </a>
         <button class="nav-prefs-btn" id="cp-trigger" aria-label="Préférences">
           <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
             <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/>
@@ -1025,15 +1068,37 @@
     }
 
     // ── Rendu d'une card ───────────────────────────────────────────────────
+    // ── Gestion des articles sauvegardés ───────────────────────────────────
+    const SAVED_KEY = 'cellia-saved';
+
+    function getSaved()         { try { return JSON.parse(localStorage.getItem(SAVED_KEY) || '[]'); } catch { return []; } }
+    function isSaved(id)        { return getSaved().includes(id); }
+    function toggleSaved(id) {
+      const list = getSaved();
+      const idx  = list.indexOf(id);
+      if (idx === -1) list.push(id); else list.splice(idx, 1);
+      localStorage.setItem(SAVED_KEY, JSON.stringify(list));
+      updateSavedCount();
+      return idx === -1; // true = ajouté
+    }
+    function updateSavedCount() {
+      const n   = getSaved().length;
+      const el  = document.getElementById('nav-saved-count');
+      if (!el) return;
+      el.textContent = n || '';
+      el.classList.toggle('visible', n > 0);
+    }
+
     function renderCard(article, featured = false) {
       const div = document.createElement('div');
       div.className = `card ${catClass(article.category)} ${featured ? 'card-featured' : ''}`;
       div.setAttribute('data-id', article.id);
       div.setAttribute('data-cat', article.category || 'web');
 
-      const timeStr = timeAgo(article.date);
+      const timeStr  = timeAgo(article.date);
       const newBadge = isNew(article.date) ? `<span class="badge badge-new">NEW</span>` : '';
       const catLabel = CAT_LABELS[article.category] || article.category || 'Tech';
+      const saved    = isSaved(article.id);
 
       div.innerHTML = `
         <div style="position:relative">
@@ -1047,6 +1112,15 @@
             <span class="badge badge-cat">${safeText(catLabel)}</span>
             ${newBadge}
           </div>
+          <button class="card-bookmark ${saved ? 'saved' : ''}"
+                  data-bookmark="${article.id}"
+                  title="${saved ? 'Retirer des favoris' : 'Sauvegarder pour plus tard'}"
+                  aria-label="${saved ? 'Retirer des favoris' : 'Sauvegarder'}">
+            <svg width="13" height="13" viewBox="0 0 13 16" fill="${saved ? 'currentColor' : 'none'}"
+                 stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1.5 1.5h10v13l-5-3.5-5 3.5V1.5z"/>
+            </svg>
+          </button>
         </div>
         <div class="card-body">
           <div class="card-meta">
@@ -1062,6 +1136,24 @@
           </div>
         </div>
       `;
+
+      // Clic sur le bookmark — ne pas propager vers la card
+      const btn = div.querySelector('[data-bookmark]');
+      btn.addEventListener('click', e => {
+        e.stopPropagation();
+        const added = toggleSaved(article.id);
+        btn.classList.toggle('saved', added);
+        btn.title = added ? 'Retirer des favoris' : 'Sauvegarder pour plus tard';
+        // Mettre à jour l'icône (pleine ou vide)
+        btn.querySelector('svg').setAttribute('fill', added ? 'currentColor' : 'none');
+        // Animation pop
+        btn.classList.remove('pop');
+        void btn.offsetWidth;
+        btn.classList.add('pop');
+        btn.addEventListener('animationend', () => btn.classList.remove('pop'), { once: true });
+        // Si on est dans le filtre Favoris et qu'on dégage un article → le retirer de la vue
+        if (!added && activeFilter === 'saved') renderGrid();
+      });
 
       div.addEventListener('click', () => {
         window.location.href = `article.html?id=${article.id}`;
@@ -1082,7 +1174,10 @@
 
       let filtered = allArticles;
 
-      if (activeFilter !== 'all') {
+      if (activeFilter === 'saved') {
+        const savedIds = getSaved();
+        filtered = allArticles.filter(a => savedIds.includes(a.id));
+      } else if (activeFilter !== 'all') {
         filtered = filtered.filter(a => a.category === activeFilter);
       }
 
@@ -1101,9 +1196,9 @@
       if (!filtered.length) {
         gMain.innerHTML = `
           <div class="state-message">
-            <span class="state-icon">🔍</span>
-            <h3>Aucun résultat</h3>
-            <p>Essaie un autre filtre ou modifie ta recherche.</p>
+            <span class="state-icon">${activeFilter === 'saved' ? '🔖' : '🔍'}</span>
+            <h3>${activeFilter === 'saved' ? 'Aucun article sauvegardé' : 'Aucun résultat'}</h3>
+            <p>${activeFilter === 'saved' ? 'Clique sur l\'icône 🔖 d\'une card pour la retrouver ici.' : 'Essaie un autre filtre ou modifie ta recherche.'}</p>
           </div>`;
         count.textContent = '';
         vpWrap.classList.add('hidden');
@@ -1170,6 +1265,7 @@
         updateHero(data.generated_at, data.count);
         buildTicker(allArticles);
         renderEphemeris(data.ephemeris);
+        updateSavedCount();
         renderGrid();
 
         document.getElementById('hero-label').textContent = '● En direct';
