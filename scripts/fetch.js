@@ -10,7 +10,8 @@ const MAX_ARTICLES = IS_DEV ? 3 : 10;
 const WINDOW_HOURS = 48;
 
 // ─── Providers IA en cascade : Gemini → Mistral → Groq ───────────────────────
-const PROVIDERS = [
+// (let car overridé en mode payant dans main())
+let PROVIDERS = [
   {
     name:   'Gemini',
     envKey: 'GEMINI_API_KEY',
@@ -34,18 +35,36 @@ const PROVIDERS = [
 ];
 
 // ─── Mots-clés tech pour filtrer l'éphéméride Wikipedia ─────────────────────
+// IMPORTANT : pas d'espaces en fin de mot — .includes() cherche une sous-chaîne
 const EPHEMERIS_KEYWORDS = [
-  'computer', 'software', 'hardware', 'internet', 'video game', 'programming',
-  'algorithm', 'processor', 'microchip', 'transistor', 'semiconductor',
-  'operating system', 'artificial intelligence', 'robot', 'network', 'digital',
-  'satellite', 'spacecraft', 'rocket', 'apple ', 'microsoft', 'google ',
-  'ibm ', 'intel ', 'amd ', 'nvidia', 'atari', 'nintendo', 'playstation',
-  'xbox', 'sega', 'linux', 'windows ', 'macintosh', 'iphone', 'android',
-  'twitter', 'facebook', 'amazon', 'youtube', 'spotify', 'browser', 'email',
-  'wi-fi', 'bluetooth', 'usb ', 'smartphone', 'hacker', 'virus', 'encryption',
-  'console', 'arcade', 'graphics', 'database', 'server', 'cloud', 'mobile phone',
-  'laser', 'fiber optic', 'cd-rom', 'dvd', 'floppy', 'modem', 'ethernet',
-  'world wide web', 'hypertext', 'domain', 'podcast', 'streaming', 'pixel',
+  // Matériel & composants
+  'computer', 'processor', 'microchip', 'transistor', 'semiconductor',
+  'microprocessor', 'integrated circuit', 'circuit', 'chip', 'ram',
+  'hard disk', 'floppy', 'cd-rom', 'dvd', 'usb', 'gpu', 'cpu',
+  // Logiciel & internet
+  'software', 'operating system', 'programming', 'algorithm', 'browser',
+  'internet', 'world wide web', 'hypertext', 'email', 'domain', 'server',
+  'database', 'encryption', 'open source', 'source code',
+  // Réseau & communication
+  'network', 'ethernet', 'modem', 'fiber optic', 'wi-fi', 'bluetooth',
+  'mobile phone', 'smartphone', 'telephone', 'telegraph', 'radio',
+  'satellite', 'spacecraft', 'rocket', 'orbit',
+  // IA & robotique
+  'artificial intelligence', 'robot', 'automation', 'machine learning',
+  // Marques & entreprises tech
+  'apple', 'microsoft', 'google', 'ibm', 'intel', 'amd', 'nvidia',
+  'amazon', 'facebook', 'twitter', 'youtube', 'spotify', 'netflix',
+  'atari', 'nintendo', 'playstation', 'xbox', 'sega',
+  // Systèmes & produits
+  'linux', 'windows', 'macintosh', 'iphone', 'android', 'ipad',
+  'digital', 'electronic', 'laser', 'pixel', 'display', 'graphics',
+  // Gaming & media
+  'video game', 'console', 'arcade', 'streaming', 'podcast',
+  // Sécurité
+  'hacker', 'virus', 'malware', 'cybersecurity',
+  // Général tech
+  'inventor', 'invention', 'patent', 'laboratory', 'engineer',
+  'cloud', 'server', 'hardware',
 ];
 
 const MONTHS_FR = [
@@ -172,15 +191,24 @@ async function fetchFeed(source, keywords, config) {
   return items;
 }
 
+// ─── Fetch avec timeout garanti (Promise.race) ───────────────────────────────
+function fetchWithTimeout(url, opts, ms) {
+  return Promise.race([
+    fetch(url, opts),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`timeout ${ms}ms`)), ms)
+    )
+  ]);
+}
+
 // ─── fetchFullText ────────────────────────────────────────────────────────────
 async function fetchFullText(article) {
   try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 5000);
-    const res = await fetch(article.url, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CelliA-Bot/1.0)' }
-    });
+    const res = await fetchWithTimeout(
+      article.url,
+      { headers: { 'User-Agent': 'Mozilla/5.0 (compatible; CelliA-Bot/1.0)' } },
+      5000
+    );
     if (!res.ok) return article.snippet;
     const html = await res.text();
     let container = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)?.[1]
@@ -388,72 +416,86 @@ RÈGLES :
 
 async function fetchEphemeris(dateStr) {
   const [yearStr, monthStr, dayStr] = dateStr.split('-');
-  const month    = parseInt(monthStr);
-  const day      = parseInt(dayStr);
-  const monthFR  = MONTHS_FR[month - 1];
-  const url      = `https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`;
+  const month   = parseInt(monthStr);
+  const day     = parseInt(dayStr);
+  const monthFR = MONTHS_FR[month - 1];
 
   log(`Éphéméride tech : ${day} ${monthFR}...`);
 
-  try {
-    const controller = new AbortController();
-    setTimeout(() => controller.abort(), 10000);
-    const res = await fetch(url, {
-      signal: controller.signal,
-      headers: { 'User-Agent': 'CelliA-Bot/1.0', 'Accept': 'application/json' }
-    });
-    if (!res.ok) throw new Error(`Wikipedia HTTP ${res.status}`);
+  // Essayer d'abord les événements "selected" (curatés), puis tous les events
+  const endpoints = [
+    `https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected/${month}/${day}`,
+    `https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`,
+  ];
 
-    const data   = await res.json();
-    const events = data.events || [];
+  let techEvents = [];
 
-    // Filtrer les événements tech
-    const techEvents = events.filter(e => {
-      if (!e.year || parseInt(e.year) >= parseInt(yearStr)) return false;
-      const text = (e.text || '').toLowerCase();
-      return EPHEMERIS_KEYWORDS.some(kw => text.includes(kw));
-    });
+  for (const url of endpoints) {
+    try {
+      const res = await fetchWithTimeout(
+        url,
+        { headers: { 'User-Agent': 'CelliA-Bot/1.0', 'Accept': 'application/json' } },
+        8000
+      );
+      if (!res.ok) continue;
+      const data   = await res.json();
+      const events = data.events || data.selected || [];
 
-    if (!techEvents.length) {
-      warn('Éphéméride : aucun événement tech trouvé pour cette date');
-      return null;
-    }
-
-    // Mélanger et prendre 2 événements max, préférer les plus anciens pour la variété
-    const selected = techEvents
-      .sort((a, b) => a.year - b.year) // plus vieux en premier
-      .slice(0, 4)                      // pool de 4
-      .sort(() => Math.random() - 0.5)  // mélange
-      .slice(0, 2);                     // garder 2
-
-    const items = [];
-    for (const event of selected) {
-      const summary     = await rewriteEphemerisEvent(event, day, monthFR);
-      const wikiPage    = event.pages?.[0];
-      const wikiUrl     = wikiPage?.content_urls?.desktop?.page || null;
-      const wikiThumb   = wikiPage?.thumbnail?.source || null;
-      items.push({
-        year:          event.year,
-        original:      event.text,
-        summary,
-        wikipedia_url: wikiUrl,
-        thumbnail:     wikiThumb,
+      techEvents = events.filter(e => {
+        if (!e.year || parseInt(e.year) >= parseInt(yearStr)) return false;
+        const text = (e.text || '').toLowerCase();
+        return EPHEMERIS_KEYWORDS.some(kw => text.includes(kw));
       });
-      await sleep(2000);
+
+      if (techEvents.length > 0) break; // on a trouvé, pas besoin du 2e endpoint
+    } catch (e) {
+      warn(`  Wikipedia (${url.includes('selected') ? 'selected' : 'events'}) : ${e.message}`);
     }
+  }
 
-    ok(`Éphéméride : ${items.length} événement(s) — ${day} ${monthFR}`);
-    return { date: dateStr, day, month, month_fr: monthFR, items };
-
-  } catch (e) {
-    warn(`Éphéméride : erreur — ${e.message}`);
+  if (!techEvents.length) {
+    warn('Éphéméride : aucun événement tech trouvé pour cette date');
     return null;
   }
+
+  // Prendre 2 événements max : 1 ancien + 1 récent pour varier
+  techEvents.sort((a, b) => a.year - b.year);
+  const oldest  = techEvents[0];
+  const newest  = techEvents[techEvents.length - 1];
+  const selected = oldest === newest ? [oldest] : [oldest, newest];
+
+  const items = [];
+  for (const event of selected) {
+    const summary   = await rewriteEphemerisEvent(event, day, monthFR);
+    const wikiPage  = event.pages?.[0];
+    items.push({
+      year:          event.year,
+      original:      event.text,
+      summary,
+      wikipedia_url: wikiPage?.content_urls?.desktop?.page || null,
+      thumbnail:     wikiPage?.thumbnail?.source || null,
+    });
+    await sleep(2000);
+  }
+
+  ok(`Éphéméride : ${items.length} événement(s) — ${day} ${monthFR}`);
+  return { date: dateStr, day, month, month_fr: monthFR, items };
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`\n${c.bold}${c.blue}━━━ CelliA — Veille Tech ━━━${c.reset}  ${IS_DEV ? c.yellow + '[DEV]' + c.reset : ''}\n`);
+
+  // ── Mode payant : override PROVIDERS avec Gemini 2.5 Flash facturé ──────
+  if (process.env.USE_PAID_GEMINI === 'true') {
+    PROVIDERS = [{
+      name:   'Gemini-Payant',
+      envKey: 'GEMINI_PAID_API_KEY',
+      type:   'gemini',
+      url:    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
+    }];
+    console.log(`${c.yellow}${c.bold}  ★ MODE PAYANT — Gemini 2.5 Flash (clé facturée)${c.reset}\n`);
+  }
 
   const disponibles = PROVIDERS.filter(p => process.env[p.envKey]).map(p => p.name);
   log(`Providers : ${disponibles.join(' → ') || 'aucun !'}`);

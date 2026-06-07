@@ -13,11 +13,11 @@
     { "url": "https://www.numerama.com/feed/", "category": "hardware", "lang": "fr", "tech_only": true },
     { "url": "https://hackaday.com/blog/feed/", "category": "maker", "lang": "en", "tech_only": false },
     { "url": "https://www.raspberrypi.com/news/feed/", "category": "maker", "lang": "en", "tech_only": false },
-    { "url": "https://css-tricks.com/feed/", "category": "web", "lang": "en", "tech_only": false },
+    { "url": "https://www.smashingmagazine.com/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://github.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://stackoverflow.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://changelog.com/feed", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://korben.info/feed", "category": "auto", "lang": "fr", "tech_only": true },
+    { "url": "https://www.journaldugeek.com/feed/", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://next.ink/feed", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://www.silicon.fr/feed", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true }
