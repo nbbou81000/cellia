@@ -43,7 +43,7 @@ const PAID_PROVIDER = {
   envKey:    'GEMINI_PAID_API_KEY',
   type:      'gemini',
   url:       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
-  maxTokens: 3000,
+  maxTokens: 6000,
 };
 
 // ─── Mots-clés éphéméride Wikipedia ──────────────────────────────────────────
@@ -236,16 +236,18 @@ Contenu : ${article.fullText||article.snippet}`;
 function buildPaidPrompt(article) {
   return `Réécris cet article INTÉGRALEMENT dans le style de Korben.
 
-RÈGLES ABSOLUES :
+RÈGLES :
 - Traduis et réécris en français, style Korben : direct, geek, complice, phrases courtes, avis tranché
-- Le "body" doit faire MINIMUM 250 mots — c'est un article complet, pas un résumé
-- HTML pour le body : <p>, <h2>, <strong> uniquement
-- L'accroche : une seule phrase courte et punchy, max 25 mots
+- Le "body" doit faire entre 250 et 350 mots — article complet, pas un résumé
+- HTML pour le body : <p>, <h2>, <strong> uniquement. Pas d'autres balises.
+- L'accroche : une seule phrase, max 25 mots
 - Le titre : accrocheur, en français, max 90 caractères
-- NE TRONQUE JAMAIS : écris l'article en entier, jusqu'à la dernière phrase
 
-Réponds UNIQUEMENT avec un objet JSON valide sur une seule structure (sans backticks, sans texte avant ou après) :
-{"titre_fr":"...","accroche":"...","body":"<p>...</p>"}
+FORMAT JSON — CRITIQUE :
+- Réponds UNIQUEMENT avec un objet JSON valide (sans backticks, sans texte avant ou après)
+- La valeur "body" DOIT être sur une seule ligne sans vrai retour à la ligne — les paragraphes sont séparés par les balises <p></p> directement collées, sans \\n entre elles
+- N'utilise AUCUN \\n ni \\r dans les valeurs JSON
+- Format exact sur une seule ligne : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><p>texte</p>"}
 
 SOURCE :
 Titre : ${article.title}
@@ -299,35 +301,108 @@ function extractText(provider, data) {
 }
 
 // ─── Parsing mode PAYANT (JSON) ───────────────────────────────────────────────
+
+// Répare un JSON invalide causé par de vrais retours à la ligne dans les valeurs string
+function repairJSON(raw) {
+  let result = '', inString = false, escaped = false;
+  for (let i = 0; i < raw.length; i++) {
+    const ch = raw[i];
+    if (escaped)      { result += ch; escaped = false; continue; }
+    if (ch === '\\')  { result += ch; escaped = true;  continue; }
+    if (ch === '"')   { result += ch; inString = !inString; continue; }
+    if (inString) {
+      if (ch === '\n') { result += '\\n'; continue; }
+      if (ch === '\r') { result += '\\r'; continue; }
+    }
+    result += ch;
+  }
+  return result;
+}
+
+// Extraction regex en dernier recours sur JSON malformé
+function extractBodyFromRawJSON(text, article) {
+  const titleM   = text.match(/"titre_fr"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  const accM     = text.match(/"accroche"\s*:\s*"((?:[^"\\]|\\.)*)"/);
+  // Pour body on accepte les guillemets non fermés (JSON tronqué)
+  const bodyM    = text.match(/"body"\s*:\s*"([\s\S]+?)(?:"\s*\}|$)/);
+  if (!bodyM) return null;
+
+  let body = bodyM[1]
+    .replace(/\\n/g, '\n').replace(/\\r/g, '').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  body = ensureParagraphs(body);
+  if (!body || body.length < 50) return null;
+
+  const titleFR = titleM
+    ? titleM[1].replace(/\\n/g,'').replace(/\\"/g,'"').trim()
+    : article.title;
+  const summary = accM
+    ? truncateToSentences(accM[1].replace(/\\n/g,' ').replace(/\\"/g,'"').trim())
+    : article.snippet.slice(0, 200);
+  const wordCount   = body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.max(1, Math.round(wordCount/200));
+  return { title: titleFR, summary, body, readingTime };
+}
+
+function cleanBodyFromJSON(body) {
+  return body
+    // Convertir les séquences \\n littérales (backslash+n) en vraie newline
+    .split('\\n').join('\n')
+    .split('\\r').join('')
+    // Normaliser les newlines multiples
+    .replace(/\n{3,}/g, '\n\n')
+    .trim();
+}
+
 function parsePaidResponse(rawText, article) {
-  // Nettoyer les backticks markdown éventuels
   let text = rawText
-    .replace(/^```(?:json)?\s*/i,'')
-    .replace(/\s*```\s*$/,'')
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```\s*$/, '')
     .trim();
 
-  // Chercher le premier { et le dernier } pour extraire le JSON même s'il y a du texte autour
+  // Extraire le bloc JSON
   const start = text.indexOf('{');
   const end   = text.lastIndexOf('}');
-  if (start !== -1 && end !== -1 && end > start) {
-    text = text.slice(start, end+1);
-  }
+  if (start !== -1 && end !== -1 && end > start) text = text.slice(start, end + 1);
 
+  // Niveau 1 : JSON.parse direct
   try {
     const json    = JSON.parse(text);
-    const titleFR = (json.titre_fr||article.title).replace(/^["«]|["»]$/g,'').trim();
-    const summary = truncateToSentences(cleanText(json.accroche||'')) || article.snippet.slice(0,200);
-    let   body    = (json.body||'').trim();
+    const titleFR = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
+    const summary = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
+    let   body    = cleanBodyFromJSON((json.body || '').trim());
     body          = ensureParagraphs(body);
-    if (!body||body.length<50) body = `<p>${article.snippet}</p>`;
-    const wordCount   = body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
-    const readingTime = Math.max(1, Math.round(wordCount/200));
+    if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
+    const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const readingTime = Math.max(1, Math.round(wordCount / 200));
     ok(`    JSON parsé ✓ — ${wordCount} mots`);
-    return { title:titleFR, summary, body, readingTime };
-  } catch(e) {
-    warn(`    JSON parse échoué (${e.message}) — fallback texte`);
-    return parseTextResponse(rawText, article);
+    return { title: titleFR, summary, body, readingTime };
+  } catch (_) {}
+
+  // Niveau 2 : repairJSON (gère les vrais retours à la ligne dans les strings)
+  try {
+    const repaired = repairJSON(text);
+    const json     = JSON.parse(repaired);
+    const titleFR  = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
+    const summary  = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
+    let   body     = cleanBodyFromJSON((json.body || '').trim());
+    body           = ensureParagraphs(body);
+    if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
+    const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const readingTime = Math.max(1, Math.round(wordCount / 200));
+    ok(`    JSON réparé ✓ — ${wordCount} mots`);
+    return { title: titleFR, summary, body, readingTime };
+  } catch (_) {}
+
+  // Niveau 3 : extraction regex (JSON tronqué ou malformé au-delà de la réparation)
+  const regexResult = extractBodyFromRawJSON(text, article);
+  if (regexResult && regexResult.body.length > 100) {
+    warn(`    JSON regex ✓ — ${regexResult.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length} mots`);
+    return regexResult;
   }
+
+  // Niveau 4 : fallback texte générique
+  warn(`    JSON échoué — fallback texte`);
+  return parseTextResponse(rawText, article);
 }
 
 // ─── Parsing mode GRATUIT (texte + |||BODY|||) ────────────────────────────────
