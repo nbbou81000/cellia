@@ -10,7 +10,12 @@ on:
   workflow_dispatch:
     inputs:
       dev_mode:
-        description: 'Mode dev (3 articles)'
+        description: 'Mode dev (3 articles seulement)'
+        required: false
+        default: 'false'
+        type: boolean
+      paid_mode:
+        description: 'Mode payant — Gemini 2.5 Flash (clé facturée niveau 1)'
         required: false
         default: 'false'
         type: boolean
@@ -19,7 +24,7 @@ jobs:
   fetch-and-deploy:
     name: Fetch RSS → Groq → Deploy
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 30
     permissions:
       contents: write
 
@@ -41,9 +46,11 @@ jobs:
       - name: Fetch & rewrite
         working-directory: scripts
         env:
-          GEMINI_API_KEY:  ${{ secrets.GEMINI_API_KEY }}
-          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
-          GROQ_API_KEY:    ${{ secrets.GROQ_API_KEY }}
+          GEMINI_API_KEY:      ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY:     ${{ secrets.MISTRAL_API_KEY }}
+          GROQ_API_KEY:        ${{ secrets.GROQ_API_KEY }}
+          GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
+          USE_PAID_GEMINI:     ${{ github.event.inputs.paid_mode }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
