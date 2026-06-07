@@ -196,7 +196,13 @@ async function fetchFeed(source, keywords, config) {
   for (const item of feed.items||[]) {
     const pubDate = item.isoDate ? new Date(item.isoDate).getTime() : 0;
     if (pubDate && (now-pubDate) > windowMs) continue;
-    const title = cleanText(item.title||''), url = item.link||item.url||'';
+    // Titre — Google News ajoute " – NomSite" en suffixe → on retire
+    let title = cleanText(item.title||'');
+    if (source.source_name) {
+      const site = source.source_name.split('.')[0];
+      title = title.replace(new RegExp(`\\s*[–—-]\\s*${site}\\s*$`, 'i'), '').trim();
+    }
+    const url = item.link||item.url||'';
     if (!title||!url) continue;
     if (source.tech_only) {
       if ((config.exclude_keywords||[]).some(kw => title.toLowerCase().includes(kw))) continue;
@@ -207,7 +213,7 @@ async function fetchFeed(source, keywords, config) {
     items.push({
       id:       md5(url),
       title, url,
-      source:   extractDomain(source.url),
+      source:   source.source_name || extractDomain(source.url),
       date:     item.isoDate||new Date().toISOString(),
       image:    img?.startsWith('http') ? img : null,
       snippet,
@@ -491,8 +497,8 @@ function parseTextResponse(text, article) {
 
   let summary='', body='';
 
-  // Chercher |||BODY||| ou variantes
-  const markers = ['|||BODY|||','---BODY---','## Corps','### Corps'];
+  // Chercher |||BODY||| ou variantes (le modèle fait parfois des typos)
+  const markers = ['|||BODY|||','|||BODY||','|||BODY|','---BODY---','## Corps','### Corps'];
   let foundMarker=null, markerIdx=-1;
   for (const m of markers) { const i=text.indexOf(m); if (i!==-1){foundMarker=m;markerIdx=i;break;} }
 
@@ -531,6 +537,11 @@ function parseTextResponse(text, article) {
     const fp=body.match(/<p[^>]*>([\s\S]*?)<\/p>/i);
     summary = fp ? truncateToSentences(cleanText(fp[1])) : article.snippet.slice(0,200);
   }
+  // Nettoyer les artefacts markdown et séparateurs résiduels dans le résumé
+  summary = summary
+    .replace(/^\*+\s*/,'').replace(/\s*\*+$/,'')      // ** gras markdown
+    .replace(/\|\|\|BODY\|*/gi,'').replace(/---BODY---/gi,'')  // séparateurs résiduels
+    .trim();
   if (summary.length>300) summary=summary.slice(0,297)+'…';
   const wordCount   = body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
   const readingTime = Math.max(1, Math.round(wordCount/200));
