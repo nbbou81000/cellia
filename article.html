@@ -440,6 +440,79 @@
       });
     }
 
+    // ── Animation typewriter + haptique ───────────────────────────────────
+    function animateArticleBody(container, htmlContent) {
+      // Respect prefers-reduced-motion (accessibilité)
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        container.innerHTML = htmlContent;
+        return;
+      }
+
+      // Injecter le HTML pour construire le DOM (structure visible mais texte vide)
+      container.innerHTML = htmlContent;
+
+      // Collecter tous les nœuds texte avec leur contenu complet
+      const textPairs = [];
+      const walker    = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
+      let   node;
+      while ((node = walker.nextNode())) {
+        const full = node.textContent;
+        if (full.length > 0) {
+          textPairs.push({ node, full });
+          node.textContent = ''; // vider pour l'animation
+        }
+      }
+
+      if (!textPairs.length) { container.innerHTML = htmlContent; return; }
+
+      // Vitesse adaptative : toujours ~3 secondes, quelle que soit la longueur
+      const totalChars    = textPairs.reduce((acc, p) => acc + p.full.length, 0);
+      const TARGET_FRAMES = 180; // ~3s à 60fps
+      const charsPerFrame = Math.max(6, Math.ceil(totalChars / TARGET_FRAMES));
+
+      let ni = 0, ci = 0;
+
+      // ── Haptique : légère vibration pendant l'animation ──────────────────
+      let hapticId = null;
+      if ('vibrate' in navigator) {
+        hapticId = setInterval(() => navigator.vibrate(1), 80);
+      }
+
+      function frame() {
+        let toReveal = charsPerFrame;
+
+        while (toReveal > 0 && ni < textPairs.length) {
+          const pair      = textPairs[ni];
+          const remaining = pair.full.length - ci;
+
+          if (toReveal >= remaining) {
+            // Ce nœud est terminé → passer au suivant
+            pair.node.textContent = pair.full;
+            ni++;
+            ci       = 0;
+            toReveal -= remaining;
+          } else {
+            // Révéler partiellement ce nœud
+            ci += toReveal;
+            pair.node.textContent = pair.full.slice(0, ci);
+            toReveal = 0;
+          }
+        }
+
+        if (ni < textPairs.length) {
+          requestAnimationFrame(frame);
+        } else {
+          // Animation terminée → couper le haptique
+          if (hapticId) {
+            clearInterval(hapticId);
+            if ('vibrate' in navigator) navigator.vibrate(0);
+          }
+        }
+      }
+
+      requestAnimationFrame(frame);
+    }
+
     // ── Barre de progression lecture ──────────────────────────────────────
     function initProgress() {
       const bar = document.getElementById('progress-bar');
@@ -507,9 +580,7 @@
 
           <hr class="article-divider">
 
-          <div class="article-body">
-            ${article.body || '<p>' + safeText(article.snippet || '') + '</p>'}
-          </div>
+          <div class="article-body" id="article-body-anim"></div>
 
           <div class="article-actions">
             <a href="${article.url}" target="_blank" rel="noopener noreferrer" class="btn-primary">
@@ -536,6 +607,11 @@
       `;
 
       initProgress();
+
+      // ── Animation typewriter sur le corps de l'article ──────────────────
+      const bodyEl   = wrap.querySelector('#article-body-anim');
+      const bodyHtml = article.body || `<p>${safeText(article.snippet || '')}</p>`;
+      if (bodyEl) animateArticleBody(bodyEl, bodyHtml);
     }
 
     // ── Chargement ────────────────────────────────────────────────────────
