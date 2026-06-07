@@ -41,7 +41,9 @@ jobs:
       - name: Fetch & rewrite
         working-directory: scripts
         env:
-          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY:  ${{ secrets.GEMINI_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          GROQ_API_KEY:    ${{ secrets.GROQ_API_KEY }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
