@@ -130,6 +130,47 @@ function fetchWithTimeout(url, opts, ms) {
   ]);
 }
 
+// ─── fetchFeed via proxy rss2json (pour sites qui bloquent GitHub Actions) ────
+async function fetchFeedRss2Json(source, keywords, config) {
+  const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}&count=30`;
+  try {
+    const res = await fetchWithTimeout(apiUrl, {
+      headers: { 'User-Agent': 'CelliA-Bot/1.0', 'Accept': 'application/json' }
+    }, 10000);
+    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+    const data = await res.json();
+    if (data.status !== 'ok') throw new Error(`API: ${data.message || 'erreur inconnue'}`);
+
+    const now = Date.now(), windowMs = WINDOW_HOURS * 3600 * 1000, items = [];
+    for (const item of data.items || []) {
+      const pubDate = item.pubDate ? new Date(item.pubDate).getTime() : 0;
+      if (pubDate && (now - pubDate) > windowMs) continue;
+      const title = cleanText(item.title || '');
+      const url   = item.link || '';
+      if (!title || !url) continue;
+      if (source.tech_only) {
+        if ((config.exclude_keywords || []).some(kw => title.toLowerCase().includes(kw))) continue;
+      }
+      const snippet  = cleanText(item.description || item.content || '').slice(0, 800);
+      const category = source.category || detectCategory(`${title} ${snippet}`, keywords);
+      const image    = item.thumbnail && item.thumbnail.startsWith('http') ? item.thumbnail : null;
+      items.push({
+        id:       md5(url),
+        title, url,
+        source:   extractDomain(source.url),
+        date:     item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
+        image, snippet, category,
+        lang:     source.lang || 'fr',
+      });
+    }
+    dim(`  [proxy] ${source.url} → ${items.length} items`);
+    return items;
+  } catch (e) {
+    warn(`Proxy rss2json échoué : ${source.url} — ${e.message}`);
+    return [];
+  }
+}
+
 // ─── fetchFeed ────────────────────────────────────────────────────────────────
 async function fetchFeed(source, keywords, config) {
   const ua = source.userAgent || 'CelliA-Bot/1.0 (+https://cellia.netlify.app)';
@@ -668,7 +709,13 @@ async function main() {
 
   // RSS
   log('Fetch des flux RSS...');
-  const feedResults = await Promise.allSettled(config.sources.map(s=>fetchFeed(s,config.keywords,config)));
+  const feedResults = await Promise.allSettled(
+    config.sources.map(s =>
+      s.proxy === 'rss2json'
+        ? fetchFeedRss2Json(s, config.keywords, config)
+        : fetchFeed(s, config.keywords, config)
+    )
+  );
   let allArticles = feedResults.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
   ok(`${allArticles.length} articles bruts récupérés`);
 
