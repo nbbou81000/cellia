@@ -132,9 +132,15 @@ function fetchWithTimeout(url, opts, ms) {
 
 // ─── fetchFeed ────────────────────────────────────────────────────────────────
 async function fetchFeed(source, keywords, config) {
+  const ua = source.userAgent || 'CelliA-Bot/1.0 (+https://cellia.netlify.app)';
   const parser = new Parser({
     timeout: 10000,
-    headers: { 'User-Agent': 'CelliA-Bot/1.0' },
+    headers: {
+      'User-Agent':      ua,
+      'Accept':          'application/rss+xml, application/atom+xml, application/xml, text/xml, */*;q=0.8',
+      'Accept-Language': 'fr-FR,fr;q=0.9,en;q=0.8',
+      'Cache-Control':   'no-cache',
+    },
     customFields: { item: [
       ['media:content','media:content',{keepArray:false}],
       ['media:thumbnail','mediaThumbnail',{keepArray:false}],
