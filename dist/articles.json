@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-07T12:22:06.025Z",
-  "count": 52,
+  "generated_at": "2026-06-07T14:20:14.202Z",
+  "count": 57,
   "ephemeris": {
     "date": "2026-06-07",
     "day": 7,
@@ -17,6 +17,76 @@
     ]
   },
   "articles": [
+    {
+      "id": "f15108a29a",
+      "title": "Intel veut sa revanche sur le Steam Deck et le ROG Ally",
+      "url": "https://www.journaldugeek.com/2026/06/07/intel-veut-sa-revanche-sur-le-steam-deck-et-le-rog-ally/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T14:00:38.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/msi-claw-ai-1280x853.jpg",
+      "snippet": "Après plusieurs faux départs dans l'univers des consoles PC portables, Intel revient avec une plateforme conçue spécifiquement pour ces appareils. Les nouvelles puces Arc G3 et Arc G3 Extreme promettent davantage de performances, une meilleure autonomie et quelques astuces bienvenues pour accélérer le lancement des jeux. De quoi bousculer AMD ? Peut-être. Mais il y a un hic.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** Intel dégaine ses nouvelles puces Arc G3, bien décidées à voler la vedette aux Ryzen Z d'AMD. |||BODY||",
+      "body": "<p>Après des années à se prendre des vents dans la figure avec ses puces mobiles un peu boiteuses, Intel revient en fanfare avec ses <strong>Arc G3 et Arc G3 Extreme</strong>, des monstres spécifiquement conçus pour les consoles PC portables sous Windows 11. Fini les adaptations de processeurs pour laptops, cette fois le fondeur mise tout sur une plateforme taillée pour le jeu nomade. Et visiblement, AMD et ses Ryzen Z qui trustent les Steam Deck, ROG Ally et autres Legion Go ferait bien de se méfier.</p>\n\n<p>Les premiers appareils à en bénéficier sont déjà connus : <strong>l'Acer Predator Atlas 8, le MSI Claw 8 EX AI+ et les prochains OneXPlayer</strong> devraient débarquer d’ici quelques mois. Au programme : des machines plus puissantes, une autonomie boostée et des astuces pour lancer les jeux plus vite. Pas mal pour une tentative de rattrapage, non ?</p>\n\n<p>Au cœur de ces nouvelles puces, on trouve l’architecture <strong>Panther Lake</strong>, avec 14 cœurs au total (un mix de cœurs performants, économes et ultra-low-power). La différence se fait côté GPU : l’Arc G3 embarque un Arc B370 à 10 cœurs Xe3, tandis que l’Arc G3 Extreme monte à 12 cœurs Xe3 avec un B390. Intel balance des chiffres qui font mal : son G3 Extreme serait jusqu’à 42 % plus rapide en 1080p à consommation égale. Même en mode économe, l’écart resterait favorable. (Mais bon, on sait tous que les benchmarks maison, c’est comme les promesses politiques : il faut prendre ça avec des pincettes.)</p>\n\n<p>Reste à voir si ces nouvelles puces parviendront à s’imposer face aux Ryzen Z, qui dominent outrageusement le marché. Mais une chose est sûre : le match risque d’être serré. Et ça, c’est une excellente nouvelle pour les joueurs nomades.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "e3b8f1738e",
+      "title": "LIPS is an Open Source Sip-And-Puff Interface",
+      "url": "https://hackaday.com/2026/06/07/lips-is-an-open-source-sip-and-puff-interface/",
+      "source": "hackaday.com",
+      "date": "2026-06-07T14:00:27.000Z",
+      "image": "https://hackaday.com/wp-content/uploads/2026/06/LIPS-puff-and-sip.png",
+      "snippet": "Lots of us have&#8211; thanks to repetative stress injuries&#8211; developed mobility issues that we have to work around when using computers. Maybe it&#8217;s a trackball instead of a mouse, or a split keyboard, or mechanical keys with very specific force requirements&#8211; but those are small potatoes compared to people with such severe movement issues such as quadriplegia who need to fall back on things like a sip-and-puff device to control the computer with their mouths. Commercial options of course come with absurd price tags, but a DIY option is a different story. [DanielYordanov]&#8217;s L.I.P.S project can be built for only a couple percent of what the big boys want, and it&#8217;s fully-open source. So you might think a sip-and-puff device is a two-bit interface, only slightly mo",
+      "category": "maker",
+      "lang": "en",
+      "summary": "** Une interface \"souffle\" open-source à moins de 100 balles, ça vous tente ?",
+      "body": "<p>Entre les tendinites à répétition et les problèmes de mobilité plus sévères, il existe pléthore de solutions pour interagir avec un ordinateur. Trackballs custom, claviers ergonomiques, claviers mécaniques ultra-sensibles… Mais quand on parle de quadriplégie ou de handicaps moteurs lourds, il faut passer aux solutions radicales. Et là, les prix des interfaces du commerce atteignent des sommets stratosphériques. Heureusement, <strong>l’open source</strong> entre en jeu avec <strong>L.I.P.S</strong>, le projet DIY de [Daniel Yordanov] qui casse les prix comme jamais.</p>\n\n<p>Imaginez : une interface \"sip-and-puff\" (vous soufflez ou aspirez dans un embout pour simuler des clics), mais en version ultra-accessible. Le génie ? Un capteur à effet Hall pour le positionnement (votre menton et vos lèvres servent de souris), couplé à un ou deux capteurs de pression pour détecter les commandes de respiration. Résultat : un périphérique qui se comporte comme une souris à 4 boutons minimum, capable même de distinguer les impulsions longues ou courtes pour exécuter des macros. Cerise sur le gâteau, grâce à un clavier virtuel et une interface web gérée par un <strong>CH552</strong>, la config’ est un jeu d’enfant.</p>\n\n<p>Tout est open : les fichiers <strong>KiCad</strong>, les plans 3D (<strong>STL</strong>), le code… Même un tuto vidéo retrace la genèse du projet. Le tout pour une poignée de dollars, contre des centaines (voire milliers) pour les solutions \"pro\". La liberté numérique, sans se ruiner. Et si vous aussi vous avez un hack qui améliore le quotidien, balancez-le en commentaire !</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "f8bb2d16d7",
+      "title": "« Au début, on nous prenait pour des fous » : entretien avec William Méauzoone, co-fondateur du cloud français Leviia",
+      "url": "https://www.numerama.com/tech/2264435-au-debut-on-nous-prenait-pour-des-fous-entretien-avec-william-co-fondateur-du-cloud-francais-leviia.html",
+      "source": "numerama.com",
+      "date": "2026-06-07T13:31:00.000Z",
+      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
+      "snippet": "Alors que le contexte géopolitique place la souveraineté numérique au cœur des débats et que la doctrine française en matière d'achats numériques priorise désormais clairement les acteurs français et européens, Numerama est allé à la rencontre des dirigeants qui composent l'écosystème tech souverain français pour retracer leurs aventures et analyser les défis actuels.",
+      "category": "hardware",
+      "lang": "fr",
+      "summary": "** En 2020, le cloud souverain français ? Une blague. Aujourd’hui ? Une réalité qui défie Amazon et ses copains.",
+      "body": "<p>En 2020, l’idée de concurrencer frontalement les mastodontes américains du cloud avec une solution made in France aurait fait rire. William Méauzoone, co-fondateur de <strong>Leviia</strong>, en est convaincu : à l’époque, seul un petit cercle de « geeks et d’activistes des données » croyait à un cloud « souverain, sécurisé et écologique ». Quatre ans plus tard, tout a changé.</p>\n\n<p>Leviia, c’est désormais une <strong>scale-up</strong> qui affiche fièrement 1,5 million d’utilisateurs. Pas mal pour une entreprise familiale née d’une frustration technique. <strong>Arnaud Méauzoone</strong>, le frère de William et co-fondateur, est un pur produit du milieu : linuxien convaincu, expert en cybersécurité et défenseur du libre. Son déclic ? Impossible de trouver une suite collaborative souveraine et accessible pour un projet perso. Résultat : « Et si on créait notre propre Dropbox, mais en mieux ? »</p>\n\n<p>Six cents mille comptes lycéens et personnels, rien que pour l’Île-de-France. Leviia gère aujourd’hui une infrastructure colossale, et ça, c’est <strong>impressionnant</strong>. Les arguments du souverain, du sécurisé et de l’écologique ? Ils ne font plus rire personne aujourd’hui. Même les plus sceptiques ont dû se rendre à l’évidence : <strong>le cloud à la française, c’est du sérieux</strong>. Et avec des résultats pareils, difficile de continuer à ricaner.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "46e77b41e2",
+      "title": "Rachat de SFR : faut-il quitter le navire dès maintenant ?",
+      "url": "https://www.journaldugeek.com/2026/06/07/rachat-de-sfr-faut-il-quitter-le-navire-des-maintenant/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T13:25:48.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/04/rachat-sfr-negociations-exclusives-abonnes-2026-1280x853.jpeg",
+      "snippet": "C'est signé. Le 6 juin 2026, quelques minutes avant minuit, Bouygues Telecom, Free et Orange ont officialisé le protocole d'accord avec Altice France pour le rachat de SFR à 20,35 milliards d'euros. Huit mois de négociations, deux offres, une période d'exclusivité prolongée jusqu'au 5 juin et un ultime délai de 48 heures. La France va passer à trois opérateurs mobiles. Pour les 25 millions d'abonnés SFR, la question de ce qui va vraiment se passer devient plus concrète.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** Bouygues, Free, Orange : le trio magique rachète SFR. Mais pour les abonnés, ça va tanguer.",
+      "body": "<p>Les mecs, accrochez-vous : <strong>SFR appartient désormais à 100% à Bouygues, Free et Orange</strong>. Un rachat à 20,35 milliards d’euros, signé dans la nuit du 6 juin 2026 après huit mois de tractations dignes d’un thriller financier. Deux offres, des nuits blanches, une exclusivité prolongée jusqu’à minuit pile, et une dernière deadline de 48 heures pour faire signer tout le monde. Résultat ? La France passe officiellement à trois opérateurs mobiles. Finito pour le quatuor historique.</p>\n\n<p>Pour les 25 millions de clients SFR, l’heure n’est plus aux spéculations. <strong>Le deal est acté</strong>, et avec lui, une restructuration massive qui va redistribuer les cartes. Bouygues héritera du B2B (les pros, donc), tandis que les infrastructures et le grand public seront partagés entre les trois heureux élus. Reste que certains actifs restent sur le carreau : XP Fibre, les data centers d’UltraEdge, les DOM-TOM et Intelcia (le service client) échappent à la transaction. Le serpent se mord la queue.</p>\n\n<p>Côté Altice France, Patrick Drahi a dû serrer la vis pour vendre. Une restructuration de dette monstrueuse (passée de 24 à 15,5 milliards), des créanciers qui prennent 45% du capital, et Drahi qui garde la bride sur l’autre moitié. Le groupe s’est délesté, mais pas au point de renoncer à la cession. La preuve que quand on a besoin de cash, même un empire télécoms se plie.</p>\n\n<p>Alors, faut-il fuir SFR dès maintenant ? Pas sûr. Mais <strong>les garanties pour les abonnés, elles, restent à écrire</strong>. Et ça, c’est une autre histoire...</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "26bb5e7041",
+      "title": "Xiaomi lance une montre qui pourrait vous faire oublier son chargeur pendant trois semaines",
+      "url": "https://www.journaldugeek.com/2026/06/07/xiaomi-lance-une-montre-qui-pourrait-vous-faire-oublier-son-chargeur-pendant-trois-semaines/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T13:00:09.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/xiaomi-Watch-S5-1280x853.jpg",
+      "snippet": "Xiaomi a profité de son événement de lancement pour dévoiler plusieurs nouveaux produits connectés, dont la Watch S5 et les écouteurs Buds 6. Si les seconds misent sur l'audio et la réduction de bruit, la première se distingue surtout par une promesse qui risque de faire tourner quelques têtes : jusqu'à 21 jours d'autonomie sur une seule charge.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** Une montre qui se recharge moins qu’un frigo, c’est la promesse de Xiaomi avec sa Watch S5.",
+      "body": "<p>Xiaomi, ce constructeur qui a le don de transformer des gadgets en outils quasi-indispensables, a encore frappé fort avec sa nouvelle <strong>Watch S5</strong>. Et cette fois, c’est l’autonomie qui fait parler d’elle. Jusqu’à <strong>21 jours</strong> sur une seule charge, vous avez bien lu. Même les plus sceptiques en matière de montres connectées devraient être impressionnés. (Et ceux qui oublient systématiquement de brancher leur montre avant de dormir, cette section est pour vous.)</p>\n\n<p>Pour y parvenir, Xiaomi a truffé sa montre d’un <strong>batterie de 815 mAh</strong> et de son système <strong>HyperOS</strong>. Même en usage intensif avec l’affichage permanent allumé, la Watch S5 tient encore <strong>9 jours</strong>. Oui, vous avez bien lu : <strong>9 jours</strong>. Face à ça, les Apple Watch, Galaxy Watch et autres Pixel Watch font pâle figure, obligées de passer par la case recharge tous les deux ou trois jours. La Watch S5, elle, se moque de vos habitudes.</p>\n\n<p>Mais ce n’est pas tout. Xiaomi n’a pas lésiné sur les specs. On a droit à un <strong>écran AMOLED de 1,48 pouce</strong> capable d’afficher jusqu’à <strong>2 500 nits</strong> de luminosité, un boîtier en <strong>acier inoxydable</strong>, un <strong>GPS double bande</strong>, et même une résistance à l’eau de <strong>5 ATM</strong>. Pour les sportifs, la montre propose le suivi de la fréquence cardiaque, du taux d’oxygène dans le sang, et du sommeil, avec plus de <strong>150 activités sportives</strong> au menu. Les amateurs de vélo ou de sports outdoor apprécieront même les <strong>cartes hors ligne</strong> pour leurs sorties sans réseau. Bref, Xiaomi a tout prévu… ou presque.</p>\n\n<p>En revanche, si vous cherchez une montre connectée pour un suivi médical poussé (ECG, détection d’arythmie…), la Watch S5 n’est clairement pas faite pour vous. Mais avouons-le : pour le prix et les performances offertes, c’est déjà un excellent compromis pour la plupart des utilisateurs.</p>",
+      "readingTime": 2
+    },
     {
       "id": "5b02078ece",
       "title": "Xbox Games Showcase 2026 : Microsoft sort le bazooka !",
