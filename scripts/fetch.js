@@ -4,12 +4,12 @@ import path    from 'path';
 import crypto  from 'crypto';
 import { fileURLToPath } from 'url';
 
-const __dirname    = path.dirname(fileURLToPath(import.meta.url));
-const IS_DEV       = process.argv.includes('--dev');
-const MAX_ARTICLES = IS_DEV ? 3 : 10;
-const WINDOW_HOURS = 48;
-const GROQ_MODEL   = 'llama-3.1-8b-instant';
-const GROQ_URL     = 'https://api.groq.com/openai/v1/chat/completions';
+const __dirname      = path.dirname(fileURLToPath(import.meta.url));
+const IS_DEV         = process.argv.includes('--dev');
+const MAX_ARTICLES   = IS_DEV ? 3 : 10;
+const WINDOW_HOURS   = 48;
+const GEMINI_MODEL   = 'gemini-2.0-flash';
+const GEMINI_URL     = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
 
 // ─── Logs colorés ANSI ───────────────────────────────────────────────────────
 const c = {
@@ -52,11 +52,9 @@ function cleanText(html) {
 }
 
 function extractImage(item) {
-  // media:content
   if (item['media:content']?.$.url) return item['media:content'].$.url;
   if (item.mediaThumbnail?.$.url)   return item.mediaThumbnail.$.url;
   if (item.enclosure?.url)          return item.enclosure.url;
-  // regex dans content
   const content = item.content || item['content:encoded'] || '';
   const match   = content.match(/<img[^>]+src=["']([^"']+)["']/i);
   if (match) return match[1];
@@ -110,7 +108,6 @@ async function fetchFeed(source, keywords, config) {
     const url   = item.link || item.url || '';
     if (!title || !url) continue;
 
-    // Filtre tech_only : exclure si mot exclu présent dans le titre
     if (source.tech_only) {
       const lowerTitle = title.toLowerCase();
       const excluded   = (config.exclude_keywords || []).some(kw => lowerTitle.includes(kw));
@@ -164,7 +161,7 @@ async function fetchFullText(article) {
     while ((m = re.exec(container)) !== null) {
       const text = cleanText(m[1]);
       if (text.length > 40) paragraphs.push(text);
-      if (paragraphs.length >= 8) break; // max 8 paragraphes
+      if (paragraphs.length >= 8) break;
     }
 
     const full = paragraphs.join(' ').slice(0, 2000);
@@ -174,80 +171,121 @@ async function fetchFullText(article) {
   }
 }
 
-// ─── rewriteWithGroq ─────────────────────────────────────────────────────────
-async function rewriteWithGroq(article) {
-  if (!process.env.GROQ_API_KEY) {
-    warn('GROQ_API_KEY manquante — fallback snippet');
-    return { summary: article.snippet, body: `<p>${article.snippet}</p>`, readingTime: 1 };
+// ─── rewriteWithGemini ───────────────────────────────────────────────────────
+async function rewriteWithGemini(article) {
+  if (!process.env.GEMINI_API_KEY) {
+    warn('GEMINI_API_KEY manquante — fallback snippet');
+    return { title: article.title, summary: article.snippet, body: `<p>${article.snippet}</p>`, readingTime: 1 };
   }
 
-  try {
-    const response = await fetch(GROQ_URL, {
-      method:  'POST',
-      headers: {
-        'Content-Type':  'application/json',
-        'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
-      },
-      body: JSON.stringify({
-        model:    GROQ_MODEL,
-        messages: [
-          {
-            role:    'system',
-            content: `Tu es Korben, blogueur tech français. Style : direct, geek, complice, légèrement ironique. Jamais corporate. Toujours en français.`
-          },
-          {
-            role:    'user',
-            content: `Réécris cet article en FRANÇAIS dans le style de Korben.
+  const systemPrompt = `Tu incarnes Korben (korben.info), le blogueur tech français culte depuis 20 ans. Ton style est immédiatement reconnaissable et doit l'être dans chaque article.
 
-RÈGLES ABSOLUES :
-- Si la source est en anglais, TRADUIS et réécris intégralement en français.
-- Tu RÉÉCRIS l'article complet. Le lecteur n'a pas besoin de lire l'original.
-- Corps entre 200 et 350 mots.
-- Utilise UNIQUEMENT les balises HTML <p>, <h2>, <strong>.
-- IMPÉRATIF : termine toujours tes phrases. Ne t'arrête JAMAIS en pleine phrase.
+TON STYLE — RÈGLES ABSOLUES :
+- Ton familier et complice, comme si tu parlais à des potes geeks autour d'une bière
+- Phrases courtes. Percutantes. Avec du rythme. Pas de blabla.
+- Tu utilises naturellement : "les gars", "bref", "du coup", "franchement", "clairement", "en gros", "au final", "histoire de"
+- Des apartés entre parenthèses pour les blagues ou précisions secondaires (comme ça, voilà)
+- Vocabulaire geek assumé et naturel, sans en faire des caisses
+- Tu donnes TON avis tranché — tu n'es pas neutre, tu n'es pas une encyclopédie
+- Références culturelles geek quand c'est pertinent (SF, rétro, jeux vidéo, internet culture)
+- Humour sec et ironie légère — jamais lourd, jamais forcé
+- Tu peux commencer par une interpellation directe du lecteur
+- Quand c'est impressionnant, tu le dis. Quand c'est du flan marketing, tu le démontes.
 
-FORMAT EXACT (respecte-le scrupuleusement) :
-[phrase d'accroche résumant l'article, 1-2 phrases max]
+JAMAIS :
+- Jamais "Il convient de noter", "Dans le cadre de", "Il est important de souligner"
+- Jamais de ton journalistique froid et neutre
+- Jamais de formules corporate ou administratives
+- Jamais de titres ou phrases en anglais (sauf noms propres techniques incontournables : GPU, CPU, API…)
+- Jamais de conclusion bateau type "En conclusion, nous pouvons dire que…"`;
+
+  const userPrompt = `Réécris cet article dans le style de Korben.
+
+RÈGLES :
+- TRADUIS et réécris intégralement en français, même si la source est en anglais.
+- Le lecteur ne lira pas l'original. Tu racontes l'info à ta façon.
+- Corps entre 220 et 320 mots.
+- Balises HTML autorisées : <p>, <h2>, <strong> UNIQUEMENT.
+- Termine TOUJOURS tes phrases. Ne coupe jamais en plein milieu.
+- Le titre français doit être accrocheur, imagé, dans le style Korben — pas une traduction littérale.
+
+FORMAT EXACT À RESPECTER (pas de texte en dehors de ce format) :
+TITRE_FR: [titre en français percutant, max 90 caractères]
+ACCROCHE: [1 à 2 phrases d'entrée qui donnent envie de lire, ton Korben]
 |||BODY|||
-[corps complet en HTML avec balises <p>, <h2>, <strong>]
+[corps complet en HTML : <p>, <h2>, <strong>]
 
 ARTICLE SOURCE :
-Titre : ${article.title}
+Titre original : ${article.title}
 Source : ${article.source}
-Contenu : ${article.fullText || article.snippet}`
-          }
-        ],
-        temperature: 0.8,
-        max_tokens:  1200,
+Contenu : ${article.fullText || article.snippet}`;
+
+  try {
+    const response = await fetch(`${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: {
+          parts: [{ text: systemPrompt }]
+        },
+        contents: [{
+          parts: [{ text: userPrompt }]
+        }],
+        generationConfig: {
+          temperature:     0.85,
+          maxOutputTokens: 1400,
+          topP:            0.95,
+        }
       })
     });
 
     if (!response.ok) {
       const body = await response.text();
-      throw new Error(`HTTP ${response.status} — ${body.slice(0, 200)}`);
+      throw new Error(`HTTP ${response.status} — ${body.slice(0, 300)}`);
     }
 
     const data = await response.json();
-    const text = data.choices?.[0]?.message?.content?.trim() || '';
 
-    let summary, body;
-    if (text.includes('|||BODY|||')) {
-      const parts = text.split('|||BODY|||');
-      summary = parts[0].trim();
-      body    = parts[1].trim().replace(/```html?/g, '').replace(/```/g, '').trim();
-    } else {
-      const firstDot = text.indexOf('. ');
-      summary = firstDot > 0 ? text.slice(0, firstDot + 1).trim() : text.slice(0, 150);
-      body    = text.slice(summary.length).trim() || text;
+    if (data.error) {
+      throw new Error(data.error.message || 'Erreur Gemini inconnue');
     }
 
-    const wordCount  = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+    if (!text) throw new Error('Réponse vide de Gemini');
+
+    // ── Parser TITRE_FR ──
+    let titleFR = article.title;
+    const titleMatch = text.match(/^TITRE_FR:\s*(.+)/m);
+    if (titleMatch) titleFR = titleMatch[1].trim();
+
+    // ── Parser ACCROCHE + BODY ──
+    let summary = article.snippet;
+    let body    = `<p>${article.snippet}</p>`;
+
+    if (text.includes('|||BODY|||')) {
+      const parts  = text.split('|||BODY|||');
+      const before = parts[0];
+      body         = parts[1].trim().replace(/```html?/g, '').replace(/```/g, '').trim();
+
+      const accrocheMatch = before.match(/ACCROCHE:\s*([\s\S]+?)(?=\|\|\|BODY\|\|\||$)/);
+      if (accrocheMatch) {
+        summary = accrocheMatch[1].trim();
+      } else {
+        // Fallback : première phrase du body
+        const firstP = body.match(/<p>([\s\S]*?)<\/p>/);
+        if (firstP) summary = cleanText(firstP[1]).slice(0, 200);
+      }
+    }
+
+    const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
     const readingTime = Math.max(1, Math.round(wordCount / 200));
 
-    return { summary, body, readingTime };
+    return { title: titleFR, summary, body, readingTime };
+
   } catch (e) {
-    err(`Groq error [${article.id}] : ${e.message}`);
+    err(`Gemini error [${article.id}] : ${e.message}`);
     return {
+      title:       article.title,
       summary:     article.snippet,
       body:        `<p>${article.snippet}</p>`,
       readingTime: 1,
@@ -269,8 +307,8 @@ async function main() {
   log(`${config.sources.length} sources configurées`);
 
   // 2. Charger le cache
-  const distPath    = path.join(__dirname, '..', 'dist', 'articles.json');
-  let   cachedData  = { articles: [] };
+  const distPath   = path.join(__dirname, '..', 'dist', 'articles.json');
+  let   cachedData = { articles: [] };
   try {
     cachedData = JSON.parse(await fs.readFile(distPath, 'utf-8'));
     ok(`Cache : ${cachedData.articles?.length || 0} articles existants`);
@@ -283,7 +321,7 @@ async function main() {
     if (a.id && a.body?.length > 100) cachedById[a.id] = a;
   }
 
-  // 3. Fetch tous les flux en parallèle
+  // 3. Fetch tous les flux RSS en parallèle
   log('Fetch des flux RSS...');
   const feedResults = await Promise.allSettled(
     config.sources.map(s => fetchFeed(s, config.keywords, config))
@@ -305,7 +343,7 @@ async function main() {
   // 5. Trier par date décroissante
   allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // 6. Équilibrer : max 5 par catégorie
+  // 6. Équilibrer : max 5 articles par catégorie
   const catCount = {};
   allArticles = allArticles.filter(a => {
     catCount[a.category] = (catCount[a.category] || 0) + 1;
@@ -316,35 +354,37 @@ async function main() {
   allArticles = allArticles.slice(0, MAX_ARTICLES);
   log(`${allArticles.length} articles retenus après équilibrage`);
 
-  // 8. fetchFullText en parallèle
+  // 8. fetchFullText en parallèle (timeout 5s par article)
   log('Extraction du texte complet...');
   await Promise.all(allArticles.map(async a => {
     a.fullText = await fetchFullText(a);
   }));
 
-  // 9. Réécriture Groq (avec cache)
-  log('Réécriture avec Groq...');
+  // 9. Réécriture Gemini (avec cache)
+  log('Réécriture avec Gemini...');
   let newCount    = 0;
   let cachedCount = 0;
 
   for (const article of allArticles) {
     if (cachedById[article.id]) {
-      const cached = cachedById[article.id];
+      const cached        = cachedById[article.id];
+      article.title       = cached.title;
       article.summary     = cached.summary;
       article.body        = cached.body;
       article.readingTime = cached.readingTime;
       cachedCount++;
-      dim(`  Cache hit : ${article.title.slice(0, 50)}`);
+      dim(`  Cache hit : ${article.title.slice(0, 55)}`);
     } else {
-      const result = await rewriteWithGroq(article);
+      const result        = await rewriteWithGemini(article);
+      article.title       = result.title;
       article.summary     = result.summary;
       article.body        = result.body;
       article.readingTime = result.readingTime;
       newCount++;
-      ok(`  Réécrit : ${article.title.slice(0, 50)}`);
-      await sleep(3000);
+      ok(`  Réécrit : ${article.title.slice(0, 55)}`);
+      await sleep(5000); // ~12 req/min — sous la limite Gemini free (15 RPM)
     }
-    delete article.fullText; // Pas besoin dans le JSON final
+    delete article.fullText;
   }
 
   // 10. Images fallback Unsplash
