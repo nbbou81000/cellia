@@ -1,7 +1,106 @@
 {
-  "generated_at": "2026-06-07T09:58:46.757Z",
-  "count": 41,
+  "generated_at": "2026-06-07T11:19:32.374Z",
+  "count": 47,
+  "ephemeris": {
+    "date": "2026-06-07",
+    "day": 7,
+    "month": 6,
+    "month_fr": "juin",
+    "items": [
+      {
+        "year": 1981,
+        "original": "The Israeli Air Force attacked a nuclear reactor under the assumption that it was about to start producing plutonium to further an Iraqi nuclear-weapons program.",
+        "summary": "En 1981, l'armée de l'air israélienne a fait un \"hotfix\" assez radical. Ils ont bombardé un réacteur nucléaire irakien, histoire de s'assurer qu'il ne produirait jamais de plutonium pour un programme d'armes atomiques. Quand tu ne veux vraiment, mais *vraiment* pas que ton voisin se mette à miner du Bitcoin atomique, tu vois le genre. C'est ce qu'on appelle une mise à jour préventive musclée.",
+        "wikipedia_url": "https://en.wikipedia.org/wiki/Israeli_Air_Force",
+        "thumbnail": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Israeli_Air_Force_-_Coat_of_arms.svg/330px-Israeli_Air_Force_-_Coat_of_arms.svg.png"
+      }
+    ]
+  },
   "articles": [
+    {
+      "id": "1e6f6cbcb4",
+      "title": "La MG4 EV Urban : l'électrique qui fout le bordel chez la concurrence ?",
+      "url": "https://www.numerama.com/vroom/2264321-jai-essaye-la-mg4-ev-urban-et-je-pense-que-cest-lune-des-voitures-electriques-pepite-de-lannee.html",
+      "source": "numerama.com",
+      "date": "2026-06-07T11:00:00.000Z",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
+      "snippet": "Numerama a pris le volant de la nouvelle MG4 EV Urban, la nouvelle arme de séduction massive du constructeur sino-britannique en Europe. Voici notre verdict sur la compacte au rapport prix/équipements ultra-compétitif.",
+      "category": "hardware",
+      "lang": "fr",
+      "summary": "",
+      "body": "<p>Numerama a pris le volant de la nouvelle MG4 EV Urban, la nouvelle arme de séduction massive du constructeur sino-britannique en Europe. Voici notre verdict sur la compacte au rapport prix/équipements ultra-compétitif.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "96a9da24cc",
+      "title": "C’est signé : SFR accepte d’être racheté et dévoile le sort de ses abonnés chez Bouygues, Free et Orange",
+      "url": "https://www.numerama.com/tech/2269551-cest-signe-sfr-accepte-detre-rachete-et-devoile-le-sort-de-ses-abonnes-chez-bouygues-free-et-orange.html",
+      "source": "numerama.com",
+      "date": "2026-06-07T10:58:05.000Z",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
+      "snippet": "Dans un communiqué nocturne envoyé le 6 juin 2026, Bouygues Telecom, Free et Orange annoncent avoir signé un protocole d'accord avec Altice France pour racheter SFR, désormais valorisé 20,35 milliards d'euros. Pour la première fois, le consortium détaille la répartition des abonnés : Free récupère toute la base RED by SFR, Bouygues toute l'activité entreprises et Orange plusieurs opérateurs virtuels. Rien ne changera toutefois avant, au minimum, le second semestre 2027.",
+      "category": "hardware",
+      "lang": "fr",
+      "summary": "**La vente de SFR est enfin signée !**",
+      "body": "Alors que les rumeurs de vente de SFR ont fait leur chemin depuis des mois, l'opérateur a finalement accepté d'être racheté par ses concurrents. Le 6 juin dernier, Orange, Bouygues et Free ont signé un protocole d'accord avec Altice France, le propriétaire de SFR. Le montant de l'accord est évalué à 20,35 milliards d'euros, soit 21 milliards en ajoutant des compléments.\n\n**L'échiquier des actionnaires**\n\nMais qui seront les véritables propriétaires de SFR ? Bouygues Telecom en récupérera 42%, tandis que Free en voudra 31%. Orange, déjà numéro 1 en France, se contentera de 27%. C'est un scénario qui semble bien équilibré, mais cela ne signifie pas que les choses seront faciles pour SFR. Les trois opérateurs doivent encore négocier les détails du montage financier et les mises en place des retraits, avec des indemnisations bien sûr.\n\n**La prochaine étape ?**\n\nPour tout le monde, la question qui se pose est de savoir quand tout cela arrivera. Selon les sources, SFR pourrait tomber dans la main d'Orange, Free et Bouygues d'ici le second semestre 2027, si tout se passe bien. Mais cela reste bien sûr à voir, car il y a encore beaucoup de détails à régler avant que les choses se mettent en place.\n\n**La fin d'une époque ?**\n\nPour certains, cela signifie la fin d'une époque pour SFR. L'opérateur a toujours joué un rôle important dans le paysage des opérateurs français, mais cela ne signifie pas que les choses seront différentes désormais. Les trois opérateurs doivent encore travailler ensemble pour assurer la transition et assurer la continuité des services offerts par SFR.\n\n**Et les abonnés ?**\n\nIl est évident que les abonnés de SFR sont les plus concernés par cette nouvelle. Mais ne vous inquiétez pas, ce ne sera pas une fin brutale. Les trois opérateurs ont déjà mis en place un plan pour assurer la transition et vous informer de tous les changements qui auront lieu. Vous recevrez des emails, des SMS et des messages sur vos réseaux sociaux pour vous tenir au courant des choses.\n\n**Et voilà, c'est parti !**\n\nC'est donc parti pour la dernière étape de la vente de SFR. Il est évident que cela sera un processus long et compliqué, mais avec un peu de patience et de compréhension, tout devrait bien se passer. Alors, restez calme et patientez un peu, les choses se mettront en place à leur rythme.",
+      "readingTime": 2
+    },
+    {
+      "id": "fd6a1c47d2",
+      "title": "Her : Votre détective privé pour les sessions Claude Code qui partent en vrille.",
+      "url": "https://huggingface.co/blog/build-small-hackathon/her-blog",
+      "source": "huggingface.co",
+      "date": "2026-06-07T10:13:41.000Z",
+      "image": "https://images.unsplash.com/photo-1620712943543-bcc4688e7485?w=400&q=75&auto=format",
+      "snippet": "",
+      "category": "ai",
+      "lang": "en",
+      "summary": "",
+      "body": "<p></p>",
+      "readingTime": 1
+    },
+    {
+      "id": "5a50a7f7ca",
+      "title": "La Crosse Météo : ta station est morte, et elle va bien.",
+      "url": "https://www.journaldugeek.com/2026/06/07/des-milliers-de-stations-meteo-privees-de-meteo/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T10:00:14.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/star-meteo-1280x853.jpg",
+      "snippet": "Elles donnent toujours l'heure, la température et le taux d'humidité. Mais pour la météo, c'est terminé. Les stations Star Météo de La Crosse Technology ont définitivement perdu l'accès aux prévisions de Météo-France qui faisaient leur particularité. Une conséquence aussi inattendue que pénible de la faillite d'un opérateur télécom et d'un désaccord commercial dont les utilisateurs font aujourd'hui les frais.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "Ton appareil météo préféré vient de se transformer en un banal thermomètre de luxe.",
+      "body": "<p",
+      "readingTime": 1
+    },
+    {
+      "id": "5f230cf6ec",
+      "title": "Game Over pour SFR : le grand partage du gâteau à 20 milliards",
+      "url": "https://www.journaldugeek.com/2026/06/07/cest-signe-sfr-rachete-20-milliards-par-bouygues-free-et-orange-la-france-passe-a-trois-operateurs-voici-ce-qui-change-pour-vous/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T09:38:32.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/rachat-sfr-bouygues-free-orange-accord-1280x853.jpeg",
+      "snippet": "Samedi 6 juin 2026, quelques minutes avant minuit, Orange, Free et Bouygues Telecom ont annoncé avoir signé un protocole d'accord avec Altice France pour l'acquisition de SFR.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "",
+      "body": "<p>Samedi 6 juin 2026, quelques minutes avant minuit, Orange, Free et Bouygues Telecom ont annoncé avoir signé un protocole d'accord avec Altice France pour l'acquisition de SFR.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "684c0b39be",
+      "title": "Une sonde spatiale qui joue à cache-cache avec les comètes ? Sérieux ?",
+      "url": "https://www.journaldugeek.com/2026/06/07/comet-interceptor-la-sonde-europeenne-qui-cherche-encore-sa-comete/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T09:00:52.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/LEES-1280x853.jpg",
+      "snippet": "Comment préparer une mission spatiale alors qu'on ne connaît même pas encore sa destination ? C'est le pari de Comet Interceptor, un projet de l'Agence spatiale européenne qui attend patiemment l'apparition d'une comète suffisamment intéressante pour partir à sa rencontre.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "",
+      "body": "<p>Comment préparer une mission spatiale alors qu'on ne connaît même pas encore sa destination ? C'est le pari de Comet Interceptor, un projet de l'Agence spatiale européenne qui attend patiemment l'apparition d'une comète suffisamment intéressante pour partir à sa rencontre.</p>",
+      "readingTime": 1
+    },
     {
       "id": "4dae4dc112",
       "title": "\"Un jardin pour l'éternité\" : l'éloge du vivant",
@@ -22,7 +121,7 @@
       "url": "https://www.numerama.com/tech/2094619-rachat-de-sfr-par-orange-free-et-bouygues-a-quoi-sattendre-pour-le-reseau-et-les-infrastructures-telecoms.html",
       "source": "numerama.com",
       "date": "2026-06-07T08:47:06.000Z",
-      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
       "snippet": "L'ère d'un marché français des télécoms à quatre opérateurs va s'achever : SFR sera dépecé entre Orange, Bouygues Telecom et Free. Du côté des infrastructures et du réseau, on peut tracer les grandes lignes de ce qu'il va se passer.",
       "category": "hardware",
       "lang": "fr",
@@ -43,6 +142,20 @@
       "summary": "** Spoiler : les vieux clichés sur la fusion, là, ils commencent à saigner.",
       "body": "<p>Ah, la fusion nucléaire… Ce serpent de mer qui fait rêver depuis que ton grand-père écoutait Elvis. Sauf que cette fois, <strong>les gars de Commonwealth Fusion Systems (CFS), spin-off du MIT, ont décidé de faire genre c’est pour demain</strong>. Genre dans les années 2030, ils veulent balancer 400 mégawatts dans le grid US. Oui, dans moins de 10 ans. Non, je ne rigole pas. (Enfin si, un peu.)</p>\n\n<p>Leur arme secrète ? Le <strong>SPARC</strong>, un réacteur Tokamak en construction, plus gros joujou magnétique jamais conçu. Derrière, l’<strong>ARC</strong>, son grand frère, est déjà en phase de planning final, avec un spot en Virginie choisi et une demande de raccordement déposée. Le tout piloté par des mecs qui ont déjà levé 2 milliards de dollars. Oui, <strong>2 milliards</strong>. Pour ceux qui comptent : c’est plus que le PIB de Malte.</p>\n\n<h2>Tokamak : King of the Lab, mais pas encore du grid</h2>\n<p>Leur tech ? Un Tokamak, cette tore magnétique qui fait fantasmer les physiciens depuis les années 70. Les Chinois ont leur EAST, les Européens leur ITER en construction… Tous promettent de l’électricité avant 10 ans. Tous sauf ITER, qui lui, promet juste d’exister un jour. <strong>Spoiler bis : ça pue le projet pharaonique</strong>.</p>\n\n<p>Mais bon, le CFS a un avantage : leur aimant supraconducteur, déjà testé en 2021, a l’air de tenir la route. Reste à voir si leur calendrier est réaliste. Car entre \"on a un aimant qui marche\" et \"on alimente New York\", y a un gouffre. Et puis y a <strong>General Fusion</strong>, la startup steampunk qui fait du plasma maison depuis l’an dernier. Eux aussi jurent que c’est pour dans 10 ans… Comme depuis 30 ans.</p>\n\n<p>Alors, on y croit ? Moi, perso, je mise sur un retour de l’homme sur la Lune avant d’avoir du courant issu de la fusion. Mais bon, <strong>au moins, cette fois, les mecs ont les tunes</strong>. Et ça, c’est déjà un progrès.</p>",
       "readingTime": 2
+    },
+    {
+      "id": "272b79b7c6",
+      "title": "Android : Quand la \"RAM virtuelle\" des constructeurs te ralentit au lieu de t'aider",
+      "url": "https://www.journaldugeek.com/2026/06/07/android-cette-option-censee-accelerer-votre-smartphone-fait-parfois-tout-linverse/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T08:00:08.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/05/smartphone-1280x853.jpg",
+      "snippet": "Désactivez cette fonctionnalité qui fait sûrement plus de mal que de bien à votre téléphone.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "",
+      "body": "<p>Désactivez cette fonctionnalité qui fait sûrement plus de mal que de bien à votre téléphone.</p>",
+      "readingTime": 1
     },
     {
       "id": "58587ac6ca",
@@ -155,20 +268,6 @@
       "summary": "Although cryocoolers are capable of pretty impressive cooling, for many of them the underlying working principle is simple enough that you do not need any special skills or a big budget to make your own version. Take the Gifford-McMahon cryocooler for example, which works using nothing more than some kind of coolant gas and a piston in a cylinder that you can even 3D print, as demonstrated by [Hyperspace Pirate] in a recent video . The lowest temperature reached across the two prototypes was only -84°C, but this was mostly due to some sub-optimal design choices, such as the use of regular air and a clear acrylic tube to get a good glimpse at the inner workings. The trickiest part of this type of cryocooler is probably that you need to move the piston containing the regenerator between both",
       "body": "<p>Although cryocoolers are capable of pretty impressive cooling, for many of them the underlying working principle is simple enough that you do not need any special skills or a big budget to make your own version. Take the Gifford-McMahon cryocooler for example, which works using nothing more than some kind of coolant gas and a piston in a cylinder that you can even 3D print, as demonstrated by [Hyperspace Pirate] in a recent video . The lowest temperature reached across the two prototypes was only -84°C, but this was mostly due to some sub-optimal design choices, such as the use of regular air and a clear acrylic tube to get a good glimpse at the inner workings. The trickiest part of this type of cryocooler is probably that you need to move the piston containing the regenerator between both</p>",
       "readingTime": 1
-    },
-    {
-      "id": "96a9da24cc",
-      "title": "C’est signé : SFR accepte d’être racheté et dévoile le sort de ses abonnés chez Bouygues, Free et Orange",
-      "url": "https://www.numerama.com/tech/2269551-cest-signe-sfr-accepte-detre-rachete-et-devoile-le-sort-de-ses-abonnes-chez-bouygues-free-et-orange.html",
-      "source": "numerama.com",
-      "date": "2026-06-06T23:05:30.000Z",
-      "image": "https://images.unsplash.com/photo-1518770660439-4636190af475?w=400&q=75&auto=format",
-      "snippet": "Dans un communiqué nocturne envoyé le 6 juin 2026, Bouygues Telecom, Free et Orange annoncent avoir signé un protocole d'accord avec Altice France pour racheter SFR, désormais valorisé 20,35 milliards d'euros. Pour la première fois, le consortium détaille la répartition des abonnés : Free récupère toute la base RED by SFR, Bouygues toute l'activité entreprises et Orange plusieurs opérateurs virtuels. Rien ne changera toutefois avant, au minimum, le second semestre 2027.",
-      "category": "hardware",
-      "lang": "fr",
-      "summary": "**La vente de SFR est enfin signée !**",
-      "body": "Alors que les rumeurs de vente de SFR ont fait leur chemin depuis des mois, l'opérateur a finalement accepté d'être racheté par ses concurrents. Le 6 juin dernier, Orange, Bouygues et Free ont signé un protocole d'accord avec Altice France, le propriétaire de SFR. Le montant de l'accord est évalué à 20,35 milliards d'euros, soit 21 milliards en ajoutant des compléments.\n\n**L'échiquier des actionnaires**\n\nMais qui seront les véritables propriétaires de SFR ? Bouygues Telecom en récupérera 42%, tandis que Free en voudra 31%. Orange, déjà numéro 1 en France, se contentera de 27%. C'est un scénario qui semble bien équilibré, mais cela ne signifie pas que les choses seront faciles pour SFR. Les trois opérateurs doivent encore négocier les détails du montage financier et les mises en place des retraits, avec des indemnisations bien sûr.\n\n**La prochaine étape ?**\n\nPour tout le monde, la question qui se pose est de savoir quand tout cela arrivera. Selon les sources, SFR pourrait tomber dans la main d'Orange, Free et Bouygues d'ici le second semestre 2027, si tout se passe bien. Mais cela reste bien sûr à voir, car il y a encore beaucoup de détails à régler avant que les choses se mettent en place.\n\n**La fin d'une époque ?**\n\nPour certains, cela signifie la fin d'une époque pour SFR. L'opérateur a toujours joué un rôle important dans le paysage des opérateurs français, mais cela ne signifie pas que les choses seront différentes désormais. Les trois opérateurs doivent encore travailler ensemble pour assurer la transition et assurer la continuité des services offerts par SFR.\n\n**Et les abonnés ?**\n\nIl est évident que les abonnés de SFR sont les plus concernés par cette nouvelle. Mais ne vous inquiétez pas, ce ne sera pas une fin brutale. Les trois opérateurs ont déjà mis en place un plan pour assurer la transition et vous informer de tous les changements qui auront lieu. Vous recevrez des emails, des SMS et des messages sur vos réseaux sociaux pour vous tenir au courant des choses.\n\n**Et voilà, c'est parti !**\n\nC'est donc parti pour la dernière étape de la vente de SFR. Il est évident que cela sera un processus long et compliqué, mais avec un peu de patience et de compréhension, tout devrait bien se passer. Alors, restez calme et patientez un peu, les choses se mettront en place à leur rythme.",
-      "readingTime": 2
     },
     {
       "id": "e4f9cae0dd",
