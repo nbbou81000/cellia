@@ -4,23 +4,49 @@ import path    from 'path';
 import crypto  from 'crypto';
 import { fileURLToPath } from 'url';
 
-const __dirname      = path.dirname(fileURLToPath(import.meta.url));
-const IS_DEV         = process.argv.includes('--dev');
-const MAX_ARTICLES   = IS_DEV ? 3 : 10;
-const WINDOW_HOURS   = 48;
-const GEMINI_MODEL   = 'gemini-2.0-flash';
-const GEMINI_URL     = `https://generativelanguage.googleapis.com/v1beta/models/${GEMINI_MODEL}:generateContent`;
+const __dirname    = path.dirname(fileURLToPath(import.meta.url));
+const IS_DEV       = process.argv.includes('--dev');
+const MAX_ARTICLES = IS_DEV ? 3 : 10;
+const WINDOW_HOURS = 48;
+
+// ─── Providers IA en cascade : Gemini → Mistral → Groq ───────────────────────
+// Chaque provider est tenté dans l'ordre. Si l'un échoue (429, erreur réseau,
+// réponse vide), le suivant prend le relais automatiquement.
+const PROVIDERS = [
+  {
+    name:   'Gemini',
+    envKey: 'GEMINI_API_KEY',
+    type:   'gemini',
+    url:    'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
+  },
+  {
+    name:   'Mistral',
+    envKey: 'MISTRAL_API_KEY',
+    type:   'openai',
+    url:    'https://api.mistral.ai/v1/chat/completions',
+    model:  'mistral-small-latest',       // free tier Mistral console
+  },
+  {
+    name:   'Groq',
+    envKey: 'GROQ_API_KEY',
+    type:   'openai',
+    url:    'https://api.groq.com/openai/v1/chat/completions',
+    model:  'llama-3.1-8b-instant',       // free tier Groq console
+  },
+];
 
 // ─── Logs colorés ANSI ───────────────────────────────────────────────────────
 const c = {
   reset: '\x1b[0m', green: '\x1b[32m', yellow: '\x1b[33m',
-  red: '\x1b[31m',  blue:  '\x1b[34m', dim:    '\x1b[2m',  bold: '\x1b[1m'
+  red: '\x1b[31m',  blue:  '\x1b[34m', dim:    '\x1b[2m',  bold: '\x1b[1m',
+  cyan: '\x1b[36m',
 };
 const log  = msg => console.log(`${c.blue}▸${c.reset} ${msg}`);
 const ok   = msg => console.log(`${c.green}✓${c.reset} ${msg}`);
 const warn = msg => console.log(`${c.yellow}⚠${c.reset} ${msg}`);
 const err  = msg => console.log(`${c.red}✗${c.reset} ${msg}`);
 const dim  = msg => IS_DEV && console.log(`${c.dim}  ${msg}${c.reset}`);
+const info = msg => console.log(`${c.cyan}  →${c.reset} ${msg}`);
 
 // ─── Images Unsplash statiques ───────────────────────────────────────────────
 const UNSPLASH_FALLBACK = {
@@ -72,6 +98,10 @@ function detectCategory(text, keywords) {
 function extractDomain(url) {
   try { return new URL(url).hostname.replace(/^www\./, ''); }
   catch { return url; }
+}
+
+function sleep(ms) {
+  return new Promise(r => setTimeout(r, ms));
 }
 
 // ─── fetchFeed ────────────────────────────────────────────────────────────────
@@ -171,35 +201,8 @@ async function fetchFullText(article) {
   }
 }
 
-// ─── rewriteWithGemini ───────────────────────────────────────────────────────
-async function callGeminiAPI(prompt, systemPrompt) {
-  const response = await fetch(`${GEMINI_URL}?key=${process.env.GEMINI_API_KEY}`, {
-    method:  'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      system_instruction: {
-        parts: [{ text: systemPrompt }]
-      },
-      contents: [{
-        parts: [{ text: prompt }]
-      }],
-      generationConfig: {
-        temperature:     0.85,
-        maxOutputTokens: 1400,
-        topP:            0.95,
-      }
-    })
-  });
-  return response;
-}
-
-async function rewriteWithGemini(article) {
-  if (!process.env.GEMINI_API_KEY) {
-    warn('GEMINI_API_KEY manquante — fallback snippet');
-    return { title: article.title, summary: article.snippet, body: `<p>${article.snippet}</p>`, readingTime: 1 };
-  }
-
-  const systemPrompt = `Tu incarnes Korben (korben.info), le blogueur tech français culte depuis 20 ans. Ton style est immédiatement reconnaissable et doit l'être dans chaque article.
+// ─── Prompts partagés entre tous les providers ────────────────────────────────
+const SYSTEM_PROMPT = `Tu incarnes Korben (korben.info), le blogueur tech français culte depuis 20 ans. Ton style est immédiatement reconnaissable et doit l'être dans chaque article.
 
 TON STYLE — RÈGLES ABSOLUES :
 - Ton familier et complice, comme si tu parlais à des potes geeks autour d'une bière
@@ -210,17 +213,17 @@ TON STYLE — RÈGLES ABSOLUES :
 - Tu donnes TON avis tranché — tu n'es pas neutre, tu n'es pas une encyclopédie
 - Références culturelles geek quand c'est pertinent (SF, rétro, jeux vidéo, internet culture)
 - Humour sec et ironie légère — jamais lourd, jamais forcé
-- Tu peux commencer par une interpellation directe du lecteur
 - Quand c'est impressionnant, tu le dis. Quand c'est du flan marketing, tu le démontes.
 
 JAMAIS :
 - Jamais "Il convient de noter", "Dans le cadre de", "Il est important de souligner"
 - Jamais de ton journalistique froid et neutre
 - Jamais de formules corporate ou administratives
-- Jamais de titres ou phrases en anglais (sauf noms propres techniques incontournables : GPU, CPU, API…)
+- Jamais de titres ou phrases en anglais (sauf noms propres techniques : GPU, CPU, API…)
 - Jamais de conclusion bateau type "En conclusion, nous pouvons dire que…"`;
 
-  const userPrompt = `Réécris cet article dans le style de Korben.
+function buildUserPrompt(article) {
+  return `Réécris cet article dans le style de Korben.
 
 RÈGLES :
 - TRADUIS et réécris intégralement en français, même si la source est en anglais.
@@ -230,7 +233,7 @@ RÈGLES :
 - Termine TOUJOURS tes phrases. Ne coupe jamais en plein milieu.
 - Le titre français doit être accrocheur, imagé, dans le style Korben — pas une traduction littérale.
 
-FORMAT EXACT À RESPECTER (pas de texte en dehors de ce format) :
+FORMAT EXACT À RESPECTER (rien en dehors) :
 TITRE_FR: [titre en français percutant, max 90 caractères]
 ACCROCHE: [1 à 2 phrases d'entrée qui donnent envie de lire, ton Korben]
 |||BODY|||
@@ -240,78 +243,145 @@ ARTICLE SOURCE :
 Titre original : ${article.title}
 Source : ${article.source}
 Contenu : ${article.fullText || article.snippet}`;
-
-  try {
-    let response = await callGeminiAPI(userPrompt, systemPrompt);
-
-    // Retry automatique sur 429 — attente 30s
-    if (response.status === 429) {
-      warn(`Rate limit 429 [${article.id}] — retry dans 30s...`);
-      await sleep(30000);
-      response = await callGeminiAPI(userPrompt, systemPrompt);
-    }
-
-    if (!response.ok) {
-      const body = await response.text();
-      throw new Error(`HTTP ${response.status} — ${body.slice(0, 300)}`);
-    }
-
-    const data = await response.json();
-
-    if (data.error) {
-      throw new Error(data.error.message || 'Erreur Gemini inconnue');
-    }
-
-    const text = data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
-    if (!text) throw new Error('Réponse vide de Gemini');
-
-    // ── Parser TITRE_FR ──
-    let titleFR = article.title;
-    const titleMatch = text.match(/^TITRE_FR:\s*(.+)/m);
-    if (titleMatch) titleFR = titleMatch[1].trim();
-
-    // ── Parser ACCROCHE + BODY ──
-    let summary = article.snippet;
-    let body    = `<p>${article.snippet}</p>`;
-
-    if (text.includes('|||BODY|||')) {
-      const parts  = text.split('|||BODY|||');
-      const before = parts[0];
-      body         = parts[1].trim().replace(/```html?/g, '').replace(/```/g, '').trim();
-
-      const accrocheMatch = before.match(/ACCROCHE:\s*([\s\S]+?)(?=\|\|\|BODY\|\|\||$)/);
-      if (accrocheMatch) {
-        summary = accrocheMatch[1].trim();
-      } else {
-        // Fallback : première phrase du body
-        const firstP = body.match(/<p>([\s\S]*?)<\/p>/);
-        if (firstP) summary = cleanText(firstP[1]).slice(0, 200);
-      }
-    }
-
-    const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
-    const readingTime = Math.max(1, Math.round(wordCount / 200));
-
-    return { title: titleFR, summary, body, readingTime };
-
-  } catch (e) {
-    err(`Gemini error [${article.id}] : ${e.message}`);
-    return {
-      title:       article.title,
-      summary:     article.snippet,
-      body:        `<p>${article.snippet}</p>`,
-      readingTime: 1,
-    };
-  }
 }
 
-function sleep(ms) {
-  return new Promise(r => setTimeout(r, ms));
+// ─── Appel API selon le type de provider ────────────────────────────────────
+async function callProvider(provider, systemPrompt, userPrompt) {
+  if (provider.type === 'gemini') {
+    return fetch(`${provider.url}?key=${process.env[provider.envKey]}`, {
+      method:  'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system_instruction: { parts: [{ text: systemPrompt }] },
+        contents: [{ parts: [{ text: userPrompt }] }],
+        generationConfig: { temperature: 0.85, maxOutputTokens: 1400, topP: 0.95 },
+      }),
+    });
+  }
+
+  // OpenAI-compatible (Groq, Mistral)
+  return fetch(provider.url, {
+    method:  'POST',
+    headers: {
+      'Content-Type':  'application/json',
+      'Authorization': `Bearer ${process.env[provider.envKey]}`,
+    },
+    body: JSON.stringify({
+      model:       provider.model,
+      messages: [
+        { role: 'system', content: systemPrompt },
+        { role: 'user',   content: userPrompt },
+      ],
+      temperature: 0.85,
+      max_tokens:  1400,
+    }),
+  });
+}
+
+// ─── Extraction du texte selon le type de provider ───────────────────────────
+function extractText(provider, data) {
+  if (provider.type === 'gemini') {
+    if (data.error) throw new Error(data.error.message || 'Erreur Gemini');
+    return data.candidates?.[0]?.content?.parts?.[0]?.text?.trim() || '';
+  }
+  // OpenAI-compatible
+  return data.choices?.[0]?.message?.content?.trim() || '';
+}
+
+// ─── Parsing de la réponse (format commun aux 3 providers) ──────────────────
+function parseResponse(text, article) {
+  let titleFR = article.title;
+  const titleMatch = text.match(/^TITRE_FR:\s*(.+)/m);
+  if (titleMatch) titleFR = titleMatch[1].trim();
+
+  let summary = article.snippet;
+  let body    = `<p>${article.snippet}</p>`;
+
+  if (text.includes('|||BODY|||')) {
+    const parts  = text.split('|||BODY|||');
+    const before = parts[0];
+    body         = parts[1].trim().replace(/```html?/g, '').replace(/```/g, '').trim();
+
+    const accrocheMatch = before.match(/ACCROCHE:\s*([\s\S]+?)(?=\|\|\|BODY\|\|\||$)/);
+    if (accrocheMatch) {
+      summary = accrocheMatch[1].trim();
+    } else {
+      const firstP = body.match(/<p>([\s\S]*?)<\/p>/);
+      if (firstP) summary = cleanText(firstP[1]).slice(0, 200);
+    }
+  }
+
+  const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
+  const readingTime = Math.max(1, Math.round(wordCount / 200));
+  return { title: titleFR, summary, body, readingTime };
+}
+
+// ─── Réécriture avec fallback Gemini → Mistral → Groq ────────────────────────
+async function rewriteWithFallback(article) {
+  const systemPrompt = SYSTEM_PROMPT;
+  const userPrompt   = buildUserPrompt(article);
+
+  // Vérifier qu'au moins une clé est disponible
+  const available = PROVIDERS.filter(p => process.env[p.envKey]);
+  if (available.length === 0) {
+    warn('Aucune clé API disponible — fallback snippet');
+    return { title: article.title, summary: article.snippet, body: `<p>${article.snippet}</p>`, readingTime: 1 };
+  }
+
+  for (const provider of PROVIDERS) {
+    const apiKey = process.env[provider.envKey];
+    if (!apiKey) {
+      dim(`  ${provider.name} : clé absente, skip`);
+      continue;
+    }
+
+    try {
+      info(`${provider.name}...`);
+      const response = await callProvider(provider, systemPrompt, userPrompt);
+
+      if (response.status === 429) {
+        warn(`  ${provider.name} : quota 429 → provider suivant`);
+        continue;
+      }
+
+      if (!response.ok) {
+        warn(`  ${provider.name} : HTTP ${response.status} → provider suivant`);
+        continue;
+      }
+
+      const data = await response.json();
+      const text = extractText(provider, data);
+
+      if (!text || text.length < 50) {
+        warn(`  ${provider.name} : réponse vide → provider suivant`);
+        continue;
+      }
+
+      ok(`  ${provider.name} ✓ — ${article.title.slice(0, 45)}`);
+      return parseResponse(text, article);
+
+    } catch (e) {
+      warn(`  ${provider.name} : ${e.message} → provider suivant`);
+    }
+  }
+
+  // Tous les providers ont échoué
+  err(`Tous les providers ont échoué [${article.id}] — fallback snippet`);
+  return {
+    title:       article.title,
+    summary:     article.snippet,
+    body:        `<p>${article.snippet}</p>`,
+    readingTime: 1,
+  };
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`\n${c.bold}${c.blue}━━━ CelliA — Veille Tech ━━━${c.reset}  ${IS_DEV ? c.yellow + '[DEV]' + c.reset : ''}\n`);
+
+  // Afficher les providers disponibles
+  const disponibles = PROVIDERS.filter(p => process.env[p.envKey]).map(p => p.name);
+  log(`Providers disponibles : ${disponibles.join(' → ') || 'aucun !'}`);
 
   // 1. Charger la config
   const configPath = path.join(__dirname, 'sources.json');
@@ -333,7 +403,7 @@ async function main() {
     if (a.id && a.body?.length > 100) cachedById[a.id] = a;
   }
 
-  // 3. Fetch tous les flux RSS en parallèle
+  // 3. Fetch RSS en parallèle
   log('Fetch des flux RSS...');
   const feedResults = await Promise.allSettled(
     config.sources.map(s => fetchFeed(s, config.keywords, config))
@@ -341,7 +411,6 @@ async function main() {
   let allArticles = feedResults
     .filter(r => r.status === 'fulfilled')
     .flatMap(r => r.value);
-
   ok(`${allArticles.length} articles bruts récupérés`);
 
   // 4. Dédupliquer par URL
@@ -355,7 +424,7 @@ async function main() {
   // 5. Trier par date décroissante
   allArticles.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-  // 6. Équilibrer : max 5 articles par catégorie
+  // 6. Équilibrer : max 5 par catégorie
   const catCount = {};
   allArticles = allArticles.filter(a => {
     catCount[a.category] = (catCount[a.category] || 0) + 1;
@@ -366,14 +435,14 @@ async function main() {
   allArticles = allArticles.slice(0, MAX_ARTICLES);
   log(`${allArticles.length} articles retenus après équilibrage`);
 
-  // 8. fetchFullText en parallèle (timeout 5s par article)
+  // 8. fetchFullText en parallèle (5s timeout par article)
   log('Extraction du texte complet...');
   await Promise.all(allArticles.map(async a => {
     a.fullText = await fetchFullText(a);
   }));
 
-  // 9. Réécriture Gemini (avec cache)
-  log('Réécriture avec Gemini...');
+  // 9. Réécriture avec fallback multi-providers
+  log('Réécriture IA (Gemini → Mistral → Groq)...');
   let newCount    = 0;
   let cachedCount = 0;
 
@@ -387,14 +456,13 @@ async function main() {
       cachedCount++;
       dim(`  Cache hit : ${article.title.slice(0, 55)}`);
     } else {
-      const result        = await rewriteWithGemini(article);
+      const result        = await rewriteWithFallback(article);
       article.title       = result.title;
       article.summary     = result.summary;
       article.body        = result.body;
       article.readingTime = result.readingTime;
       newCount++;
-      ok(`  Réécrit : ${article.title.slice(0, 55)}`);
-      await sleep(5000); // ~12 req/min — sous la limite Gemini free (15 RPM)
+      await sleep(5000); // ~12 req/min par provider
     }
     delete article.fullText;
   }
@@ -406,7 +474,7 @@ async function main() {
     }
   }
 
-  // 11. Fusion historique : nouveaux + anciens cache (max 90 jours)
+  // 11. Fusion historique (max 90 jours)
   const cutoff      = Date.now() - 90 * 24 * 3600 * 1000;
   const newIds      = new Set(allArticles.map(a => a.id));
   const oldArticles = (cachedData.articles || [])
@@ -421,7 +489,6 @@ async function main() {
     count:        finalArticles.length,
     articles:     finalArticles,
   };
-
   await fs.mkdir(path.join(__dirname, '..', 'dist'), { recursive: true });
   await fs.writeFile(distPath, JSON.stringify(output, null, 2), 'utf-8');
 
