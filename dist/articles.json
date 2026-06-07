@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-07T16:05:26.041Z",
-  "count": 62,
+  "generated_at": "2026-06-07T16:18:43.517Z",
+  "count": 66,
   "ephemeris": {
     "date": "2026-06-07",
     "day": 7,
@@ -17,6 +17,20 @@
     ]
   },
   "articles": [
+    {
+      "id": "26949c483d",
+      "title": "Zcash - Une IA déniche en 24h une faille vieille de 4 ans - Korben",
+      "url": "https://news.google.com/rss/articles/CBMibEFVX3lxTE5KTlQtbUZhS0JWeGJ4a0lBelpxZVRSWlBqUjItdGRQaUN2Q25uQlhMeG9TYVkwc1RuYkNXTWNDcndkY015M1BiQ0FKck51LXBERW56NWh5QXBXZlQyY25QaHA4ZWhRMFJHT0tSYg?oc=5",
+      "source": "news.google.com",
+      "date": "2026-06-07T16:02:40.000Z",
+      "image": "https://images.unsplash.com/photo-1516116216624-53ad0571bc4c?w=400&q=75&auto=format",
+      "snippet": "Zcash - Une IA déniche en 24h une faille vieille de 4 ans Korben",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** Une IA vient de dégommer Zcash en un éclair.",
+      "body": "<p>Les gars, vous vous souvenez de Zcash, cette cryptomonnaie qui se la joue parano sur la privacy avec ses zk-SNARKs et son délire de confidentialité ? Ben voilà, une faille de 4 ans vient d’être déterrée – et pas par un humain, non, par une IA.</p>\n\n<p>Le problème ? Un bug dans le code de consensus, assez vicieux pour permettre un <strong>double spend</strong> et donc de frauder la blockchain sans que personne ne s’en rende compte. Le pire, c’est que cette faille traînait depuis la création du réseau en 2016. Quatre ans à faire semblant d’être safe alors qu’un simple script aurait pu tout faire péter.</p>\n\n<p>Et c’est là que l’IA entre en scène, comme un justicier high-tech venu sauver la mise. En analysant des milliers de transactions et des logs, elle a repéré l’anomalie en moins de 24 heures. Les développeurs de Zcash ont dû se sentir comme des collégiens pris la main dans le pot de confiture après l’avoir ignorée pendant des lustres.</p>\n\n<p>Bon, maintenant faut relativiser : Zcash n’a pas encore été exploitée (enfin, officiellement), et la faille a été corrigée en urgence. Mais clairement, ça pose une question : si une IA trouve ça en un jour, combien d’autres bugs dormants croupissent dans les cryptos ?</p>\n\n<p>En gros, les gars, la next crypto sécurisée à 100% n’existe pas encore – mais au moins, on a des IA pour nous le rappeler quand ça pète.</p>",
+      "readingTime": 1
+    },
     {
       "id": "7e9479b53a",
       "title": "L’un des jeux les plus prometteurs montrés au State of Play est en précommande",
@@ -60,12 +74,40 @@
       "readingTime": 1
     },
     {
+      "id": "0d6a586aa0",
+      "title": "ntsc-rs - L'effet VHS open source qui simule le vrai signal - Korben",
+      "url": "https://news.google.com/rss/articles/CBMiY0FVX3lxTFBoOElFNnNjblNvcVVDLXFlRTZoVWhFZlN4dDRrdUxUUE42UHdIc0FiRVlodk42MWxmRXpjWDNaa0oyTFNjaUVSRVBHQVp5bV9rLV9ZSUw1c2JkV0VWc0kwRWlVOA?oc=5",
+      "source": "news.google.com",
+      "date": "2026-06-07T14:54:04.000Z",
+      "image": "https://images.unsplash.com/photo-1461749280684-dccba630e2f6?w=400&q=75&auto=format",
+      "snippet": "ntsc-rs - L'effet VHS open source qui simule le vrai signal Korben",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** Recréez l’âme des cassettes sans vous prendre la tête.",
+      "body": "<p><strong>ntsc-rs</strong> débarque comme un coup de nostalgie bien placé. Ce petit outil open source, signé <strong>Gökçe Tuluk</strong>, vous balance une simulation d’effet VHS sur vos vidéos, et le résultat est tout simplement <strong>bluffant</strong>.</p>\n<p>Pas besoin de vous trimbaler avec du matos vintage ou de bidouiller des filtres Photoshop à la con : ntsc-rs s’occupe de tout. Il reproduit le <strong>signal NTSC</strong> (le standard vidéo US/JP des années 80-90), avec ses artefacts caractéristiques – <strong>teintées de couleur</strong>, <strong>lignes tremblotantes</strong>, <strong>parasites</strong>, et même un léger <strong>flou de mouvement</strong> qui rappelle les vieilles cassettes.</p>\n<p>Le plus beau ? L’outil est écrit en <strong>Rust</strong>, donc il carbure aussi bien sur un PC de guerre que sur un Raspberry Pi 200 balles. Et si vous voulez aller plus loin, <strong>Gökçe</strong> a prévu un système de plugins pour customiser l’effet à votre sauce – parce que, oui, votre vidéo de chat qui éternue mérite d’avoir ce grain VHS criminel.</p>\n<p>Pour tester, direction le <strong>GitHub du projet</strong> et hop, vous exportez votre masterpiece en MP4. Aucune excuse pour ne pas <strong>dégrader vos vidéos comme un pro</strong>.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "f6b103ce16",
+      "title": "DOOM Retro - Le portage qui fait couler encore plus de sang - Korben",
+      "url": "https://news.google.com/rss/articles/CBMiYEFVX3lxTE15S3czUlV6T2JCMlFuVk1YbXF0eFJtSXU5NV84Y2pRNkpEV3BldGNub0lvazM0elVnT0xGWW9ScWZGT2N3TVl2dXRVdUk3Tm9ObEdhTlprTUFONWpYaVR5ZA?oc=5",
+      "source": "news.google.com",
+      "date": "2026-06-07T14:30:08.000Z",
+      "image": "https://images.unsplash.com/photo-1516116216624-53ad0571bc4c?w=400&q=75&auto=format",
+      "snippet": "DOOM Retro - Le portage qui fait couler encore plus de sang Korben",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** DOOM revient en version ultra-violente, pixel par pixel. |||BODY||",
+      "body": "<p>Les gars, <strong>DOOM Retro</strong> débarque enfin après des années de patience et de rumeurs, et c’est l’un des portages les plus attendus de l’année. Bon, je vais pas vous faire un dessin : si vous aimez les FPS old-school avec une bonne dose de frénésie sanglante, cette version est faite pour vous.</p>\n\n<p>Développée par le légendaire <strong>Fabien Sanglard</strong> (oui, celui qui a écrit <a href=\"https://fabiensanglard.net/\">ce bouquin culte sur DOOM</a>), cette réécriture en C++ du moteur original est une pépite pour les puristes. Les gars, c’est du code nettoyé, optimisé, et surtout, ça tourne sur à peu près tout : Windows, Linux, macOS, Raspberry Pi… Même votre toaster 8-bit peut en rêver.</p>\n\n<p>Le plus beau ? Le jeu est <strong>100% fidèle au DOOM original</strong>, mais avec des améliorations techniques discrètes : gestion des écrans larges, support des manettes modernes, et même une option pour booster le framerate. Bref, c’est comme retrouver son ex après une rupture douloureuse : tout est à sa place, mais en mieux.</p>\n\n<p>Alors, vous attendez quoi pour télécharger ce bijou ? Le site officiel est <a href=\"https://doomretro.com/\">doomretro.com</a>, et ça coûte moins cher qu’une pizza. Et si vous voulez un aperçu, la démo est dispo. Profitez-en avant que les mods ne débarquent.</p>",
+      "readingTime": 1
+    },
+    {
       "id": "8e1be0ce66",
       "title": "C0XMO botnet spreads via DD-WRT router flaw, kills rival malware",
       "url": "https://www.bleepingcomputer.com/news/security/c0xmo-botnet-spreads-via-dd-wrt-router-flaw-kills-rival-malware/",
       "source": "bleepingcomputer.com",
       "date": "2026-06-07T14:17:46.000Z",
-      "image": "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
       "snippet": "A new variant of the Gafgyt botnet called C0XMO is targeting DD-WRT router firmware and can move to other device types with various CPU architectures. [...]",
       "category": "secu",
       "lang": "en",
@@ -79,7 +121,7 @@
       "url": "https://www.bleepingcomputer.com/news/security/silent-ransom-group-targets-law-firms-with-fake-it-support-calls/",
       "source": "bleepingcomputer.com",
       "date": "2026-06-07T14:09:19.000Z",
-      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
+      "image": "https://images.unsplash.com/photo-1510511459019-5dda7724fd87?w=400&q=75&auto=format",
       "snippet": "The Silent Ransom Group extortion gang is actively targeting U.S. law firms and professional services organizations in social engineering attacks that often lead to data theft within hours of initial contact, according to a new report by cybersecurity firm Mandiant. [...]",
       "category": "secu",
       "lang": "en",
@@ -141,6 +183,20 @@
       "lang": "fr",
       "summary": "** Bouygues, Free, Orange : le trio magique rachète SFR. Mais pour les abonnés, ça va tanguer.",
       "body": "<p>Les mecs, accrochez-vous : <strong>SFR appartient désormais à 100% à Bouygues, Free et Orange</strong>. Un rachat à 20,35 milliards d’euros, signé dans la nuit du 6 juin 2026 après huit mois de tractations dignes d’un thriller financier. Deux offres, des nuits blanches, une exclusivité prolongée jusqu’à minuit pile, et une dernière deadline de 48 heures pour faire signer tout le monde. Résultat ? La France passe officiellement à trois opérateurs mobiles. Finito pour le quatuor historique.</p>\n\n<p>Pour les 25 millions de clients SFR, l’heure n’est plus aux spéculations. <strong>Le deal est acté</strong>, et avec lui, une restructuration massive qui va redistribuer les cartes. Bouygues héritera du B2B (les pros, donc), tandis que les infrastructures et le grand public seront partagés entre les trois heureux élus. Reste que certains actifs restent sur le carreau : XP Fibre, les data centers d’UltraEdge, les DOM-TOM et Intelcia (le service client) échappent à la transaction. Le serpent se mord la queue.</p>\n\n<p>Côté Altice France, Patrick Drahi a dû serrer la vis pour vendre. Une restructuration de dette monstrueuse (passée de 24 à 15,5 milliards), des créanciers qui prennent 45% du capital, et Drahi qui garde la bride sur l’autre moitié. Le groupe s’est délesté, mais pas au point de renoncer à la cession. La preuve que quand on a besoin de cash, même un empire télécoms se plie.</p>\n\n<p>Alors, faut-il fuir SFR dès maintenant ? Pas sûr. Mais <strong>les garanties pour les abonnés, elles, restent à écrire</strong>. Et ça, c’est une autre histoire...</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "cac8ec32ee",
+      "title": "Age of Empires II est aussi conscient que votre ChatGPT - Korben",
+      "url": "https://news.google.com/rss/articles/CBMicEFVX3lxTE90dC1sNmxNWnRWeEtQZzUyYmtSdG9PVWZEX0ZQVkVSa0VBSHVJNGdvNHVmX2Q2eGxMRDlMbXZUUm1xZHFVMGMzemN6Mk85UGVHdHJfcHNRNVVYemxRWXFHeHZ2cnM2UnZLYWhIcDNDWlk?oc=5",
+      "source": "news.google.com",
+      "date": "2026-06-07T13:01:18.000Z",
+      "image": "https://images.unsplash.com/photo-1516116216624-53ad0571bc4c?w=400&q=75&auto=format",
+      "snippet": "Age of Empires II est aussi conscient que votre ChatGPT Korben",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "** *Age of Empires II prend vie avec un bot qui apprend, ment et s’adapte comme une vraie personne.*",
+      "body": "<p><strong>Microsoft a discrètement intégré un nouveau bot dans Age of Empires II : Definitive Edition.</strong> Pas un PNJ classique qui tourne en rond sur la carte, non : un adversaire (ou allié) capable de discuter, de bluffer, et même de faire semblant de mal jouer pour mieux vous surprendre. En gros, c’est du ChatGPT dans votre RTS préféré.</p>\n\n<p>Concrètement, ce bot utilise l’<strong>IA générative</strong> pour analyser vos parties en temps réel. Il repère vos faiblesses, change de stratégie si vous le coincez dans une impasse, et peut carrément inventer des tactiques tordues juste pour vous embêter. Les développeurs parlent de *\"réactivité émotionnelle\"* – en clair, il bluffe, ment, et s’adapte comme un humain (mais en bien plus chiant à battre).</p>\n\n<p>Sans déconner, ça donne des parties où l’adversaire vous sort des phrases comme *\"Bon, je vais me faire passer pour un noob… puis je te pète ton économie en 20 minutes\"*. Le genre de truc qui fait rager… jusqu’à ce que vous réalisiez que c’est une machine qui vous manipule avec un sourire en coin (virtuel, hein).</p>\n\n<p>Alors, révolution ou simple gadget ? Pour les puristes, c’est une trahison du gameplay historique. Pour les autres, c’est l’avenir : des jeux où l’IA pense, ment, et s’amuse autant que vous. Bref, préparez-vous à avoir honte devant votre écran.</p>",
       "readingTime": 1
     },
     {
