@@ -17,7 +17,7 @@
     { "url": "https://github.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://stackoverflow.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://changelog.com/feed", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://korben.info/feed", "category": "auto", "lang": "fr", "tech_only": true, "proxy": "rss2json" },
+    { "url": "https://news.google.com/rss/search?q=site:korben.info&hl=fr&gl=FR&ceid=FR:fr", "category": "auto", "lang": "fr", "tech_only": true, "source_name": "korben.info" },
     { "url": "https://next.ink/feed", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://www.silicon.fr/feed", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true }

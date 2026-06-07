@@ -157,7 +157,7 @@ async function fetchFeedRss2Json(source, keywords, config) {
       items.push({
         id:       md5(url),
         title, url,
-        source:   extractDomain(source.url),
+        source:   source.source_name || extractDomain(source.url),
         date:     item.pubDate ? new Date(item.pubDate).toISOString() : new Date().toISOString(),
         image, snippet, category,
         lang:     source.lang || 'fr',
