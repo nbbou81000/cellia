@@ -1,6 +1,6 @@
 {
-  "generated_at": "2026-06-07T14:20:14.202Z",
-  "count": 57,
+  "generated_at": "2026-06-07T15:17:24.602Z",
+  "count": 62,
   "ephemeris": {
     "date": "2026-06-07",
     "day": 7,
@@ -17,6 +17,76 @@
     ]
   },
   "articles": [
+    {
+      "id": "7e9479b53a",
+      "title": "L’un des jeux les plus prometteurs montrés au State of Play est en précommande",
+      "url": "https://www.numerama.com/pop-culture/2268765-lun-des-jeux-les-plus-prometteurs-montres-au-state-of-play-est-en-precommande.html",
+      "source": "numerama.com",
+      "date": "2026-06-07T15:12:58.000Z",
+      "image": "https://images.unsplash.com/photo-1611532736597-de2d4265fba3?w=400&q=75&auto=format",
+      "snippet": "[Précommande] La suite de Control s’est fait attendre, mais la voilà qui arrive en septembre 2026. Si le Manhattan sens dessus dessous de Remedy Entertainment vous attire, la précommande est déjà disponible.",
+      "category": "hardware",
+      "lang": "fr",
+      "summary": "** Un jeu qui déforme la réalité comme jamais, à précommander absolument.",
+      "body": "<p><strong>Control Resonant</strong> débarque pour continuer de défoncer les lois de la physique comme seul Remedy sait le faire. Pas une suite directe, mais une plongée plus profonde dans l’univers <em>étrange et angoissant</em> du premier opus, entre <em>science-fiction</em> et <em>horreur lovecraftienne</em>. Imaginez un mélange de <strong>Backrooms</strong> et de bureau hanté par des entités qui n’auraient jamais dû exister. Bref, du Remedy pur jus.</p>\n\n<p>Le studio derrière <strong>Alan Wake</strong> propose ici un gameplay revu et corrigé, plus <em>nerveux</em> et <em>dynamique</em>. On garde le <strong>tir à la troisième personne</strong> et les <strong>pouvoirs télékinétiques</strong>, mais avec une touche de folie en plus pour tout casser – ou tout déplacer. Parce que oui, manipuler des objets avec l’esprit, c’est cool, mais se battre avec en prime, c’est encore mieux.</p>\n\n<p>Prévu pour le <strong>24 septembre 2026</strong> sur <strong>macOS, PS5, Windows et Xbox Series X/S</strong>, le jeu sera disponible en version classique à <strong>59,99 €</strong>. Pour ceux qui veulent frimer sur leur étagère, une <strong>version Steelbook</strong> est aussi au programme, avec des <strong>cartes d’art</strong> et un <strong>poster</strong> en bonus. Parce que quand on a un univers aussi riche, autant en profiter pleinement.</p>\n\n<p>En résumé : si vous aimez les jeux qui vous font douter de la réalité et qui vous donnent envie de casser des trucs avec la pensée, <strong>Control Resonant</strong> est clairement une précommande à mettre en haut de la pile. À moins que vous ne préfériez attendre les tests pour voir si la magie opère… (mais franchement, avec Remedy, on mise sur du lourd).</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "8b83cf6e5b",
+      "title": "RX-1 : le robot quadrupède made in Europe qui veut tout casser",
+      "url": "https://www.journaldugeek.com/2026/06/07/un-nouveau-robot-quadrupede-part-a-lassaut-de-leurope/",
+      "source": "journaldugeek.com",
+      "date": "2026-06-07T15:02:08.000Z",
+      "image": "https://www.journaldugeek.com/app/uploads/2026/06/helsing-rx-1-1280x853.jpg",
+      "snippet": "Après avoir développé des IA pour les avions de combat, Helsing s'attaque désormais au matériel. L'entreprise allemande a dévoilé RX-1, un robot quadrupède conçu et fabriqué en Europe. L'objectif est de bâtir des systèmes autonomes entièrement maîtrisés sur le continent.",
+      "category": "auto",
+      "lang": "fr",
+      "summary": "Un robot made in Europe qui marche, résiste et va faire pâlir les Américains et les Chinois. |||BODY||",
+      "body": "<p>Après avoir électrisé l’aéronautique militaire avec ses IA de combat, l’Allemand <strong>Helsing</strong> passe à la vitesse supérieure en sortant <strong>RX-1</strong>, un robot quadrupède 100 % européen. On parle ici de hardware, pas de code : la boîte veut maintenant maîtriser toute la chaîne, des algorithmes jusqu’aux pattes du robot. Après des années à fournir des copilotes IA comme <strong>Centaur</strong> pour les Gripen suédois, Helsing bifurque vers le concret. Et ça se voit.</p>\n\n<p>RX-1, c’est d’abord un monstre de robustesse : conçu pour survivre aux intempéries, aux chocs et aux environnements hostiles que le matériel classique fuit comme la peste. Pas un jouet de salon, mais un vrai labo sur pattes, baptisé « plateforme de recherche » par la maison. Officiellement, il n’est pas encore un soldat, mais clairement, Helsing prépare l’avenir. <strong>Area 9</strong>, sa nouvelle division dirigée par <strong>Antoine Bordes</strong> (le cerveau derrière les modèles), a pour mission de transformer la recherche en briques utilisables. RX-1 est le premier bébé de cette équation.</p>\n\n<p>L’autre obsession de l’équipe ? <strong>L’indépendance européenne</strong>. Pas question de dépendre des composants chinois ou américains. <strong>Antoine Bordes</strong> martèle : « RX-1 est conçu en Europe, fabriqué en Europe, avec des actionneurs conçus en interne. » Traduction : si la Chine et les USA dominent le marché des robots quadrupèdes, Helsing veut offrir une alternative souveraine. Et ça, c’est clairement une déclaration de guerre technologique.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "cbe3be0a30",
+      "title": "\"Le KGB à Tchernobyl\" : quand ultrasurveillance et impuissance se côtoient",
+      "url": "https://www.sciencesetavenir.fr/decouvrir/livres/le-kgb-a-tchernobyl-quand-ultrasurveillance-et-impuissance-se-cotoient_192642?xtor=RSS-27",
+      "source": "sciencesetavenir.fr",
+      "date": "2026-06-07T15:00:00.000Z",
+      "image": "https://www.sciencesetavenir.fr/assets/img/2026/06/02/cover-r4x3w1200-6a1ed0132ccd2-afp-20160426-kharchenko-notitle160426-nphuu-v1-highres-kgbarchivesinkyivsunderg.jpg",
+      "snippet": "L'historienne Galia Ackerman revient sur les années qui ont précédé et suivi le désastre nucléaire à travers les archives du KGB.",
+      "category": "science",
+      "lang": "fr",
+      "summary": "** Le KGB espionnait tout, mais a laissé mourir Tchernobyl.",
+      "body": "<p>Si vous pensiez que Big Brother était une invention moderne, détrompez-vous : en 1986, le KGB squattait déjà l’URSS comme un squatteur indélicat. Galia Ackerman, historienne, vient de déterrer des archives qui confirment l’horreur : l’agence était partout, mais n’a strictement rien vu venir avant la catastrophe de Tchernobyl. Et pire encore : elle a tout fait pour étouffer l’affaire une fois le mal fait.</p>\n\n<p><strong>12 milliards de milliards de becquerels</strong> balancés dans l’air en quelques jours. Pour vous donner une idée, c’est comme si quelqu’un avait décidé de griller 400 bombes atomiques au-dessus de l’Europe en accéléré. Pourtant, entre 1970 et 1986, les espions soviétiques avaient noté <strong>tout</strong> : les fissures dans les réacteurs, les rapports truqués, les techniciens bourrés, la corruption qui gangrenait chaque service. Mais au lieu d’alerter, ils ont préféré jouer les autruches. Parce que le Parti avait besoin de son électricité bon marché, point.</p>\n\n<p>Le pire ? Après la catastrophe, le KGB a redoublé d’efforts pour cacher la vérité. Les villes contaminées ? On les a vidées de force, les habitants expédiés vers des \"relocalisations\" en realidad des pièges à radiation. Les journalistes étrangers ? Accusés de \"panique morale\" s’ils osaient parler. Les scientifiques locaux ? Menacés, mutés, ou pire. Tout ça pour sauver la face d’un système qui pourrissait sur pied depuis des décennies.</p>\n\n<p>En gros, Tchernobyl, c’est l’histoire d’une superpuissance qui avait les moyens de tout savoir, mais qui a préféré fermer les yeux jusqu’à ce que le ciel lui tombe sur la tête. Et le plus glaçant, c’est que ces archives ne mentent pas : elles prouvent que même un État ultrasecurisé peut être une passoire quand l’incompétence et l’hypocrisie s’allient.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "8e1be0ce66",
+      "title": "C0XMO botnet spreads via DD-WRT router flaw, kills rival malware",
+      "url": "https://www.bleepingcomputer.com/news/security/c0xmo-botnet-spreads-via-dd-wrt-router-flaw-kills-rival-malware/",
+      "source": "bleepingcomputer.com",
+      "date": "2026-06-07T14:17:46.000Z",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
+      "snippet": "A new variant of the Gafgyt botnet called C0XMO is targeting DD-WRT router firmware and can move to other device types with various CPU architectures. [...]",
+      "category": "secu",
+      "lang": "en",
+      "summary": "** Un nouveau botnet s’invite dans vos routeurs DD-WRT. Attention, ça va déglinguer.",
+      "body": "<p>Les chercheurs de chez Fortinet viennent de tomber sur <strong>C0XMO</strong>, une variante ultra-agressive du botnet Gafgyt, et franchement, ça donne des sueurs froides. Ce machin cible les routeurs sous <strong>DD-WRT</strong>, mais ne s’arrête pas là. Il s’étale sur une ribambelle d’architectures : ARM, MIPS, PowerPC, SuperH, x86, x86_64… Bref, presque tous les appareils connectés y passent, des DVR aux téléphones Android.</p>\n<p>La cerise sur le gâteau ? <strong>C0XMO</strong> se balade masqué : un jour il attaque une entreprise japonaise, le lendemain son IP pointe en Allemagne. Le cauchemar parfait pour les admins système. Et ce n’est pas tout. Ce botnet est <strong>modulaire</strong>, ce qui signifie que ses opérateurs peuvent le mettre à jour à volonté pour ajouter des exploits, changer de cibles ou booster ses capacités de propagation, sans toucher au payload principal.</p>\n<p>Pour les non-initiés, <strong>C0XMO</strong> sert surtout à lancer des attaques DDoS de ouf : 19 méthodes au menu, dont des floods UDP/TCP/SYN/ICMP, un bon vieux « ping of death », des amplifications NTP/Memcached, des attaques Discord voice UDP, et même des trucs spécifiques à Valve. Tout ça, grâce à <strong>CVE-2021-27137</strong>, une vulnérabilité de buffer overflow dans le firmware des routeurs DD-WRT. Et le pire ? Pas besoin de s’authentifier pour l’exploiter.</p>\n<p>Une fois installé, <strong>C0XMO</strong> télécharge un script Python qui installe des dépendances comme <strong>requests</strong>, <strong>paramiko</strong> et <strong>beautifulsoup4</strong> pour scanner le réseau et communiquer en SSH/telnet. Le scanner, lui, se balade sur les ports 22, 23, 80/443, 7547, 8080, 8443, 8888 et bien d’autres pour recruter de nouveaux zombies.</p>\n<p>Bref, si vous avez un routeur DD-WRT qui traîne, mettez-le à jour. Maintenant.</p>",
+      "readingTime": 1
+    },
+    {
+      "id": "60bf91b479",
+      "title": "Silent Ransom Group targets law firms with fake IT support calls",
+      "url": "https://www.bleepingcomputer.com/news/security/silent-ransom-group-targets-law-firms-with-fake-it-support-calls/",
+      "source": "bleepingcomputer.com",
+      "date": "2026-06-07T14:09:19.000Z",
+      "image": "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?w=400&q=75&auto=format",
+      "snippet": "The Silent Ransom Group extortion gang is actively targeting U.S. law firms and professional services organizations in social engineering attacks that often lead to data theft within hours of initial contact, according to a new report by cybersecurity firm Mandiant. [...]",
+      "category": "secu",
+      "lang": "en",
+      "summary": "** Des faux appels de support IT qui débouchent sur des extorsions en quelques heures, c’est la nouvelle tendance des cybercriminels.",
+      "body": "<p>Les gars, les cabinets d’avocats américains feraient bien de serrer les portes de leur open space un peu plus fort. <strong>Le Silent Ransom Group</strong>, un gang d’extorsion particulièrement vicieux, a décidé de les cibler en masse avec des attaques d’ingénierie sociale qui peuvent tourner au vol de données en moins de temps qu’il n’en faut pour boire un café.</p>\n\n<p>D’après Mandiant, une firme spécialisée en cybersécurité, <strong>UNC3753</strong> (alias Luna Moth ou Chatty Spider) a frappé entre janvier et mai 2026 une cinquantaine d’organisations, surtout dans le juridique, la finance et les services pros. Le butin ? Des tonnes d’infos ultra-sensibles : contrats, secrets industriels, rapports réglementaires… Tout ce qui peut faire trembler une entreprise ou ruiner une réputation. Les pirates le savent : un cabinet d’avocats n’a pas envie que ses clients sachent qu’il a été victime d’une arnaque, alors ils appuient où ça fait mal.</p>\n\n<p>Leur méthode ? Des mails d’apparence anodine, imitant des factures, envoyés depuis des comptes Gmail basiques. Pas de lien piégé ni de pièce jointe infectée, juste un prétexte pour passer à l’étape suivante : <strong>un coup de fil</strong>. Les cybercriminels se font passer pour des techniciens IT internes et guident leur victime vers un site web… piégé. Une fois la porte entrouverte, c’est l’hallali.</p>\n\n<p>Franchement, entre les mails bidons et les appels “bienveillants”, on frôle la farce macabre. Mais quand on voit que cette tactique a déjà servi dans des campagnes du type BazarCall, liée à Ryuk ou Conti, difficile de rire. La prochaine fois que votre service IT vous appelle pour un “problème ponctuel”, vérifiez l’identité de votre interlocuteur. Et gardez votre calme, parce que ça ne sent pas bon.</p>",
+      "readingTime": 1
+    },
     {
       "id": "f15108a29a",
       "title": "Intel veut sa revanche sur le Steam Deck et le ROG Ally",
