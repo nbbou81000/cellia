@@ -854,12 +854,73 @@
     /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE
     ═══════════════════════════════════════════════════════════════ */
+    /* ── Bouton "plus" mobile ── */
+    .nav-more-btn {
+      display: none;
+      align-items: center; justify-content: center;
+      background: var(--glass-card);
+      border: 1px solid var(--border-soft);
+      border-radius: 9px;
+      color: var(--text-dim);
+      cursor: pointer;
+      width: 34px; height: 34px;
+      flex-shrink: 0;
+      font-size: 17px; line-height: 1;
+      transition: background 0.15s, color 0.15s;
+      position: relative;
+    }
+    .nav-more-btn:hover { background: var(--glass-hover); color: var(--text-hi); }
+    .nav-more-btn.has-active::after {
+      content: '';
+      position: absolute; top: 5px; right: 5px;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--red);
+    }
+
+    /* ── Panneau déroulant ── */
+    .nav-more-panel {
+      position: fixed;
+      top: 60px; left: 0; right: 0;
+      z-index: 95;
+      background: var(--glass-nav);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border-bottom: 1px solid var(--border);
+      padding: 10px 20px 12px;
+      display: flex; flex-wrap: wrap; gap: 6px;
+      transform: translateY(-110%);
+      opacity: 0;
+      pointer-events: none;
+      transition: transform 0.24s cubic-bezier(0.16,1,0.3,1), opacity 0.2s;
+    }
+    .nav-more-panel.open {
+      transform: translateY(0);
+      opacity: 1;
+      pointer-events: all;
+    }
+    .nav-more-link {
+      font-size: 12.5px; font-weight: 600;
+      color: var(--text-dim);
+      padding: 6px 12px;
+      border-radius: 8px;
+      border: 1px solid var(--border-soft);
+      background: var(--glass-card);
+      cursor: pointer;
+      text-decoration: none;
+      transition: color 0.15s, background 0.15s, border-color 0.15s;
+      display: flex; align-items: center; gap: 5px;
+    }
+    .nav-more-link:hover { color: var(--text-hi); background: var(--glass-hover); }
+    .nav-more-link.active { color: var(--red); border-color: var(--red-dim); }
+
     @media (max-width: 800px) {
       .grid-featured { grid-template-columns: 1fr; }
       .grid-main     { grid-template-columns: 1fr 1fr; }
+      /* Cacher les liens secondaires — accessibles via le bouton ⋯ */
       .nav-links .nav-link:not([data-nav="all"]):not([data-nav="ai"]):not([data-nav="secu"]) {
         display: none;
       }
+      .nav-more-btn { display: flex; }
     }
 
     @media (max-width: 560px) {
@@ -946,9 +1007,25 @@
             <path d="M9 1.5v2M9 14.5v2M1.5 9h2M14.5 9h2M3.7 3.7l1.4 1.4M12.9 12.9l1.4 1.4M3.7 14.3l1.4-1.4M12.9 5.1l1.4-1.4" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"/>
           </svg>
         </button>
+        <!-- Bouton "plus" — visible seulement sur mobile -->
+        <button class="nav-more-btn" id="nav-more-btn" aria-label="Plus de catégories" aria-expanded="false">
+          ···
+        </button>
       </div>
     </div>
   </nav>
+
+  <!-- Panneau mobile avec les catégories cachées -->
+  <div class="nav-more-panel" id="nav-more-panel" role="menu">
+    <a href="#" class="nav-more-link" data-more-nav="hardware">Hardware</a>
+    <a href="#" class="nav-more-link" data-more-nav="maker">Maker</a>
+    <a href="#" class="nav-more-link" data-more-nav="web">Web</a>
+    <a href="#" class="nav-more-link" data-more-nav="science">Science</a>
+    <a href="#" class="nav-more-link" data-more-nav="saved">
+      🔖 Favoris
+      <span id="nav-more-saved-badge" style="background:var(--red);color:#fff;font-size:9px;font-weight:800;border-radius:99px;padding:1px 5px;display:none"></span>
+    </a>
+  </div>
 
   <!-- ═══ TICKER ════════════════════════════════════════════════════════════ -->
   <div class="ticker-wrap" id="ticker-wrap" style="margin-top:60px;display:none;overflow:hidden;height:32px;background:rgba(232,53,42,0.06);border-bottom:1px solid rgba(232,53,42,0.12)">
@@ -1266,6 +1343,7 @@
         buildTicker(allArticles);
         renderEphemeris(data.ephemeris);
         updateSavedCount();
+        updateMoreBtn();
         renderGrid();
 
         document.getElementById('hero-label').textContent = '● En direct';
@@ -1282,15 +1360,69 @@
       }
     }
 
-    // ── Filtres ────────────────────────────────────────────────────────────
+    // ── Panneau mobile "plus de catégories" ───────────────────────────────
+    const navMoreBtn   = document.getElementById('nav-more-btn');
+    const navMorePanel = document.getElementById('nav-more-panel');
+    const HIDDEN_CATS  = ['hardware','maker','web','science','saved'];
+
+    function openMorePanel()  { navMorePanel.classList.add('open');  navMoreBtn.setAttribute('aria-expanded','true'); }
+    function closeMorePanel() { navMorePanel.classList.remove('open'); navMoreBtn.setAttribute('aria-expanded','false'); }
+
+    navMoreBtn.addEventListener('click', e => {
+      e.stopPropagation();
+      navMorePanel.classList.contains('open') ? closeMorePanel() : openMorePanel();
+    });
+
+    // Clic en dehors → fermer
+    document.addEventListener('click', e => {
+      if (!navMorePanel.contains(e.target) && e.target !== navMoreBtn) closeMorePanel();
+    });
+
+    // Liens du panneau
+    document.querySelectorAll('[data-more-nav]').forEach(link => {
+      link.addEventListener('click', e => {
+        e.preventDefault();
+        const cat = link.dataset.moreNav;
+        // Désactiver tous les liens nav principaux + panneau
+        document.querySelectorAll('[data-nav]').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('[data-more-nav]').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        activeFilter  = cat;
+        visibleCount  = PAGE_SIZE;
+        closeMorePanel();
+        renderGrid();
+        updateMoreBtn();
+      });
+    });
+
+    // Synchroniser l'état du bouton ⋯ et des liens du panneau quand le filtre change
+    function updateMoreBtn() {
+      const isHiddenCat = HIDDEN_CATS.includes(activeFilter);
+      navMoreBtn.classList.toggle('has-active', isHiddenCat);
+      document.querySelectorAll('[data-more-nav]').forEach(l => {
+        l.classList.toggle('active', l.dataset.moreNav === activeFilter);
+      });
+      // Badge favoris dans le panneau
+      const badge = document.getElementById('nav-more-saved-badge');
+      if (badge) {
+        const n = getSaved().length;
+        badge.textContent = n || '';
+        badge.style.display = n > 0 ? 'inline' : 'none';
+      }
+    }
+
+    // Synchroniser aussi quand on clique sur les liens principaux (Tout/IA/Sécu)
     document.querySelectorAll('[data-nav]').forEach(link => {
       link.addEventListener('click', e => {
         e.preventDefault();
         document.querySelectorAll('[data-nav]').forEach(l => l.classList.remove('active'));
+        document.querySelectorAll('[data-more-nav]').forEach(l => l.classList.remove('active'));
         link.classList.add('active');
         activeFilter  = link.dataset.nav;
-        visibleCount  = PAGE_SIZE; // reset pagination
+        visibleCount  = PAGE_SIZE;
+        closeMorePanel();
         renderGrid();
+        updateMoreBtn();
       });
     });
 
