@@ -7,7 +7,7 @@ import { fileURLToPath } from 'url';
 const __dirname    = path.dirname(fileURLToPath(import.meta.url));
 const IS_DEV       = process.argv.includes('--dev');
 const IS_PAID      = process.env.USE_PAID_GEMINI === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : 10;
+const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID ? 15 : 10;
 const WINDOW_HOURS = 48;
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
@@ -113,10 +113,16 @@ function extractImage(item) {
   return m ? m[1] : null;
 }
 
+// Scoring : compte le nombre de mots-clés trouvés par catégorie → la plus haute gagne
+// Bien meilleur que le "premier match" qui favorisait les catégories en tête de liste
 const detectCategory = (text, kws) => {
   const l = text.toLowerCase();
-  for (const [cat, words] of Object.entries(kws)) if (words.some(w => l.includes(w))) return cat;
-  return 'web';
+  let bestCat = 'web', bestScore = 0;
+  for (const [cat, words] of Object.entries(kws)) {
+    const score = words.filter(w => l.includes(w)).length;
+    if (score > bestScore) { bestScore = score; bestCat = cat; }
+  }
+  return bestCat;
 };
 
 const extractDomain = url => { try { return new URL(url).hostname.replace(/^www\./,''); } catch { return url; } };
@@ -295,22 +301,23 @@ Source : ${article.source}
 Contenu : ${article.fullText||article.snippet}`;
 }
 
-// Prompt mode PAYANT — format JSON (bien plus fiable)
+// Prompt mode PAYANT — format JSON, articles longs et structurés
 function buildPaidPrompt(article) {
   return `Réécris cet article INTÉGRALEMENT dans le style de Korben.
 
 RÈGLES :
-- Traduis et réécris en français, style Korben : direct, geek, complice, phrases courtes, avis tranché
-- Le "body" doit faire entre 250 et 350 mots — article complet, pas un résumé
-- HTML pour le body : <p>, <h2>, <strong> uniquement. Pas d'autres balises.
-- L'accroche : une seule phrase, max 25 mots
+- Traduis et réécris en français, style Korben : direct, geek, complice, avis tranché
+- Le "body" doit faire entre 350 et 500 mots — vrai article de fond, pas un résumé
+- Structure l'article avec 2 ou 3 <h2> pour guider la lecture
+- Utilise <p>, <h2>, <strong> uniquement. Pas d'autres balises.
+- L'accroche : une seule phrase punchy, max 25 mots
 - Le titre : accrocheur, en français, max 90 caractères
+- Donne ton analyse personnelle : contexte, enjeux, ce que ça change vraiment
 
 FORMAT JSON — CRITIQUE :
 - Réponds UNIQUEMENT avec un objet JSON valide (sans backticks, sans texte avant ou après)
-- La valeur "body" DOIT être sur une seule ligne sans vrai retour à la ligne — les paragraphes sont séparés par les balises <p></p> directement collées, sans \\n entre elles
-- N'utilise AUCUN \\n ni \\r dans les valeurs JSON
-- Format exact sur une seule ligne : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><p>texte</p>"}
+- La valeur "body" DOIT être sur une seule ligne — paragraphes séparés par <p></p> directement collés, AUCUN \\n réel
+- Format exact : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><h2>titre</h2><p>texte</p>"}
 
 SOURCE :
 Titre : ${article.title}
@@ -709,19 +716,23 @@ async function main() {
   const cachedById={};
   for (const a of (cachedData.articles||[])) if (a.id&&a.body?.length>100) cachedById[a.id]=a;
 
-  // Éphéméride (une fois par jour, ignorée en mode payant pour économiser)
+  // Éphéméride (une fois par jour, toujours — peu importe le mode)
   const today = new Date().toISOString().slice(0,10);
   let ephemeris = cachedData.ephemeris||null;
-  if (!IS_PAID && (!ephemeris||ephemeris.date!==today)) {
+  if (!ephemeris||ephemeris.date!==today) {
     ephemeris = await fetchEphemeris(today);
-  } else if (!IS_PAID) {
+  } else {
     ok('Éphéméride du jour déjà en cache');
   }
 
   // RSS
   log('Fetch des flux RSS...');
+  // Sources actives : toutes en mode payant, sinon sans les paid_only
+  const activeSources = config.sources.filter(s => !s.paid_only || IS_PAID);
+  log(`${activeSources.length} sources actives${IS_PAID ? ' (mode payant — toutes sources)' : ''}`);
+
   const feedResults = await Promise.allSettled(
-    config.sources.map(s =>
+    activeSources.map(s =>
       s.proxy === 'rss2json'
         ? fetchFeedRss2Json(s, config.keywords, config)
         : fetchFeed(s, config.keywords, config)

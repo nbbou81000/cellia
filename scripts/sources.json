@@ -18,17 +18,31 @@
     { "url": "https://stackoverflow.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://changelog.com/feed", "category": "web", "lang": "en", "tech_only": false },
     { "url": "https://news.google.com/rss/search?q=site:korben.info&hl=fr&gl=FR&ceid=FR:fr", "category": "auto", "lang": "fr", "tech_only": true, "source_name": "korben.info" },
+    { "url": "https://www.journaldugeek.com/feed/", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://next.ink/feed", "category": "auto", "lang": "fr", "tech_only": true },
     { "url": "https://www.silicon.fr/feed", "category": "auto", "lang": "fr", "tech_only": true },
-    { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true }
+    { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true },
+    { "url": "https://www.gamekult.com/rss.xml", "category": "gaming", "lang": "fr", "tech_only": false },
+    { "url": "https://www.jeuxvideo.com/rss/news.xml", "category": "gaming", "lang": "fr", "tech_only": true },
+    { "url": "https://www.frandroid.com/feed", "category": "mobile", "lang": "fr", "tech_only": true },
+    { "url": "https://www.theverge.com/rss/index.xml", "category": "auto", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://krebsonsecurity.com/feed/", "category": "secu", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://hnrss.org/frontpage", "category": "web", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://www.wired.com/feed/rss", "category": "auto", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://feeds.macrumors.com/MacRumors-All", "category": "mobile", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://www.eurogamer.net/feed", "category": "gaming", "lang": "en", "tech_only": false, "paid_only": true },
+    { "url": "https://www.technologyreview.com/feed/", "category": "science", "lang": "en", "tech_only": false, "paid_only": true }
   ],
   "keywords": {
-    "ai":       ["ai","artificial intelligence","machine learning","llm","gpt","gemini","claude","mistral","neural","deep learning","openai","anthropic","intelligence artificielle","modèle","transformer","benchmark","inference","agent","multimodal","alignment"],
-    "secu":     ["security","vulnerability","exploit","malware","ransomware","breach","zero-day","cve","hack","phishing","cybersecurity","faille","sécurité","attaque","patch","encryption","leak","pentest","botnet","rootkit"],
-    "hardware": ["chip","gpu","cpu","processor","apple","nvidia","amd","intel","tsmc","semiconductor","hardware","benchmark","puce","processeur","datacenter","arm","fpga","transistor"],
-    "maker":    ["raspberry","arduino","esp32","maker","diy","circuit","3d print","pcb","microcontroller","gpio","fpga","solder","breadboard","hack","mod","retro","emulator"],
-    "web":      ["javascript","typescript","css","html","react","vue","node","browser","api","framework","open source","github","npm","frontend","backend","wasm","rust","python","deno","bun"],
-    "science":  ["science","research","study","brain","neuroscience","quantum","physics","biology","climate","space","nasa","recherche","étude","quantique","espace","découverte","arxiv"]
+    "ai": ["artificial intelligence","machine learning","llm","gpt","gemini","claude","mistral","neural","deep learning","openai","anthropic","intelligence artificielle","transformer","benchmark","inference","agent","multimodal","alignment","chatgpt","stable diffusion","midjourney","diffusion","hugging face","generative","chatbot","language model","fine-tun","embedding","vector","rag","prompt"],
+    "secu": ["security","vulnerability","exploit","malware","ransomware","breach","zero-day","cve","hack","phishing","cybersecurity","faille","sécurité","attaque","patch","encryption","leak","pentest","botnet","rootkit","spyware","backdoor","injection","xss","ddos","firewall","intrusion","forensic","incident","threat","apt"],
+    "hardware": ["chip","gpu","cpu","processor","apple silicon","nvidia","amd","intel","tsmc","semiconductor","hardware","benchmark","puce","processeur","datacenter","arm","fpga","transistor","mémoire","ram","ssd","nvme","overclocking","cooling","motherboard","carte mère","alimentation","chassis","watercooling"],
+    "gaming": ["game","gaming","jeu vidéo","jeux vidéo","playstation","xbox","nintendo","switch","steam","epic games","twitch","esport","fps","rpg","indie game","emulateur","emulator","retrogaming","speedrun","dlc","mod ","rom ","gamer","pixel art","roguelike","metroidvania","souls","zelda","mario","pokémon","minecraft","fortnite","valorant","league of legends","world of warcraft","gog","itch.io","unity","unreal","godot","pcgaming","console de jeu","jeu de rôle","jeu d'aventure","jeu de tir"],
+    "mobile": ["iphone","android","smartphone","ios","ipad","samsung galaxy","google pixel","oneplus","xiaomi","huawei","fairphone","app store","google play","apk","5g","wearable","apple watch","wear os","foldable","tablette","application mobile","mobile gaming","notification","batterie","autonomie","écran","recharge","sans fil"],
+    "maker": ["raspberry","arduino","esp32","maker","diy","circuit","3d print","pcb","microcontroller","gpio","fpga","solder","breadboard","retro","home automation","domotique","impression 3d","filament","cnc","laser cutter","electronics","oscilloscope","multimetre","kicad","fritzing","platformio","micropython","circuitpython"],
+    "web": ["javascript","typescript","css","html","react","vue","angular","node","browser","api","framework","open source","github","npm","frontend","backend","wasm","rust","python","deno","bun","devops","docker","kubernetes","ci/cd","graphql","rest","http","websocket","pwa","web assembly","svelte","nextjs","astro","vite","tailwind","cloudflare","aws","azure","gcp","database","postgresql","mongodb"],
+    "science": ["science","research","study","brain","neuroscience","quantum","physics","biology","climate","space","nasa","recherche","étude","quantique","espace","découverte","arxiv","cern","iss","telescope","satellite","fusée","mars","lune","astronomie","génétique","adn","biologie","chimie","énergie","fusion","nucléaire","climatique","environnement"],
+    "auto": ["tech","technologie","numérique","digital","startup","innovation","industrie","entreprise","logiciel","software"]
   },
   "exclude_keywords": [
     "star wars","marvel","film","cinéma","série","netflix","disney",
