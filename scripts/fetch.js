@@ -14,18 +14,18 @@ const WINDOW_HOURS = 48;
 // Déclaré en `let` — overridé en mode payant dans main()
 let PROVIDERS = [
   {
-    name:      'Gemini',
-    envKey:    'GEMINI_API_KEY',
-    type:      'gemini',
-    url:       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
-    maxTokens: 1400,
-  },
-  {
     name:      'Mistral',
     envKey:    'MISTRAL_API_KEY',
     type:      'openai',
     url:       'https://api.mistral.ai/v1/chat/completions',
     model:     'mistral-small-latest',
+    maxTokens: 2000,
+  },
+  {
+    name:      'Gemini',
+    envKey:    'GEMINI_API_KEY',
+    type:      'gemini',
+    url:       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent',
     maxTokens: 1400,
   },
   {
@@ -332,7 +332,8 @@ function buildFreePrompt(article) {
 
 RÈGLES :
 - Traduis et réécris intégralement en français
-- Corps : 220 à 320 mots
+- Corps : 280 à 380 mots — vrai article, pas un résumé
+- Utilise 1 ou 2 <h2> pour structurer si pertinent
 - HTML : <p>, <h2>, <strong> UNIQUEMENT
 - Termine toujours tes phrases
 
