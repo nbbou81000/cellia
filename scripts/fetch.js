@@ -105,12 +105,47 @@ function cleanText(html) {
     .replace(/\s+/g,' ').trim();
 }
 
+// Normalise une URL d'image : gère les URLs protocol-relative et filtre les non-HTTP
+function normalizeImgUrl(url) {
+  if (!url) return null;
+  url = url.trim();
+  if (url.startsWith('//')) return 'https:' + url;
+  if (url.startsWith('http')) return url;
+  return null;
+}
+
 function extractImage(item) {
-  if (item['media:content']?.$.url) return item['media:content'].$.url;
-  if (item.mediaThumbnail?.$.url)   return item.mediaThumbnail.$.url;
-  if (item.enclosure?.url)          return item.enclosure.url;
-  const m = (item.content||item['content:encoded']||'').match(/<img[^>]+src=["']([^"']+)["']/i);
-  return m ? m[1] : null;
+  // media:content (plusieurs formats possibles)
+  const mc = item['media:content'];
+  if (mc?.$.url)                             return normalizeImgUrl(mc.$.url);
+  if (Array.isArray(mc) && mc[0]?.$.url)    return normalizeImgUrl(mc[0].$.url);
+
+  // media:thumbnail
+  if (item.mediaThumbnail?.$.url)            return normalizeImgUrl(item.mediaThumbnail.$.url);
+
+  // enclosure (seulement si c'est bien une image)
+  if (item.enclosure?.url && /\.(jpe?g|png|webp|gif|avif)/i.test(item.enclosure.url))
+    return normalizeImgUrl(item.enclosure.url);
+
+  // itunes:image (podcasts, certains blogs)
+  if (item['itunes:image']?.$.href)          return normalizeImgUrl(item['itunes:image'].$.href);
+
+  // Champ image direct
+  if (typeof item.image === 'string')        return normalizeImgUrl(item.image);
+  if (item.image?.url)                       return normalizeImgUrl(item.image.url);
+
+  // Regex dans le contenu HTML (content:encoded prioritaire sur content)
+  const html = item['content:encoded'] || item.content || item.description || '';
+  // og:image ou twitter:image dans le contenu
+  const ogMatch = html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i)
+    || html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i);
+  if (ogMatch?.[1]) return normalizeImgUrl(ogMatch[1]);
+
+  // Première <img> dans le contenu
+  const imgMatch = html.match(/<img[^>]+src=["']([^"']+)["']/i);
+  if (imgMatch?.[1]) return normalizeImgUrl(imgMatch[1]);
+
+  return null;
 }
 
 // Scoring : compte le nombre de mots-clés trouvés par catégorie → la plus haute gagne
@@ -192,6 +227,7 @@ async function fetchFeed(source, keywords, config) {
       ['media:content','media:content',{keepArray:false}],
       ['media:thumbnail','mediaThumbnail',{keepArray:false}],
       ['content:encoded','content:encoded'],
+      ['itunes:image','itunes:image',{keepArray:false}],
     ]},
   });
   let feed;
@@ -231,7 +267,7 @@ async function fetchFeed(source, keywords, config) {
   return items;
 }
 
-// ─── fetchFullText ────────────────────────────────────────────────────────────
+// ─── fetchFullText + extraction og:image ─────────────────────────────────────
 async function fetchFullText(article) {
   try {
     const res = await fetchWithTimeout(
@@ -241,6 +277,17 @@ async function fetchFullText(article) {
     );
     if (!res.ok) return article.snippet;
     const html = await res.text();
+
+    // ── Extraire og:image / twitter:image si l'article n'a pas encore d'image ──
+    if (!article.image) {
+      const meta =
+        html.match(/<meta[^>]+property=["']og:image["'][^>]+content=["']([^"']+)["']/i) ||
+        html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+property=["']og:image["']/i) ||
+        html.match(/<meta[^>]+name=["']twitter:image(?::src)?["'][^>]+content=["']([^"']+)["']/i) ||
+        html.match(/<meta[^>]+content=["']([^"']+)["'][^>]+name=["']twitter:image/i);
+      const imgUrl = normalizeImgUrl(meta?.[1]);
+      if (imgUrl) article.image = imgUrl;
+    }
     let container = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)?.[1]
       || html.match(/<main[^>]*>([\s\S]*?)<\/main>/i)?.[1]
       || html;
