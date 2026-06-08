@@ -789,8 +789,36 @@ async function main() {
   let allArticles = feedResults.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
   ok(`${allArticles.length} articles bruts récupérés`);
 
+  // 1. Déduplication par URL exacte
   const seenUrls=new Set();
   allArticles=allArticles.filter(a=>{if(seenUrls.has(a.url))return false;seenUrls.add(a.url);return true;});
+
+  // 2. Déduplication par sujet (similarité Jaccard sur les titres)
+  // Si deux titres partagent >35% de leurs mots significatifs → doublon
+  const FR_STOP = new Set(['le','la','les','de','du','des','un','une','en','et','ou','que','qui','se','sur','par','pour','avec','dans','au','aux','est','sont','a','l','d','ce','il','elle','on','nous','vous','ils','elles','je','tu','sa','son','ses','mon','ton','ma','ta','pas','plus','tout','bien','aussi','mais','donc','car','si','ni','ne','y','s']);
+  function titleTokens(t) {
+    return t.toLowerCase()
+      .replace(/[^a-z0-9àâäéèêëîïôùûüœæç]/g,' ')
+      .split(/\s+/)
+      .filter(w => w.length > 2 && !FR_STOP.has(w));
+  }
+  function jaccard(t1, t2) {
+    const s1 = new Set(titleTokens(t1));
+    const s2 = new Set(titleTokens(t2));
+    const inter = [...s1].filter(w => s2.has(w)).length;
+    const union = new Set([...s1, ...s2]).size;
+    return union === 0 ? 0 : inter / union;
+  }
+  const deduped = [];
+  for (const a of allArticles) {
+    const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.35);
+    if (!isDup) deduped.push(a);
+    else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
+  }
+  const dupCount = allArticles.length - deduped.length;
+  if (dupCount > 0) ok(`${dupCount} doublon(s) de sujet éliminé(s)`);
+  allArticles = deduped;
+
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
   const catCount={};
   allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
