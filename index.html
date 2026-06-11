@@ -1010,11 +1010,16 @@
     .nav-more-link:hover { color: var(--text-hi); background: var(--glass-hover); }
     .nav-more-link.active { color: var(--red); border-color: var(--red-dim); }
 
+    /* Desktop : masquer le 🔖 mobile-only */
+    .nav-mobile-only { display: none; }
+
     @media (max-width: 800px) {
       .grid-featured { grid-template-columns: 1fr; }
       .grid-main     { grid-template-columns: 1fr 1fr; }
-      /* Cacher les liens secondaires — accessibles via le bouton ⋯ */
-      .nav-links .nav-link:not([data-nav="all"]):not([data-nav="ai"]):not([data-nav="secu"]) {
+      /* Cacher les catégories secondaires sur mobile — accessibles via ⋯ */
+      .nav-desktop-only { display: none !important; }
+      .nav-mobile-only  { display: flex !important; }
+      .nav-links .nav-link:not([data-nav="all"]):not([data-nav="ai"]):not([data-nav="secu"]):not([data-nav="gaming"]):not(.nav-mobile-only) {
         display: none;
       }
       .nav-more-btn { display: flex; }
@@ -1087,8 +1092,17 @@
         <a href="#" class="nav-link" data-nav="ai">IA</a>
         <a href="#" class="nav-link" data-nav="secu">Sécu</a>
         <a href="#" class="nav-link" data-nav="gaming">Gaming</a>
-        <a href="#" class="nav-link" data-nav="saved" style="position:relative">
+        <a href="#" class="nav-link nav-desktop-only" data-nav="mobile">Mobile</a>
+        <a href="#" class="nav-link nav-desktop-only" data-nav="hardware">Hardware</a>
+        <a href="#" class="nav-link nav-desktop-only" data-nav="maker">Maker</a>
+        <a href="#" class="nav-link nav-desktop-only" data-nav="web">Web</a>
+        <a href="#" class="nav-link nav-desktop-only" data-nav="science">Science</a>
+        <a href="#" class="nav-link nav-desktop-only" data-nav="saved" style="position:relative">
           🔖 <span class="nav-saved-count" id="nav-saved-count"></span>
+        </a>
+        <!-- 🔖 visible sur mobile via le panneau ··· uniquement -->
+        <a href="#" class="nav-link nav-mobile-only" data-nav="saved" style="position:relative">
+          🔖 <span class="nav-saved-count"></span>
         </a>
         <button class="nav-prefs-btn" id="cp-trigger" aria-label="Préférences">
           <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
