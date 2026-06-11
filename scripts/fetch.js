@@ -755,8 +755,8 @@ async function main() {
   const config = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
   log(`${config.sources.length} sources configurées`);
 
-  // Cache
-  const distPath = path.join(__dirname,'..','dist','articles.json');
+  // Cache — toujours depuis le fichier complet (avec bodies)
+  const distPath = path.join(__dirname,'..','dist','articles-full.json');
   let cachedData = {articles:[], ephemeris:null};
   try { cachedData=JSON.parse(await fs.readFile(distPath,'utf-8')); ok(`Cache : ${cachedData.articles?.length||0} articles`); }
   catch { warn('Pas de cache existant'); }
@@ -793,6 +793,11 @@ async function main() {
   const seenUrls=new Set();
   allArticles=allArticles.filter(a=>{if(seenUrls.has(a.url))return false;seenUrls.add(a.url);return true;});
 
+  // Sauvegarder les articles Korben avant que les filtres les éliminent (pour le mode payant)
+  const korbenPool = [...allArticles]
+    .filter(a => a.source === 'korben.info')
+    .sort((a,b) => new Date(b.date) - new Date(a.date));
+
   // 2. Déduplication par sujet (similarité Jaccard sur les titres)
   // Si deux titres partagent >35% de leurs mots significatifs → doublon
   const FR_STOP = new Set(['le','la','les','de','du','des','un','une','en','et','ou','que','qui','se','sur','par','pour','avec','dans','au','aux','est','sont','a','l','d','ce','il','elle','on','nous','vous','ils','elles','je','tu','sa','son','ses','mon','ton','ma','ta','pas','plus','tout','bien','aussi','mais','donc','car','si','ni','ne','y','s']);
@@ -823,6 +828,21 @@ async function main() {
   const catCount={};
   allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
   allArticles=allArticles.slice(0,MAX_ARTICLES);
+
+  // Mode payant : garantir au moins 1 article Korben s'il en existe
+  if (IS_PAID && korbenPool.length > 0) {
+    const hasKorben = allArticles.some(a => a.source === 'korben.info');
+    if (!hasKorben) {
+      // Prendre le plus récent qui n'est pas déjà un doublon sujet avec la sélection actuelle
+      const best = korbenPool.find(k => !allArticles.some(a => jaccard(a.title, k.title) > 0.35));
+      if (best) {
+        allArticles[allArticles.length - 1] = best; // remplace le dernier slot
+        ok(`Korben.info : article garanti — "${best.title.slice(0,55)}…"`);
+      }
+    } else {
+      ok(`Korben.info : déjà présent dans la sélection`);
+    }
+  }
   log(`${allArticles.length} articles retenus`);
 
   // fetchFullText
@@ -860,15 +880,24 @@ async function main() {
   const finalArticles=[...allArticles,...oldArticles];
   finalArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-  // Écriture
-  const output={generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles};
+  // Écriture — deux fichiers distincts
+  const fullPath  = path.join(__dirname,'..','dist','articles-full.json');
+  const indexPath = path.join(__dirname,'..','dist','articles.json');
+
+  // Fichier complet (avec body) — pour article.html
+  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
   await fs.mkdir(path.join(__dirname,'..','dist'),{recursive:true});
-  await fs.writeFile(distPath,JSON.stringify(output,null,2),'utf-8');
+  await fs.writeFile(fullPath, JSON.stringify(outputFull), 'utf-8');
+
+  // Fichier index léger (sans body) — pour index.html
+  const indexArticles = finalArticles.map(({body, ...rest}) => rest);
+  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:indexArticles };
+  await fs.writeFile(indexPath, JSON.stringify(outputIndex), 'utf-8');
 
   console.log(`\n${c.bold}━━━ Terminé ━━━${c.reset}`);
   ok(`${newCount} nouveaux | ${cachedCount} depuis cache | ${finalArticles.length} total`);
   if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
-  ok(`Écrit : dist/articles.json`);
+  ok(`Écrit : dist/articles.json (index) + dist/articles-full.json (complet)`);
   console.log();
 }
 
