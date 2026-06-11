@@ -755,8 +755,8 @@ async function main() {
   const config = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
   log(`${config.sources.length} sources configurées`);
 
-  // Cache — toujours depuis le fichier complet (avec bodies)
-  const distPath = path.join(__dirname,'..','dist','articles-full.json');
+  // Cache — lecture depuis articles.json
+  const distPath = path.join(__dirname,'..','dist','articles.json');
   let cachedData = {articles:[], ephemeris:null};
   try { cachedData=JSON.parse(await fs.readFile(distPath,'utf-8')); ok(`Cache : ${cachedData.articles?.length||0} articles`); }
   catch { warn('Pas de cache existant'); }
@@ -880,24 +880,15 @@ async function main() {
   const finalArticles=[...allArticles,...oldArticles];
   finalArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-  // Écriture — deux fichiers distincts
-  const fullPath  = path.join(__dirname,'..','dist','articles-full.json');
-  const indexPath = path.join(__dirname,'..','dist','articles.json');
-
-  // Fichier complet (avec body) — pour article.html
-  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
+  // Écriture — fichier unique articles.json (index + bodies)
+  const output = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
   await fs.mkdir(path.join(__dirname,'..','dist'),{recursive:true});
-  await fs.writeFile(fullPath, JSON.stringify(outputFull), 'utf-8');
-
-  // Fichier index léger (sans body) — pour index.html
-  const indexArticles = finalArticles.map(({body, ...rest}) => rest);
-  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:indexArticles };
-  await fs.writeFile(indexPath, JSON.stringify(outputIndex), 'utf-8');
+  await fs.writeFile(distPath, JSON.stringify(output), 'utf-8');
 
   console.log(`\n${c.bold}━━━ Terminé ━━━${c.reset}`);
   ok(`${newCount} nouveaux | ${cachedCount} depuis cache | ${finalArticles.length} total`);
   if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
-  ok(`Écrit : dist/articles.json (index) + dist/articles-full.json (complet)`);
+  ok(`Écrit : dist/articles.json`);
   console.log();
 }
 
