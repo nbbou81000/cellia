@@ -195,7 +195,13 @@
     }
 
     .nav-link:hover { color: var(--text-hi); background: var(--glass-card); }
-    .nav-link.active { color: var(--red); }
+    .nav-link.active {
+      color: var(--red);
+      background: rgba(232,53,42,0.09);
+      border-radius: 8px;
+      position: relative;
+    }
+    [data-theme="dark"] .nav-link.active { background: rgba(255,80,70,0.11); }
 
     .nav-prefs-btn {
       background: var(--glass-card);
@@ -325,13 +331,25 @@
       background: linear-gradient(135deg, var(--reflet) 0%, transparent 40%);
       opacity: 0.5;
       pointer-events: none;
+      transition: opacity 0.3s;
     }
+    .card:hover::before { opacity: 0.75; }
 
     .card:hover {
       background: var(--glass-hover);
-      box-shadow: 0 8px 32px var(--shadow-lg);
-      transform: translateY(-2px);
-      border-color: var(--border);
+      box-shadow: 0 12px 40px var(--shadow-lg);
+      transform: translateY(-3px);
+      border-color: rgba(255,255,255,0.13);
+    }
+
+    /* Featured : bordure et ombre plus marquées */
+    .card-featured {
+      border-color: rgba(255,255,255,0.10);
+      box-shadow: 0 4px 24px var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.06);
+    }
+    .card-featured:hover {
+      border-color: rgba(255,255,255,0.18);
+      box-shadow: 0 16px 48px var(--shadow-lg), inset 0 1px 0 rgba(255,255,255,0.08);
     }
 
     /* Card image */
@@ -413,7 +431,7 @@
 
     .card-summary {
       font-size: 13px;
-      color: var(--text-body);
+      color: #64748b;
       line-height: 1.58;
       flex: 1;
       display: -webkit-box;
@@ -422,12 +440,12 @@
       overflow: hidden;
     }
 
-    /* Boost lisibilité dark */
-    [data-theme="dark"] .card-title   { color: #e8ecf8; }
-    [data-theme="dark"] .card-summary { color: #9aa4be; }
-    [data-theme="dark"] .card-source  { color: #7a84a0; }
-    [data-theme="dark"] .card-time    { color: #5a6278; }
-    [data-theme="dark"] .card-read    { color: #5a6278; }
+    /* Boost lisibilité dark — titres blancs, résumés gris doux distinctifs */
+    [data-theme="dark"] .card-title   { color: #f0f2f8; }
+    [data-theme="dark"] .card-summary { color: #94a3b8; }
+    [data-theme="dark"] .card-source  { color: #64748b; }
+    [data-theme="dark"] .card-time    { color: #4a5568; }
+    [data-theme="dark"] .card-read    { color: #4a5568; }
 
     .card-footer {
       display: flex;
@@ -457,6 +475,8 @@
       border-color: var(--red);
       color: #fff;
     }
+
+    .card:hover .card-favicon { opacity: 0.9; }
 
     /* Card featured (grande) */
     .card-featured .card-title   { font-size: 18px; }
@@ -659,18 +679,21 @@
 
     .ephemeris-link:hover { color: var(--red); }
     @keyframes shimmer {
-      0%   { background-position: -400px 0; }
-      100% { background-position: 400px 0; }
+      0%   { background-position: -600px 0; }
+      100% { background-position: 600px 0; }
     }
 
     .skeleton {
-      background: linear-gradient(90deg,
-        var(--glass-card) 25%,
-        var(--glass-hover) 50%,
-        var(--glass-card) 75%
+      background: linear-gradient(
+        90deg,
+        var(--glass-card) 0%,
+        var(--glass-hover) 40%,
+        rgba(255,255,255,0.06) 50%,
+        var(--glass-hover) 60%,
+        var(--glass-card) 100%
       );
-      background-size: 800px 100%;
-      animation: shimmer 1.5s ease-in-out infinite;
+      background-size: 1200px 100%;
+      animation: shimmer 2s ease-in-out infinite;
       border-radius: 8px;
     }
 
@@ -732,6 +755,62 @@
       flex: 1;
       height: 1px;
       background: var(--border-soft);
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       FAVICON SOURCE
+    ═══════════════════════════════════════════════════════════════ */
+    .card-favicon {
+      width: 14px; height: 14px;
+      border-radius: 3px;
+      opacity: 0.65;
+      flex-shrink: 0;
+      object-fit: contain;
+      transition: opacity 0.2s;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       INDICATEUR ARTICLE FRAIS (< 1h) — PULSATION
+    ═══════════════════════════════════════════════════════════════ */
+    .fresh-dot {
+      width: 7px; height: 7px;
+      border-radius: 50%;
+      background: var(--red);
+      flex-shrink: 0;
+      animation: freshPulse 2s ease-in-out infinite;
+    }
+    @keyframes freshPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(255,80,70,0.55); }
+      50%       { box-shadow: 0 0 0 5px rgba(255,80,70,0); }
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       SÉPARATEURS DE JOURS (TIMELINE)
+    ═══════════════════════════════════════════════════════════════ */
+    .day-separator {
+      grid-column: 1 / -1;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 14px 0 6px;
+      margin-top: 4px;
+    }
+    .day-sep-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border-soft);
+    }
+    .day-label {
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-dimmer);
+      white-space: nowrap;
+      padding: 3px 12px;
+      border-radius: 99px;
+      border: 1px solid var(--border-soft);
+      background: var(--glass-card);
     }
 
     /* ═══════════════════════════════════════════════════════════════
@@ -1110,7 +1189,7 @@
   <script src="prefs.js"></script>
   <script>
     // ── Constantes ─────────────────────────────────────────────────────────
-    const FEED_URL    = '/dist/articles.json';
+    const FEED_URL    = 'dist/articles.json';
     const CAT_LABELS  = { all:'Tout', ai:'IA', secu:'Sécu', hardware:'Hardware', gaming:'Gaming', mobile:'Mobile', maker:'Maker', web:'Web', science:'Science', auto:'Tech' };
 
     let allArticles   = [];
@@ -1128,8 +1207,28 @@
       return 'à l\'instant';
     }
 
-    function isNew(iso) {
-      return (Date.now() - new Date(iso).getTime()) < 3 * 3600000; // < 3h
+    function isFresh(iso) { // < 1h → pulsation rouge
+      return (Date.now() - new Date(iso).getTime()) < 3600000;
+    }
+
+    function isNew(iso) { // 1h–6h → badge NEW
+      const age = Date.now() - new Date(iso).getTime();
+      return age >= 3600000 && age < 6 * 3600000;
+    }
+
+    function getDayLabel(iso) {
+      const d   = new Date(iso);
+      const now = new Date();
+      const msDay  = 86400000;
+      const dayOf  = t => new Date(t.getFullYear(), t.getMonth(), t.getDate()).getTime();
+      const diff   = dayOf(now) - dayOf(d);
+      if (diff === 0)      return 'Aujourd\'hui';
+      if (diff === msDay)  return 'Hier';
+      return d.toLocaleDateString('fr-FR', { weekday:'long', day:'numeric', month:'long' });
+    }
+
+    function getFaviconUrl(source) {
+      return `https://www.google.com/s2/favicons?domain=${encodeURIComponent(source)}&sz=16`;
     }
 
     function catClass(cat) {
@@ -1169,9 +1268,9 @@
       div.setAttribute('data-cat', article.category || 'web');
 
       const timeStr  = timeAgo(article.date);
+      const fresh    = isFresh(article.date);
       const newBadge = isNew(article.date) ? `<span class="badge badge-new">NEW</span>` : '';
       const catLabel = CAT_LABELS[article.category] || article.category || 'Tech';
-      const saved    = isSaved(article.id);
 
       div.innerHTML = `
         <div style="position:relative">
@@ -1185,11 +1284,11 @@
             <span class="badge badge-cat">${safeText(catLabel)}</span>
             ${newBadge}
           </div>
-          <button class="card-bookmark ${saved ? 'saved' : ''}"
+          <button class="card-bookmark ${isSaved(article.id) ? 'saved' : ''}"
                   data-bookmark="${article.id}"
-                  title="${saved ? 'Retirer des favoris' : 'Sauvegarder pour plus tard'}"
-                  aria-label="${saved ? 'Retirer des favoris' : 'Sauvegarder'}">
-            <svg width="13" height="13" viewBox="0 0 13 16" fill="${saved ? 'currentColor' : 'none'}"
+                  title="${isSaved(article.id) ? 'Retirer des favoris' : 'Sauvegarder pour plus tard'}"
+                  aria-label="${isSaved(article.id) ? 'Retirer des favoris' : 'Sauvegarder'}">
+            <svg width="13" height="13" viewBox="0 0 13 16" fill="${isSaved(article.id) ? 'currentColor' : 'none'}"
                  stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
               <path d="M1.5 1.5h10v13l-5-3.5-5 3.5V1.5z"/>
             </svg>
@@ -1197,8 +1296,10 @@
         </div>
         <div class="card-body">
           <div class="card-meta">
+            <img class="card-favicon" src="${getFaviconUrl(article.source)}" alt="" onerror="this.style.display='none'" loading="lazy">
             <span class="card-source">${safeText(article.source)}</span>
             <span class="card-dot">·</span>
+            ${fresh ? '<span class="fresh-dot" title="Publié il y a moins d\'une heure"></span>' : ''}
             <span class="card-time">${timeStr}</span>
           </div>
           <h2 class="card-title">${safeText(article.title)}</h2>
@@ -1286,7 +1387,20 @@
       const hasMore       = filtered.length > 2 + visibleCount;
 
       featuredItems.forEach(a => gFeat.appendChild(renderCard(a, true)));
-      mainItems.forEach(a     => gMain.appendChild(renderCard(a, false)));
+
+      // Grille principale avec séparateurs de jours
+      let lastDayLabel = null;
+      mainItems.forEach(a => {
+        const dayLabel = getDayLabel(a.date);
+        if (dayLabel !== lastDayLabel) {
+          const sep = document.createElement('div');
+          sep.className = 'day-separator';
+          sep.innerHTML = `<div class="day-sep-line"></div><span class="day-label">${dayLabel}</span><div class="day-sep-line"></div>`;
+          gMain.appendChild(sep);
+          lastDayLabel = dayLabel;
+        }
+        gMain.appendChild(renderCard(a, false));
+      });
 
       // Bouton voir plus
       vpWrap.classList.toggle('hidden', !hasMore);
