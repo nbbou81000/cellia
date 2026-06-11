@@ -22,7 +22,7 @@ on:
 
 jobs:
   fetch-and-deploy:
-    name: Fetch RSS → Groq → Deploy
+    name: Fetch RSS → Mistral → GitHub Pages
     runs-on: ubuntu-latest
     timeout-minutes: 30
     permissions:
@@ -64,7 +64,7 @@ jobs:
           COUNT=$(node -e "console.log(require('./dist/articles.json').count)")
           echo "✓ $COUNT articles"
 
-      - name: Commit articles.json
+      - name: Commit articles
         run: |
           git config user.name  "CelliA Bot"
           git config user.email "cellia-bot@noreply.github.com"
@@ -75,20 +75,6 @@ jobs:
             git commit -m "chore: articles $(date -u '+%Y-%m-%d %H:%M')"
             git push
           fi
-
-      - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v3
-        with:
-          publish-dir: '.'
-          production-branch: main
-          production-deploy: true
-          deploy-message: "CelliA ${{ github.run_id }}"
-          enable-pull-request-comment: false
-          enable-commit-comment: false
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID:    ${{ secrets.NETLIFY_SITE_ID }}
-        timeout-minutes: 5
 
       - name: Summary
         if: always()
