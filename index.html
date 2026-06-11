@@ -924,13 +924,29 @@
       position: relative;
       z-index: 1;
       text-align: center;
-      padding: 0 24px 40px;
+      padding: 32px 24px 48px;
       color: var(--text-dimmer);
       font-size: 12px;
+      border-top: 1px solid var(--border-soft);
+      margin-top: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
     }
-
-    .footer a { color: var(--text-dim); }
+    .footer-links {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .footer a {
+      color: var(--text-dim);
+      text-decoration: none;
+      transition: color 0.15s;
+    }
     .footer a:hover { color: var(--red); }
+    .footer-dot { opacity: 0.3; }
 
     /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE
@@ -1182,7 +1198,18 @@
   </button>
 
   <footer class="footer">
-    <p>CelliA — veille tech générée à <span id="footer-time">—</span> · <a href="/feed">JSON</a> · <a href="https://github.com" target="_blank">GitHub</a></p>
+    <div class="footer-links">
+      <a href="https://meteo-atlas.netlify.app/" target="_blank" rel="noopener noreferrer">
+        🌤 MétéoAtlas
+      </a>
+      <span class="footer-dot">·</span>
+      <a href="https://github.com/nbbou81000" target="_blank" rel="noopener noreferrer">GitHub</a>
+    </div>
+    <p>
+      Agrégateur d'actualités tech généré par IA &mdash;
+      Réalisé en no-code avec <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a>
+    </p>
+    <p>&copy; 2026 Nicolas Bouteiller &mdash; CelliA &mdash; Mis à jour à <span id="footer-time">—</span></p>
   </footer>
 
   <!-- ═══ SCRIPTS ══════════════════════════════════════════════════════════ -->
