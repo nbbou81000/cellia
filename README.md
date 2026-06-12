@@ -46,36 +46,37 @@ The GitHub Actions workflow also includes optional toggles:
 While the repository and code are completely public, all API keys used for content generation are tightly secured using **GitHub Actions Secrets** (`MISTRAL_API_KEY`, `GROQ_API_KEY`, `GEMINI_API_KEY`). 
 
 
+
 ```mermaid
 graph TD
     %% ZONE CONFIG & AUTOMATION
-    subgraph Pipeline d'Automatisation GitHub Actions
+    subgraph Pipeline_Automation [Pipeline d'Automatisation GitHub Actions]
         Cron[⏰ Trigger : Cron 5x/jour ou Manuel] -->|Exécute| Workflow[daily.yml]
         Workflow -->|Injecte Secrets API & Node.js| Script[fetch.js]
         Sources[(sources.json - 20+ Flux RSS)] -->|Filtre mots-clés| Script
     end
 
     %% ZONE IA & INTÉGRATION
-    subgraph Cascade de Résilience LLM Forfaits Gratuits
+    subgraph Cascade_LLM [Cascade de Résilience LLM Forfaits Gratuits]
         Script --> Provider1{1. Mistral AI}
         Provider1 -->|Échec ou Rate Limit| Provider2{2. Groq Cloud}
         Provider2 -->|Échec ou Rate Limit| Provider3{3. Google Gemini}
         
-        Provider1 -->|Succès : Traduit & Rédige| Output
+        Provider1 -->|Succès : Traduit & Rédige| Output[Génération Synchrone]
         Provider2 -->|Succès : Traduit & Rédige| Output
         Provider3 -->|Succès : Traduit & Rédige| Output
     end
 
     %% ZONE STOCKAGE DATA
-    subgraph Stockage Statique Git Dépôt Public
-        Output[Génération Synchrone] -->|Commit & Push auto| Dist[📂 Dossier /dist]
+    subgraph Stockage_Data [Stockage Statique Git Dépôt Public]
+        Output -->|Commit & Push auto| Dist[📂 Dossier /dist]
         Dist --> Data1[articles.json - Index Léger]
         Dist --> Data2[articles-full.json - Articles Complets]
         Dist --> Data3[articles-fond.json - Contenu Long-Form]
     end
 
     %% ZONE FRONT END
-    subgraph Expérience Utilisateur GitHub Pages
+    subgraph Experience_Utilisateur [Expérience Utilisateur GitHub Pages]
         Data1 -->|Fetch asynchrone cache-busting| Index[index.html - Grille de Veille Rapide]
         Data2 -->|Fetch ciblé par ID| Article[article.html - Page de Lecture]
         
@@ -90,31 +91,6 @@ graph TD
 
     %% Notifications & Liens annexes
     Workflow -->|Webhook de succès| Ntfy[🔔 Notification Push ntfy.sh]
-
-    %% Styles des blocs (Compatibilité stricte GitHub native)
-    style Cron fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
-    style Workflow fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
-    style Script fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
-    style Ntfy fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
-    
-    style Provider1 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
-    style Provider2 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
-    style Provider3 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
-
-    style Sources fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Dist fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Output fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Data1 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Data2 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Data3 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-    style Streams fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
-
-    style Index fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
-    style Article fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
-    style Prefs fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
-    style Lofi fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
-
-
 
 
 
