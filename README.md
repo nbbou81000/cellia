@@ -45,6 +45,72 @@ The GitHub Actions workflow also includes optional toggles:
 
 While the repository and code are completely public, all API keys used for content generation are tightly secured using **GitHub Actions Secrets** (`MISTRAL_API_KEY`, `GROQ_API_KEY`, `GEMINI_API_KEY`). 
 
+```mermaid
+graph TD
+    %% Liens et styles globaux
+    classDef automation fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff;
+    classDef data fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9;
+    classDef llm fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff;
+    classDef client fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff;
+
+    %% ZONE CONFIG & AUTOMATION
+    subgraph 🤖 Pipeline d'Automatisation (GitHub Actions)
+        Cron[⏰ Trigger : Cron 5x/jour ou Manuel] -->|Exécute| Workflow[daily.yml]
+        Workflow -->|Injecte Secrets API & Node.js| Script[fetch.js]
+        Sources[(sources.json<br>20+ Flux RSS)] -->|Filtre mots-clés| Script
+    end
+    class Workflow,Script,Cron automation;
+    class Sources data;
+
+    %% ZONE IA & INTÉGRATION
+    subgraph 🧠 Cascade de Résilience LLM (Forfaits Gratuits)
+        Script --> Provider1{1. Mistral AI}
+        Provider1 -->|Échec / Rate Limit| Provider2{2. Groq Cloud}
+        Provider2 -->|Échec / Rate Limit| Provider3{3. Google Gemini}
+        
+        Provider1 -->|Succès : Traduit & Rédige| Output
+        Provider2 -->|Succès : Traduit & Rédige| Output
+        Provider3 -->|Succès : Traduit & Rédige| Output
+    end
+    class Provider1,Provider2,Provider3 llm;
+
+    %% ZONE STOCKAGE DATA
+    subgraph 📦 Stockage Statique Git (Dépôt Public)
+        Output[Génération Synchrone] -->|Commit & Push auto| Dist[📂 Dossier /dist]
+        Dist --> Data1[articles.json <br> Index Léger]
+        Dist --> Data2[articles-full.json <br> Articles Complets]
+        Dist --> Data3[articles-fond.json <br> Contenu Long-Form]
+    end
+    class Dist,Data1,Data2,Data3,Output data;
+
+    %% ZONE FRONT END
+    subgraph 💻 Expérience Utilisateur (GitHub Pages)
+        Data1 -->|Fetch asynchrone cache-busting| Index[index.html <br> Grille de Veille Rapide]
+        Data2 -->|Fetch ciblé par ID| Article[article.html <br> Page de Lecture]
+        
+        Index <--> Prefs[prefs.js <br> Customisation Thèmes]
+        Article <--> Prefs
+        
+        Index --> Lofi[lofi.js <br> Radio Lofi & Mini-Player]
+        Article --> Lofi
+        
+        Streams[(Flux Audio Externes<br>ILoveMusic / Open.FM)] -.->|Streaming Direct| Lofi
+    end
+    class Index,Article,Prefs,Lofi client;
+    class Streams data;
+
+    %% Notifications
+    Workflow -->|Webhook de succès| Ntfy[🔔 Notification Push ntfy.sh]
+    class Ntfy automation;
+
+
+
+
+
+
+
+
+
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------
