@@ -50,38 +50,37 @@ While the repository and code are completely public, all API keys used for conte
 ```mermaid
 graph TD
     %% 1. PIPELINE AUTOMATION
-    CRON["⏰ Trigger : Cron 5x/jour ou Manuel"] --> WORKFLOW["Fichier daily.yml"]
-    WORKFLOW --> SCRIPT["Script fetch.js"]
-    SOURCES["Fichier sources.json (20+ Flux RSS)"] --> SCRIPT
+    CRON["⏰ Trigger : Cron 5x/jour ou Manuel"] --> WORKFLOW["Workflow Github Actions"]
+    WORKFLOW --> SCRIPT["Script de generation fetch"]
+    SOURCES["Fichier sources JSON - 20+ Flux RSS"] --> SCRIPT
 
     %% 2. CASCADE LLM
     SCRIPT --> MISTRAL{"1. API Mistral AI"}
     MISTRAL -->|"Échec / Rate Limit"| GROQ{"2. API Groq Cloud"}
     GROQ -->|"Échec / Rate Limit"| GEMINI{"3. API Google Gemini"}
     
-    MISTRAL -->|"Succès"| OUTPUT["Génération des données"]
+    MISTRAL -->|"Succès"| OUTPUT["Compilation des données"]
     GROQ -->|"Succès"| OUTPUT
     GEMINI -->|"Succès"| OUTPUT
 
     %% 3. STOCKAGE DATA
-    OUTPUT --> DIST["Dossier /dist (Fichiers Statiques)"]
-    DIST --> DATA1["articles.json (Index Léger)"]
-    DIST --> DATA2["articles-full.json (Articles Complets)"]
-    DIST --> DATA3["articles-fond.json (Contenu Long-Form)"]
+    OUTPUT --> DIST["Dossier dist - Fichiers Statiques"]
+    DIST --> DATA1["articles JSON - Index Léger"]
+    DIST --> DATA2["articles-full JSON - Articles Complets"]
+    DIST --> DATA3["articles-fond JSON - Contenu Long-Form"]
 
     %% 4. FRONT END
-    DATA1 --> INDEX["index.html (Grille de Veille)"]
-    DATA2 --> ARTICLE["article.html (Page de Lecture)"]
+    DATA1 --> INDEX["index HTML - Grille de Veille"]
+    DATA2 --> ARTICLE["article HTML - Page de Lecture"]
     
-    INDEX <--> PREFS["prefs.js (Gestion des Thèmes)"]
+    INDEX <--> PREFS["prefs JS - Gestion des Thèmes"]
     ARTICLE <--> PREFS
     
-    INDEX --> LOFI["lofi.js (Radio Lofi & Mini-Player)"]
+    INDEX --> LOFI["lofi JS - Radio Lofi et Mini-Player"]
     ARTICLE --> LOFI
     
     AUDIO["Flux Audio Externes"] --> LOFI
-    WORKFLOW --> NTFY["🔔 Notification Push ntfy.sh"]
-
+    WORKFLOW --> NTFY["🔔 Notification Push via ntfy"]
 
 
 
