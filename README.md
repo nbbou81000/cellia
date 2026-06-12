@@ -45,65 +45,74 @@ The GitHub Actions workflow also includes optional toggles:
 
 While the repository and code are completely public, all API keys used for content generation are tightly secured using **GitHub Actions Secrets** (`MISTRAL_API_KEY`, `GROQ_API_KEY`, `GEMINI_API_KEY`). 
 
+
 ```mermaid
 graph TD
-    %% Liens et styles globaux
-    classDef automation fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff;
-    classDef data fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9;
-    classDef llm fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff;
-    classDef client fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff;
-
     %% ZONE CONFIG & AUTOMATION
-    subgraph 🤖 Pipeline d'Automatisation (GitHub Actions)
+    subgraph Pipeline d'Automatisation GitHub Actions
         Cron[⏰ Trigger : Cron 5x/jour ou Manuel] -->|Exécute| Workflow[daily.yml]
         Workflow -->|Injecte Secrets API & Node.js| Script[fetch.js]
-        Sources[(sources.json<br>20+ Flux RSS)] -->|Filtre mots-clés| Script
+        Sources[(sources.json - 20+ Flux RSS)] -->|Filtre mots-clés| Script
     end
-    class Workflow,Script,Cron automation;
-    class Sources data;
 
     %% ZONE IA & INTÉGRATION
-    subgraph 🧠 Cascade de Résilience LLM (Forfaits Gratuits)
+    subgraph Cascade de Résilience LLM Forfaits Gratuits
         Script --> Provider1{1. Mistral AI}
-        Provider1 -->|Échec / Rate Limit| Provider2{2. Groq Cloud}
-        Provider2 -->|Échec / Rate Limit| Provider3{3. Google Gemini}
+        Provider1 -->|Échec ou Rate Limit| Provider2{2. Groq Cloud}
+        Provider2 -->|Échec ou Rate Limit| Provider3{3. Google Gemini}
         
         Provider1 -->|Succès : Traduit & Rédige| Output
         Provider2 -->|Succès : Traduit & Rédige| Output
         Provider3 -->|Succès : Traduit & Rédige| Output
     end
-    class Provider1,Provider2,Provider3 llm;
 
     %% ZONE STOCKAGE DATA
-    subgraph 📦 Stockage Statique Git (Dépôt Public)
+    subgraph Stockage Statique Git Dépôt Public
         Output[Génération Synchrone] -->|Commit & Push auto| Dist[📂 Dossier /dist]
-        Dist --> Data1[articles.json <br> Index Léger]
-        Dist --> Data2[articles-full.json <br> Articles Complets]
-        Dist --> Data3[articles-fond.json <br> Contenu Long-Form]
+        Dist --> Data1[articles.json - Index Léger]
+        Dist --> Data2[articles-full.json - Articles Complets]
+        Dist --> Data3[articles-fond.json - Contenu Long-Form]
     end
-    class Dist,Data1,Data2,Data3,Output data;
 
     %% ZONE FRONT END
-    subgraph 💻 Expérience Utilisateur (GitHub Pages)
-        Data1 -->|Fetch asynchrone cache-busting| Index[index.html <br> Grille de Veille Rapide]
-        Data2 -->|Fetch ciblé par ID| Article[article.html <br> Page de Lecture]
+    subgraph Expérience Utilisateur GitHub Pages
+        Data1 -->|Fetch asynchrone cache-busting| Index[index.html - Grille de Veille Rapide]
+        Data2 -->|Fetch ciblé par ID| Article[article.html - Page de Lecture]
         
-        Index <--> Prefs[prefs.js <br> Customisation Thèmes]
+        Index <--> Prefs[prefs.js - Customisation Thèmes]
         Article <--> Prefs
         
-        Index --> Lofi[lofi.js <br> Radio Lofi & Mini-Player]
+        Index --> Lofi[lofi.js - Radio Lofi & Mini-Player]
         Article --> Lofi
         
-        Streams[(Flux Audio Externes<br>ILoveMusic / Open.FM)] -.->|Streaming Direct| Lofi
+        Streams[(Flux Audio Externes)] -.->|Streaming Direct| Lofi
     end
-    class Index,Article,Prefs,Lofi client;
-    class Streams data;
 
-    %% Notifications
+    %% Notifications & Liens annexes
     Workflow -->|Webhook de succès| Ntfy[🔔 Notification Push ntfy.sh]
-    class Ntfy automation;
 
+    %% Styles des blocs (Compatibilité stricte GitHub native)
+    style Cron fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
+    style Workflow fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
+    style Script fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
+    style Ntfy fill:#1f1a3a,stroke:#6f42c1,stroke-width:2px,color:#fff
+    
+    style Provider1 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
+    style Provider2 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
+    style Provider3 fill:#0d2d21,stroke:#2ea44f,stroke-width:1px,color:#fff
 
+    style Sources fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Dist fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Output fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Data1 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Data2 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Data3 fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+    style Streams fill:#161b22,stroke:#30363d,stroke-width:1px,color:#c9d1d9
+
+    style Index fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
+    style Article fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
+    style Prefs fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
+    style Lofi fill:#21262d,stroke:#f25c54,stroke-width:1px,color:#fff
 
 
 
