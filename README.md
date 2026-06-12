@@ -49,34 +49,38 @@ While the repository and code are completely public, all API keys used for conte
 
 ```mermaid
 graph TD
-    Cron[⏰ Trigger : Cron 5x/jour ou Manuel] --> Workflow[daily.yml]
-    Workflow --> Script[fetch.js]
-    Sources[(sources.json - 20+ Flux RSS)] --> Script
+    %% 1. PIPELINE AUTOMATION
+    CRON["⏰ Trigger : Cron 5x/jour ou Manuel"] --> WORKFLOW["Fichier daily.yml"]
+    WORKFLOW --> SCRIPT["Script fetch.js"]
+    SOURCES["Fichier sources.json (20+ Flux RSS)"] --> SCRIPT
 
-    Script --> Provider1{1. Mistral AI}
-    Provider1 --> Provider2{2. Groq Cloud}
-    Provider2 --> Provider3{3. Google Gemini}
+    %% 2. CASCADE LLM
+    SCRIPT --> MISTRAL{"1. API Mistral AI"}
+    MISTRAL -->|"Échec / Rate Limit"| GROQ{"2. API Groq Cloud"}
+    GROQ -->|"Échec / Rate Limit"| GEMINI{"3. API Google Gemini"}
     
-    Provider1 --> Output[Génération Synchrone]
-    Provider2 --> Output
-    Provider3 --> Output
+    MISTRAL -->|"Succès"| OUTPUT["Génération des données"]
+    GROQ -->|"Succès"| OUTPUT
+    GEMINI -->|"Succès"| OUTPUT
 
-    Output --> Dist[📂 Dossier /dist]
-    Dist --> Data1[articles.json - Index Léger]
-    Dist --> Data2[articles-full.json - Articles Complets]
-    Dist --> Data3[articles-fond.json - Contenu Long-Form]
+    %% 3. STOCKAGE DATA
+    OUTPUT --> DIST["Dossier /dist (Fichiers Statiques)"]
+    DIST --> DATA1["articles.json (Index Léger)"]
+    DIST --> DATA2["articles-full.json (Articles Complets)"]
+    DIST --> DATA3["articles-fond.json (Contenu Long-Form)"]
 
-    Data1 --> Index[index.html - Grille de Veille Rapide]
-    Data2 --> Article[article.html - Page de Lecture]
+    %% 4. FRONT END
+    DATA1 --> INDEX["index.html (Grille de Veille)"]
+    DATA2 --> ARTICLE["article.html (Page de Lecture)"]
     
-    Index <--> Prefs[prefs.js - Customisation Thèmes]
-    Article <--> Prefs
+    INDEX <--> PREFS["prefs.js (Gestion des Thèmes)"]
+    ARTICLE <--> PREFS
     
-    Index --> Lofi[lofi.js - Radio Lofi & Mini-Player]
-    Article --> Lofi
+    INDEX --> LOFI["lofi.js (Radio Lofi & Mini-Player)"]
+    ARTICLE --> LOFI
     
-    Streams[(Flux Audio Externes)] --> Lofi
-    Workflow --> Ntfy[🔔 Notification Push ntfy.sh]
+    AUDIO["Flux Audio Externes"] --> LOFI
+    WORKFLOW --> NTFY["🔔 Notification Push ntfy.sh"]
 
 
 
