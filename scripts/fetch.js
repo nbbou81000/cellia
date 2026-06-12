@@ -811,6 +811,22 @@ async function main() {
     .filter(a => a.source === 'korben.info')
     .sort((a,b) => new Date(b.date) - new Date(a.date));
 
+  // Fonctions de similarité Jaccard (utilisées pour dédup et garantie Korben)
+  const FR_STOP = new Set(['le','la','les','de','du','des','un','une','en','et','ou','que','qui','se','sur','par','pour','avec','dans','au','aux','est','sont','a','l','d','ce','il','elle','on','nous','vous','ils','elles','je','tu','sa','son','ses','mon','ton','ma','ta','pas','plus','tout','bien','aussi','mais','donc','car','si','ni','ne','y','s']);
+  function titleTokens(t) {
+    return t.toLowerCase()
+      .replace(/[^a-z0-9àâäéèêëîïôùûüœæç]/g,' ')
+      .split(/\s+/)
+      .filter(w => w.length > 2 && !FR_STOP.has(w));
+  }
+  function jaccard(t1, t2) {
+    const s1 = new Set(titleTokens(t1));
+    const s2 = new Set(titleTokens(t2));
+    const inter = [...s1].filter(w => s2.has(w)).length;
+    const union = new Set([...s1, ...s2]).size;
+    return union === 0 ? 0 : inter / union;
+  }
+
   // 2. Déduplication par sujet — désactivée en mode Korben (on veut tout)
   if (!IS_KORBEN) {
     const deduped = [];
