@@ -19,6 +19,11 @@ on:
         required: false
         default: 'false'
         type: boolean
+      korben_mode:
+        description: 'Spécial Korben — tous les articles du jour de korben.info'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
   fetch-and-deploy:
@@ -51,6 +56,7 @@ jobs:
           GROQ_API_KEY:        ${{ secrets.GROQ_API_KEY }}
           GEMINI_PAID_API_KEY: ${{ secrets.GEMINI_PAID_API_KEY }}
           USE_PAID_GEMINI:     ${{ github.event.inputs.paid_mode }}
+          USE_KORBEN:          ${{ github.event.inputs.korben_mode }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
@@ -75,6 +81,17 @@ jobs:
             git commit -m "chore: articles $(date -u '+%Y-%m-%d %H:%M')"
             git push
           fi
+
+      - name: Notification push
+        if: success()
+        run: |
+          COUNT=$(node -e "console.log(require('./dist/articles.json').count)" 2>/dev/null || echo "?")
+          curl -s \
+            -H "Title: CelliA — Veille tech" \
+            -H "Priority: default" \
+            -H "Tags: newspaper" \
+            -d "✅ $COUNT articles disponibles" \
+            https://ntfy.sh/${{ secrets.NTFY_TOPIC }} || true
 
       - name: Summary
         if: always()
