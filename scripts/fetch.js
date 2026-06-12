@@ -840,9 +840,19 @@ async function main() {
     allArticles = deduped;
   }
 
+  // Mode Korben : redater les articles au moment du fetch pour qu'ils remontent en tête
+  if (IS_KORBEN) {
+    const now = new Date().toISOString();
+    allArticles = allArticles.map(a => ({ ...a, date: now }));
+    ok(`Articles Korben redatés à maintenant (remontée en tête de liste)`);
+  }
+
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  const catCount={};
-  allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
+  // Limite par catégorie — désactivée en mode Korben (une seule source)
+  if (!IS_KORBEN) {
+    const catCount={};
+    allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
+  }
   allArticles=allArticles.slice(0,MAX_ARTICLES);
 
   // Mode payant : garantir au moins 1 article Korben s'il en existe
