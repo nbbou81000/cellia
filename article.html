@@ -149,6 +149,64 @@
     }
     .nav-prefs-btn:hover { background: var(--glass-hover); color: var(--text-hi); }
 
+    /* Lofi buttons */
+    .nav-lofi-btn {
+      background: var(--glass-card); border: 1px solid var(--border-soft);
+      border-radius: 9px; color: var(--text-dim); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      width: 34px; height: 34px; font-size: 15px; flex-shrink: 0;
+      transition: background .2s, color .2s, border-color .2s, box-shadow .2s;
+    }
+    .nav-lofi-btn:hover { background: var(--glass-hover); color: var(--text-hi); }
+    .nav-lofi-btn.active {
+      background: rgba(255,90,78,0.14); border-color: rgba(255,90,78,0.35);
+      color: #ff5a4e; box-shadow: 0 0 10px rgba(255,90,78,0.22);
+    }
+    @media (max-width: 800px) { .nav-lofi-player-btn { display: none !important; } }
+
+    /* Mini player */
+    .lofi-player {
+      position: fixed; bottom: 24px; right: 24px; width: 272px;
+      background: rgba(10,11,16,0.94); border: 1px solid rgba(255,90,78,0.22);
+      border-radius: 20px; padding: 14px 16px 12px;
+      backdrop-filter: blur(28px); z-index: 9990; display: none;
+      box-shadow: 0 12px 40px rgba(0,0,0,0.65), 0 0 0 1px rgba(255,90,78,0.06);
+    }
+    .lofi-player.visible { display: block; animation: lofi-in .22s ease; }
+    @keyframes lofi-in {
+      from { opacity:0; transform: translateY(10px) scale(.97); }
+      to   { opacity:1; transform: translateY(0) scale(1); }
+    }
+    @media (max-width: 800px) { .lofi-player { display: none !important; } }
+    .lofi-top { display:flex; align-items:center; justify-content:space-between; margin-bottom:10px; }
+    .lofi-badge { display:flex; align-items:center; gap:6px; font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:rgba(255,90,78,.75); }
+    .lofi-live-dot { width:6px; height:6px; border-radius:50%; background:#ff5a4e; flex-shrink:0; }
+    .lofi-live-dot.pulse { animation: lofi-pulse 1.6s ease-in-out infinite; }
+    @keyframes lofi-pulse { 0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(255,90,78,.5)} 50%{opacity:.7;box-shadow:0 0 0 5px rgba(255,90,78,0)} }
+    .lofi-close-btn { background:none; border:none; cursor:pointer; color:rgba(255,255,255,.25); font-size:13px; padding:2px 4px; border-radius:5px; transition:color .15s; line-height:1; }
+    .lofi-close-btn:hover { color:rgba(255,255,255,.6); }
+    .lofi-station-name { font-size:12px; font-weight:700; color:rgba(255,255,255,.88); letter-spacing:.02em; margin-bottom:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .lofi-station-sub { font-size:9.5px; color:rgba(255,255,255,.3); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+    .lofi-wave { display:flex; align-items:flex-end; gap:3px; height:22px; margin-bottom:12px; }
+    .lofi-wave span { width:3px; border-radius:2px; background:rgba(255,90,78,.65); height:4px; }
+    .lofi-wave.playing span { animation: lofi-bar 1.1s ease-in-out infinite; }
+    .lofi-wave.playing span:nth-child(2){animation-delay:.1s} .lofi-wave.playing span:nth-child(3){animation-delay:.22s} .lofi-wave.playing span:nth-child(4){animation-delay:.08s} .lofi-wave.playing span:nth-child(5){animation-delay:.18s} .lofi-wave.playing span:nth-child(6){animation-delay:.33s} .lofi-wave.playing span:nth-child(7){animation-delay:.12s}
+    @keyframes lofi-bar { 0%,100%{height:4px} 50%{height:18px} }
+    .lofi-controls { display:flex; align-items:center; gap:8px; }
+    .lofi-btn { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.08); border-radius:8px; cursor:pointer; color:rgba(255,255,255,.6); display:flex; align-items:center; justify-content:center; width:30px; height:30px; font-size:11px; transition:all .15s; flex-shrink:0; }
+    .lofi-btn:hover { background:rgba(255,255,255,.1); color:#fff; }
+    .lofi-btn.play-pause { width:34px; height:34px; background:rgba(255,90,78,.18); border-color:rgba(255,90,78,.3); color:#ff5a4e; font-size:12px; }
+    .lofi-btn.play-pause:hover { background:rgba(255,90,78,.28); }
+    .lofi-vol-wrap { flex:1; display:flex; align-items:center; gap:6px; min-width:0; }
+    .lofi-vol-icon { font-size:11px; color:rgba(255,255,255,.3); flex-shrink:0; }
+    .lofi-vol-slider { flex:1; appearance:none; height:3px; background:rgba(255,255,255,.12); border-radius:2px; outline:none; cursor:pointer; }
+    .lofi-vol-slider::-webkit-slider-thumb { appearance:none; width:12px; height:12px; border-radius:50%; background:#ff5a4e; cursor:pointer; }
+    .lofi-vol-slider::-moz-range-thumb { width:12px; height:12px; border-radius:50%; background:#ff5a4e; cursor:pointer; border:none; }
+    .lofi-stream-row { display:flex; align-items:center; justify-content:space-between; margin-top:10px; padding-top:10px; border-top:1px solid rgba(255,255,255,.05); }
+    .lofi-stream-dots { display:flex; gap:5px; }
+    .lofi-stream-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.18); cursor:pointer; transition:background .2s; border:none; padding:0; }
+    .lofi-stream-dot.active { background:#ff5a4e; }
+
     /* ── Reading progress ── */
     #progress-bar {
       position: fixed; top: 60px; left: 0;
@@ -433,6 +491,8 @@
           </text>
         </svg>
       </a>
+      <button class="nav-lofi-btn" id="lofi-radio-btn" aria-label="Radio lofi — lecture/arrêt" title="Radio lofi">🎙️</button>
+      <button class="nav-lofi-btn nav-lofi-player-btn" id="lofi-player-btn" aria-label="Lecteur lofi" title="Lecteur lofi">📻</button>
       <button class="nav-prefs-btn" id="cp-trigger" aria-label="Préférences">
         <svg width="15" height="15" viewBox="0 0 18 18" fill="none">
           <circle cx="9" cy="9" r="2.5" stroke="currentColor" stroke-width="1.4"/>
@@ -441,6 +501,29 @@
       </button>
     </div>
   </nav>
+
+  <!-- Mini Lecteur Lofi -->
+  <div class="lofi-player" id="lofi-player" role="complementary" aria-label="Lecteur radio lofi">
+    <div class="lofi-top">
+      <div class="lofi-badge"><div class="lofi-live-dot" id="lofi-live-dot"></div><span>LIVE</span></div>
+      <button class="lofi-close-btn" id="lofi-close-btn" aria-label="Fermer">✕</button>
+    </div>
+    <div class="lofi-station-name" id="lofi-station-name">Lofi Hip-Hop Radio</div>
+    <div class="lofi-station-sub"  id="lofi-station-sub">chilling · focus · relax</div>
+    <div class="lofi-wave" id="lofi-wave" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span><span></span><span></span>
+    </div>
+    <div class="lofi-controls">
+      <button class="lofi-btn" id="lofi-prev-btn" aria-label="Stream précédent">&#8249;</button>
+      <button class="lofi-btn play-pause" id="lofi-pp-btn" aria-label="Lecture / Pause">▶</button>
+      <button class="lofi-btn" id="lofi-next-btn" aria-label="Stream suivant">&#8250;</button>
+      <div class="lofi-vol-wrap">
+        <span class="lofi-vol-icon">🔉</span>
+        <input class="lofi-vol-slider" id="lofi-vol" type="range" min="0" max="1" step="0.05" value="0.7" aria-label="Volume">
+      </div>
+    </div>
+    <div class="lofi-stream-row"><div class="lofi-stream-dots" id="lofi-dots"></div></div>
+  </div>
 
   <div id="progress-bar"></div>
 
@@ -784,5 +867,6 @@
 
     loadArticle();
   </script>
+  <script src="lofi.js"></script>
 </body>
 </html>
