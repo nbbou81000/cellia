@@ -556,6 +556,13 @@
       color: #fff;
     }
 
+    .badge-fond {
+      background: linear-gradient(135deg, #c9a96a 0%, #e8c87a 100%);
+      color: #1a1200;
+      font-weight: 800;
+      letter-spacing: .06em;
+    }
+
     /* Card body */
     .card-body {
       padding: 16px;
@@ -1504,6 +1511,7 @@
       const timeStr  = timeAgo(article.date);
       const fresh    = isFresh(article.date);
       const newBadge = isNew(article.date) ? `<span class="badge badge-new">NEW</span>` : '';
+      const fondBadge = article.type === 'fond' ? `<span class="badge badge-fond">✦ FOND</span>` : '';
       const catLabel = CAT_LABELS[article.category] || article.category || 'Tech';
 
       div.innerHTML = `
@@ -1516,6 +1524,7 @@
           >
           <div class="card-badges">
             <span class="badge badge-cat">${safeText(catLabel)}</span>
+            ${fondBadge}
             ${newBadge}
           </div>
           <button class="card-bookmark ${isSaved(article.id) ? 'saved' : ''}"
