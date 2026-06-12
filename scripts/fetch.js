@@ -8,8 +8,9 @@ const __dirname    = path.dirname(fileURLToPath(import.meta.url));
 const IS_DEV       = process.argv.includes('--dev');
 const IS_PAID      = process.env.USE_PAID_GEMINI === 'true';
 const IS_KORBEN    = process.env.USE_KORBEN === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID ? 15 : IS_KORBEN ? 20 : 10;
-const WINDOW_HOURS = IS_KORBEN ? 24 : 48; // Korben : 24h (articles du jour seulement)
+const IS_FOND      = process.env.USE_FOND === 'true';
+const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN ? 20 : 10;
+const WINDOW_HOURS = IS_KORBEN ? 24 : 48;
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
 // Déclaré en `let` — overridé en mode payant dans main()
@@ -177,6 +178,87 @@ function calcReadingTime(body) {
   const text  = (body || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
   const words = text.split(' ').filter(w => w.length > 0).length;
   return Math.max(1, Math.ceil(words / 200));
+}
+
+// ─── Mode FOND : scorer les articles et choisir le meilleur ──────────────────
+async function scorerMeilleurArticle(articles) {
+  const PAID_KEY = process.env.GEMINI_PAID_API_KEY;
+  if (!PAID_KEY) throw new Error('GEMINI_PAID_API_KEY manquante pour le mode fond');
+
+  const liste = articles.map((a, i) =>
+    `${i}. ${a.title}\n   ${(a.snippet||'').replace(/<[^>]+>/g,' ').slice(0,180).trim()}`
+  ).join('\n\n');
+
+  const prompt = `Tu es un éditeur tech senior français réputé.
+Voici ${articles.length} articles candidats (titre + extrait) :
+
+${liste}
+
+Ta mission : identifier l'article le plus propice à un grand reportage de fond.
+Critères : originalité, profondeur potentielle, impact sociétal ou technique durable, intérêt journalistique réel.
+À ÉVITER : bon plan, promo, rumeur sans substance, simple mise à jour logicielle.
+FAVORISER : découverte importante, analyse de tendance de fond, enjeu technologique majeur, sujet qui mérite contexte et investigation.
+
+Réponds UNIQUEMENT avec le numéro de l'article (entre 0 et ${articles.length-1}), rien d'autre.`;
+
+  const body = JSON.stringify({
+    contents: [{ role:'user', parts:[{ text: prompt }] }],
+    generationConfig: { maxOutputTokens: 8, temperature: 0.1 }
+  });
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${PAID_KEY}`,
+    { method:'POST', headers:{'Content-Type':'application/json'}, body, signal: AbortSignal.timeout(30000) }
+  );
+  if (!resp.ok) throw new Error(`Scoring HTTP ${resp.status}`);
+  const data = await resp.json();
+  const text  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '0';
+  const match = text.match(/\d+/);
+  const idx   = match ? Math.min(parseInt(match[0]), articles.length - 1) : 0;
+  return idx;
+}
+
+// ─── Mode FOND : réécriture longue forme ─────────────────────────────────────
+async function rewriteFond(article) {
+  const PAID_KEY = process.env.GEMINI_PAID_API_KEY;
+
+  const prompt = `Tu es Korben, le blogueur tech français légendaire depuis plus de 20 ans.
+Tu vas écrire un GRAND ARTICLE DE FOND exceptionnel sur ce sujet. Pas un simple résumé : une véritable exploration journalistique.
+
+SUJET : ${article.title}
+SOURCE : ${article.source}
+TEXTE ORIGINAL :
+${(article.fullText || article.snippet || '').slice(0, 4000)}
+
+CONSIGNES IMPÉRATIVES :
+- Longueur : 1500 mots MINIMUM, vise 2000 mots
+- Structure avec 5 à 7 sections titrées en <h2>
+- SECTION 1 : Accroche percutante et inattendue (pas "Introduction", pas de résumé bateau)
+- SECTION 2 : Contexte et historique (d'où ça vient, comment on en est arrivé là)
+- SECTION 3 : Analyse technique ou factuelle approfondie (avec détails concrets)
+- SECTION 4 : Enjeux réels et implications pratiques (pour qui, pourquoi ça change quelque chose)
+- SECTION 5 : Exemples concrets, anecdotes, comparaisons parlantes
+- SECTION 6 (optionnel) : Ce que les autres ne disent pas, ton angle original
+- SECTION FINALE : Ta vision personnelle, ce qui va se passer ensuite
+- Style Korben : direct, passionné, humour geek discret, vulgarisation sans condescendance, références pop culture ou cinéma si pertinent
+- Écris en HTML pur : <h2>, <p>, <strong>, <em>, <ul><li> — SANS balises markdown, SANS bloc de code
+- Langue : français impeccable
+- Le titre de l'article sera fourni séparément, ne le répète pas en début de corps
+
+Génère l'article maintenant :`;
+
+  const bodyPayload = JSON.stringify({
+    contents: [{ role:'user', parts:[{ text: prompt }] }],
+    generationConfig: { maxOutputTokens: 6000, temperature: 0.75 }
+  });
+  const resp = await fetch(
+    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${PAID_KEY}`,
+    { method:'POST', headers:{'Content-Type':'application/json'}, body: bodyPayload, signal: AbortSignal.timeout(120000) }
+  );
+  if (!resp.ok) throw new Error(`Fond HTTP ${resp.status}`);
+  const data  = await resp.json();
+  const text  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  if (!text) throw new Error('Réponse fond vide');
+  return text.trim();
 }
 async function fetchFeedRss2Json(source, keywords, config) {
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}&count=30`;
@@ -931,6 +1013,73 @@ async function main() {
   if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
   ok(`Écrit : dist/articles.json (index léger) + dist/articles-full.json (complet)`);
   console.log();
+
+  // ── Mode FOND : sélection + réécriture longue forme ──────────────────────
+  if (IS_FOND) {
+    log('★ MODE ARTICLE DE FOND — sélection du meilleur sujet…');
+    try {
+      // 1. Scorer tous les articles du run (pas le cache)
+      const candidats = allArticles.slice(0, 30); // top 30 du run
+      const bestIdx   = await scorerMeilleurArticle(candidats);
+      const choisi    = candidats[bestIdx];
+      ok(`Article choisi (${bestIdx}) : "${choisi.title.slice(0,70)}…"`);
+      ok(`Source : ${choisi.source}`);
+
+      // 2. Récupérer le texte complet si pas encore fait
+      if (!choisi.fullText || choisi.fullText.length < 200) {
+        log('  Extraction du texte complet…');
+        choisi.fullText = await fetchFullText(choisi.url);
+      }
+
+      // 3. Réécriture longue forme
+      log('  Réécriture longue forme (Gemini 2.5 Flash, 6000 tokens)…');
+      const bodyFond = await rewriteFond(choisi);
+      const wordsFond = bodyFond.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
+      ok(`Article de fond : ${wordsFond} mots`);
+
+      // 4. Construire l'article fond
+      const articleFond = {
+        ...choisi,
+        id:          'fond-' + choisi.id,
+        type:        'fond',
+        title:       choisi.title,
+        body:        bodyFond,
+        summary:     choisi.summary || choisi.snippet?.slice(0,200),
+        readingTime: Math.max(5, Math.ceil(wordsFond / 200)),
+        fondDate:    new Date().toISOString(),
+      };
+      delete articleFond.fullText;
+
+      // 5. Sauvegarder dans articles-fond.json
+      const fondPath    = path.join(__dirname,'..','dist','articles-fond.json');
+      let fondExisting  = { articles: [] };
+      try { fondExisting = JSON.parse(await fs.readFile(fondPath,'utf-8')); } catch {}
+      // Éviter les doublons sur le même sujet
+      const fondFiltered = (fondExisting.articles||[]).filter(a => a.id !== articleFond.id);
+      fondFiltered.unshift(articleFond);
+      const fondOutput = {
+        generated_at: new Date().toISOString(),
+        count:        fondFiltered.length,
+        articles:     fondFiltered,
+      };
+      await fs.writeFile(fondPath, JSON.stringify(fondOutput), 'utf-8');
+      ok(`Écrit : dist/articles-fond.json (${fondFiltered.length} articles de fond)`);
+
+      // 6. Injecter en tête de articles-full.json (avec body)
+      const fondForFull   = { ...articleFond };
+      const updatedFull   = { ...outputFull, articles: [fondForFull, ...outputFull.articles.filter(a => a.id !== articleFond.id)] };
+      await fs.writeFile(fullPath, JSON.stringify(updatedFull), 'utf-8');
+
+      // 7. Injecter en tête de articles.json (sans body)
+      const { body: _b, fullText: _ft, ...fondIndex } = fondForFull;
+      const updatedIndex  = { ...outputIndex, articles: [fondIndex, ...outputIndex.articles.filter(a => a.id !== articleFond.id)] };
+      await fs.writeFile(distPath, JSON.stringify(updatedIndex), 'utf-8');
+
+      ok(`Article de fond injecté en tête du site`);
+    } catch(e) {
+      err(`Mode fond échoué : ${e.message}`);
+    }
+  }
   process.exit(0);
 }
 
