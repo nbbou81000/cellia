@@ -49,48 +49,34 @@ While the repository and code are completely public, all API keys used for conte
 
 ```mermaid
 graph TD
-    %% ZONE CONFIG & AUTOMATION
-    subgraph Pipeline_Automation [Pipeline d'Automatisation GitHub Actions]
-        Cron[⏰ Trigger : Cron 5x/jour ou Manuel] -->|Exécute| Workflow[daily.yml]
-        Workflow -->|Injecte Secrets API & Node.js| Script[fetch.js]
-        Sources[(sources.json - 20+ Flux RSS)] -->|Filtre mots-clés| Script
-    end
+    Cron[⏰ Trigger : Cron 5x/jour ou Manuel] --> Workflow[daily.yml]
+    Workflow --> Script[fetch.js]
+    Sources[(sources.json - 20+ Flux RSS)] --> Script
 
-    %% ZONE IA & INTÉGRATION
-    subgraph Cascade_LLM [Cascade de Résilience LLM Forfaits Gratuits]
-        Script --> Provider1{1. Mistral AI}
-        Provider1 -->|Échec ou Rate Limit| Provider2{2. Groq Cloud}
-        Provider2 -->|Échec ou Rate Limit| Provider3{3. Google Gemini}
-        
-        Provider1 -->|Succès : Traduit & Rédige| Output[Génération Synchrone]
-        Provider2 -->|Succès : Traduit & Rédige| Output
-        Provider3 -->|Succès : Traduit & Rédige| Output
-    end
+    Script --> Provider1{1. Mistral AI}
+    Provider1 --> Provider2{2. Groq Cloud}
+    Provider2 --> Provider3{3. Google Gemini}
+    
+    Provider1 --> Output[Génération Synchrone]
+    Provider2 --> Output
+    Provider3 --> Output
 
-    %% ZONE STOCKAGE DATA
-    subgraph Stockage_Data [Stockage Statique Git Dépôt Public]
-        Output -->|Commit & Push auto| Dist[📂 Dossier /dist]
-        Dist --> Data1[articles.json - Index Léger]
-        Dist --> Data2[articles-full.json - Articles Complets]
-        Dist --> Data3[articles-fond.json - Contenu Long-Form]
-    end
+    Output --> Dist[📂 Dossier /dist]
+    Dist --> Data1[articles.json - Index Léger]
+    Dist --> Data2[articles-full.json - Articles Complets]
+    Dist --> Data3[articles-fond.json - Contenu Long-Form]
 
-    %% ZONE FRONT END
-    subgraph Experience_Utilisateur [Expérience Utilisateur GitHub Pages]
-        Data1 -->|Fetch asynchrone cache-busting| Index[index.html - Grille de Veille Rapide]
-        Data2 -->|Fetch ciblé par ID| Article[article.html - Page de Lecture]
-        
-        Index <--> Prefs[prefs.js - Customisation Thèmes]
-        Article <--> Prefs
-        
-        Index --> Lofi[lofi.js - Radio Lofi & Mini-Player]
-        Article --> Lofi
-        
-        Streams[(Flux Audio Externes)] -.->|Streaming Direct| Lofi
-    end
-
-    %% Notifications & Liens annexes
-    Workflow -->|Webhook de succès| Ntfy[🔔 Notification Push ntfy.sh]
+    Data1 --> Index[index.html - Grille de Veille Rapide]
+    Data2 --> Article[article.html - Page de Lecture]
+    
+    Index <--> Prefs[prefs.js - Customisation Thèmes]
+    Article <--> Prefs
+    
+    Index --> Lofi[lofi.js - Radio Lofi & Mini-Player]
+    Article --> Lofi
+    
+    Streams[(Flux Audio Externes)] --> Lofi
+    Workflow --> Ntfy[🔔 Notification Push ntfy.sh]
 
 
 
