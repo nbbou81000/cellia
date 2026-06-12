@@ -7,8 +7,9 @@ import { fileURLToPath } from 'url';
 const __dirname    = path.dirname(fileURLToPath(import.meta.url));
 const IS_DEV       = process.argv.includes('--dev');
 const IS_PAID      = process.env.USE_PAID_GEMINI === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID ? 15 : 10;
-const WINDOW_HOURS = 48;
+const IS_KORBEN    = process.env.USE_KORBEN === 'true';
+const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID ? 15 : IS_KORBEN ? 20 : 10;
+const WINDOW_HOURS = IS_KORBEN ? 24 : 48; // Korben : 24h (articles du jour seulement)
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
 // Déclaré en `let` — overridé en mode payant dans main()
@@ -171,7 +172,12 @@ function fetchWithTimeout(url, opts, ms) {
   ]);
 }
 
-// ─── fetchFeed via proxy rss2json (pour sites qui bloquent GitHub Actions) ────
+// ─── Calcul temps de lecture réel ────────────────────────────────────────────
+function calcReadingTime(body) {
+  const text  = (body || '').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  const words = text.split(' ').filter(w => w.length > 0).length;
+  return Math.max(1, Math.ceil(words / 200));
+}
 async function fetchFeedRss2Json(source, keywords, config) {
   const apiUrl = `https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(source.url)}&count=30`;
   try {
@@ -775,9 +781,16 @@ async function main() {
 
   // RSS
   log('Fetch des flux RSS...');
-  // Sources actives : toutes en mode payant, sinon sans les paid_only
-  const activeSources = config.sources.filter(s => !s.paid_only || IS_PAID);
-  log(`${activeSources.length} sources actives${IS_PAID ? ' (mode payant — toutes sources)' : ''}`);
+  // Sources actives
+  const activeSources = IS_KORBEN
+    ? config.sources.filter(s => s.source_name === 'korben.info' || s.url.includes('korben'))
+    : config.sources.filter(s => !s.paid_only || IS_PAID);
+
+  if (IS_KORBEN) {
+    log(`★ MODE SPÉCIAL KORBEN — ${activeSources.length} source(s) · fenêtre 24h · max ${MAX_ARTICLES} articles`);
+  } else {
+    log(`${activeSources.length} sources actives${IS_PAID ? ' (mode payant — toutes sources)' : ''}`);
+  }
 
   const feedResults = await Promise.allSettled(
     activeSources.map(s =>
@@ -798,31 +811,18 @@ async function main() {
     .filter(a => a.source === 'korben.info')
     .sort((a,b) => new Date(b.date) - new Date(a.date));
 
-  // 2. Déduplication par sujet (similarité Jaccard sur les titres)
-  // Si deux titres partagent >35% de leurs mots significatifs → doublon
-  const FR_STOP = new Set(['le','la','les','de','du','des','un','une','en','et','ou','que','qui','se','sur','par','pour','avec','dans','au','aux','est','sont','a','l','d','ce','il','elle','on','nous','vous','ils','elles','je','tu','sa','son','ses','mon','ton','ma','ta','pas','plus','tout','bien','aussi','mais','donc','car','si','ni','ne','y','s']);
-  function titleTokens(t) {
-    return t.toLowerCase()
-      .replace(/[^a-z0-9àâäéèêëîïôùûüœæç]/g,' ')
-      .split(/\s+/)
-      .filter(w => w.length > 2 && !FR_STOP.has(w));
+  // 2. Déduplication par sujet — désactivée en mode Korben (on veut tout)
+  if (!IS_KORBEN) {
+    const deduped = [];
+    for (const a of allArticles) {
+      const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.35);
+      if (!isDup) deduped.push(a);
+      else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
+    }
+    const dupCount = allArticles.length - deduped.length;
+    if (dupCount > 0) ok(`${dupCount} doublon(s) de sujet éliminé(s)`);
+    allArticles = deduped;
   }
-  function jaccard(t1, t2) {
-    const s1 = new Set(titleTokens(t1));
-    const s2 = new Set(titleTokens(t2));
-    const inter = [...s1].filter(w => s2.has(w)).length;
-    const union = new Set([...s1, ...s2]).size;
-    return union === 0 ? 0 : inter / union;
-  }
-  const deduped = [];
-  for (const a of allArticles) {
-    const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.35);
-    if (!isDup) deduped.push(a);
-    else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
-  }
-  const dupCount = allArticles.length - deduped.length;
-  if (dupCount > 0) ok(`${dupCount} doublon(s) de sujet éliminé(s)`);
-  allArticles = deduped;
 
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
   const catCount={};
@@ -890,6 +890,7 @@ async function main() {
   if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
   ok(`Écrit : dist/articles.json`);
   console.log();
+  process.exit(0);
 }
 
 main().catch(e=>{err(`Erreur fatale : ${e.message}`);console.error(e);process.exit(1);});
