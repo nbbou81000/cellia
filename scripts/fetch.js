@@ -761,11 +761,19 @@ async function main() {
   const config = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
   log(`${config.sources.length} sources configurées`);
 
-  // Cache — lecture depuis articles.json
-  const distPath = path.join(__dirname,'..','dist','articles.json');
+  // Cache — lecture depuis articles-full.json (avec bodies) ou articles.json en fallback
+  const fullPath  = path.join(__dirname,'..','dist','articles-full.json');
+  const distPath  = path.join(__dirname,'..','dist','articles.json');
   let cachedData = {articles:[], ephemeris:null};
-  try { cachedData=JSON.parse(await fs.readFile(distPath,'utf-8')); ok(`Cache : ${cachedData.articles?.length||0} articles`); }
-  catch { warn('Pas de cache existant'); }
+  try {
+    cachedData = JSON.parse(await fs.readFile(fullPath,'utf-8'));
+    ok(`Cache : ${cachedData.articles?.length||0} articles (articles-full.json)`);
+  } catch {
+    try {
+      cachedData = JSON.parse(await fs.readFile(distPath,'utf-8'));
+      ok(`Cache : ${cachedData.articles?.length||0} articles (articles.json — fallback)`);
+    } catch { warn('Pas de cache existant'); }
+  }
 
   const cachedById={};
   for (const a of (cachedData.articles||[])) if (a.id&&a.body?.length>100) cachedById[a.id]=a;
@@ -906,15 +914,22 @@ async function main() {
   const finalArticles=[...allArticles,...oldArticles];
   finalArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
 
-  // Écriture — fichier unique articles.json (index + bodies)
-  const output = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
+  // Écriture — deux fichiers
   await fs.mkdir(path.join(__dirname,'..','dist'),{recursive:true});
-  await fs.writeFile(distPath, JSON.stringify(output), 'utf-8');
+
+  // 1. articles-full.json — avec bodies, pour article.html et le cache interne
+  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
+  await fs.writeFile(fullPath, JSON.stringify(outputFull), 'utf-8');
+
+  // 2. articles.json — sans bodies, léger, pour index.html (~8x plus petit)
+  const indexArticles = finalArticles.map(({ body, fullText, ...rest }) => rest);
+  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:indexArticles };
+  await fs.writeFile(distPath, JSON.stringify(outputIndex), 'utf-8');
 
   console.log(`\n${c.bold}━━━ Terminé ━━━${c.reset}`);
   ok(`${newCount} nouveaux | ${cachedCount} depuis cache | ${finalArticles.length} total`);
   if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
-  ok(`Écrit : dist/articles.json`);
+  ok(`Écrit : dist/articles.json (index léger) + dist/articles-full.json (complet)`);
   console.log();
   process.exit(0);
 }
