@@ -1,0 +1,42 @@
+name: 🗑️ Supprimer un article
+
+on:
+  workflow_dispatch:
+    inputs:
+      article_id:
+        description: "ID de l'article à supprimer"
+        required: true
+        type: string
+
+jobs:
+  delete:
+    name: Suppression article
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Supprimer l'article des fichiers JSON
+        env:
+          ARTICLE_ID: ${{ github.event.inputs.article_id }}
+        run: |
+          cd scripts
+          node delete-article.js
+
+      - name: Commit & push
+        run: |
+          git config user.name  "CelliA Modération"
+          git config user.email "cellia-bot@noreply.github.com"
+          git add dist/articles.json dist/articles-full.json
+          git add dist/articles-fond.json 2>/dev/null || true
+          git diff --staged --quiet && echo "Rien à commiter" && exit 0
+          git commit -m "mod: suppression article ${{ github.event.inputs.article_id }}"
+          git push
