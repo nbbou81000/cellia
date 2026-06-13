@@ -943,7 +943,7 @@ async function main() {
   if (!IS_KORBEN) {
     const deduped = [];
     for (const a of allArticles) {
-      const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.30);
+      const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.35);
       if (!isDup) deduped.push(a);
       else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
     }
