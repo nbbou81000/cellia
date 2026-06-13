@@ -938,28 +938,12 @@ async function main() {
     const union = new Set([...s1, ...s2]).size;
     return union === 0 ? 0 : inter / union;
   }
-  // Entités nommées (mots capitalisés >3 chars) : détecte les doublons inter-langues
-  // ex: "Fable d'Anthropic bridée" vs "Anthropic Fable AI cut" → shared: [anthropic, fable]
-  function namedEntities(t) {
-    return new Set(
-      t.split(/\s+/)
-        .filter(w => /^[A-ZÉÈÀÂÎÔÙÛŒ]/.test(w) && w.length > 3)
-        .map(w => w.toLowerCase().replace(/[^a-z0-9]/g,''))
-    );
-  }
-  function isDuplicate(t1, t2) {
-    if (jaccard(t1, t2) > 0.30) return true;
-    const ne1 = namedEntities(t1);
-    const ne2 = namedEntities(t2);
-    const shared = [...ne1].filter(w => ne2.has(w));
-    return shared.length >= 2; // ≥2 entités nommées communes = même sujet
-  }
 
   // 2. Déduplication par sujet — désactivée en mode Korben (on veut tout)
   if (!IS_KORBEN) {
     const deduped = [];
     for (const a of allArticles) {
-      const isDup = deduped.some(k => isDuplicate(k.title, a.title));
+      const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.30);
       if (!isDup) deduped.push(a);
       else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
     }
@@ -1043,6 +1027,15 @@ async function main() {
 
   // Images
   for (const a of allArticles) if (!a.image||!a.image.startsWith('http')) a.image=getUnsplashImage(a.category);
+
+  // ── Redating universel : les nouveaux articles reçoivent l'heure du CRON ──
+  // Garantit qu'ils remontent en tête quelle que soit leur date de publication source
+  const fetchTime = Date.now();
+  allArticles = allArticles.map((a, i) => ({
+    ...a,
+    date: new Date(fetchTime - i * 60000).toISOString() // 1 min d'écart pour conserver l'ordre
+  }));
+  ok(`Articles redatés au moment du fetch (${new Date(fetchTime).toLocaleTimeString('fr-FR')})`);
 
   // Fusion historique
   const cutoff=Date.now()-90*24*3600*1000;
