@@ -563,6 +563,20 @@
       letter-spacing: .06em;
     }
 
+    /* ── Modération admin ── */
+    .btn-delete-admin {
+      position: absolute; top: 8px; left: 8px; z-index: 10;
+      background: rgba(220,38,38,.88);
+      color: #fff; border: none; border-radius: 6px;
+      font-size: 11px; font-weight: 700; padding: 4px 9px;
+      cursor: pointer; backdrop-filter: blur(6px);
+      font-family: var(--font-ui, sans-serif);
+      transition: background .15s, opacity .15s;
+      line-height: 1.4;
+    }
+    .btn-delete-admin:hover   { background: #dc2626; }
+    .btn-delete-admin:disabled { opacity: .5; cursor: wait; }
+
     /* Card body */
     .card-body {
       padding: 16px;
@@ -1576,6 +1590,7 @@
         window.location.href = `article.html?id=${article.id}`;
       });
 
+      if (IS_ADMIN) injectDeleteBtn(div, article.id);
       return div;
     }
 
@@ -1867,6 +1882,85 @@
         applySearch(e.target.value);
       }, 220);
     });
+
+    // ══════════════════════════════════════════════════════════════════════
+    // MODÉRATION ADMIN — ?admin=true
+    // Token GitHub stocké en sessionStorage (disparaît à la fermeture de l'onglet)
+    // ══════════════════════════════════════════════════════════════════════
+    const IS_ADMIN = new URLSearchParams(location.search).get('admin') === 'true';
+    const REPO     = 'nbbou81000/cellia';
+    const WORKFLOW = 'delete-article.yml';
+
+    function getAdminToken() {
+      let t = sessionStorage.getItem('cellia-admin-token');
+      if (!t) {
+        t = prompt(
+          '🔐 Token GitHub — permissions : workflow\n' +
+          '(Fine-grained : Actions write + Contents write)\n\n' +
+          'Il sera conservé uniquement pour cette session :'
+        );
+        if (!t) return null;
+        sessionStorage.setItem('cellia-admin-token', t.trim());
+      }
+      return t;
+    }
+
+    async function deleteArticle(articleId, cardEl) {
+      const title = cardEl.querySelector('.card-title')?.textContent?.trim() || articleId;
+      if (!confirm(`Supprimer cet article ?\n\n"${title}"\n\nID : ${articleId}\n\nCette action est irréversible.`)) return;
+
+      const token = getAdminToken();
+      if (!token) return;
+
+      const btn = cardEl.querySelector('.btn-delete-admin');
+      if (btn) { btn.textContent = '⏳'; btn.disabled = true; }
+
+      try {
+        const res = await fetch(
+          `https://api.github.com/repos/${REPO}/actions/workflows/${WORKFLOW}/dispatches`,
+          {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ ref: 'main', inputs: { article_id: articleId } })
+          }
+        );
+
+        if (res.status === 204) {
+          // Workflow lancé — animer la disparition de la carte
+          cardEl.style.transition = 'opacity .35s, transform .35s';
+          cardEl.style.opacity    = '0';
+          cardEl.style.transform  = 'scale(.96)';
+          setTimeout(() => cardEl.remove(), 380);
+        } else if (res.status === 401 || res.status === 403) {
+          sessionStorage.removeItem('cellia-admin-token');
+          alert('Token invalide ou droits insuffisants.\nVérifie les permissions (Actions write + Contents write) et réessaie.');
+          if (btn) { btn.textContent = '❌ Supprimer'; btn.disabled = false; }
+        } else {
+          const body = await res.text();
+          alert(`Erreur GitHub ${res.status} :\n${body.slice(0, 200)}`);
+          if (btn) { btn.textContent = '❌ Supprimer'; btn.disabled = false; }
+        }
+      } catch (e) {
+        alert(`Erreur réseau : ${e.message}`);
+        if (btn) { btn.textContent = '❌ Supprimer'; btn.disabled = false; }
+      }
+    }
+
+    function injectDeleteBtn(cardEl, articleId) {
+      // Le bouton se pose sur l'image (premier enfant position:relative)
+      const imageWrap = cardEl.querySelector('div[style*="position:relative"]');
+      const target    = imageWrap || cardEl;
+      const btn = document.createElement('button');
+      btn.className = 'btn-delete-admin';
+      btn.textContent = '❌ Supprimer';
+      btn.setAttribute('aria-label', `Supprimer l'article ${articleId}`);
+      btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); deleteArticle(articleId, cardEl); });
+      target.appendChild(btn);
+    }
 
     // ── GO ───────────────────────────────────────────────────────────────
     loadArticles();
