@@ -16,7 +16,7 @@
     { "url": "https://www.reddit.com/r/selfhosted/.rss", "category": "maker", "lang": "en", "tech_only": false, "source_name": "r/selfhosted" },
     { "url": "https://www.reddit.com/r/LocalLLaMA/.rss", "category": "ai", "lang": "en", "tech_only": false, "source_name": "r/LocalLLaMA" },
     { "url": "https://www.ghacks.net/feed/", "category": "web", "lang": "en", "tech_only": false, "source_name": "ghacks.net" },
-    { "url": "https://dev.to/feed/tag/opensource", "category": "web", "lang": "en", "tech_only": false, "source_name": "dev.to" },
+    { "url": "https://dev.to/feed/tag/opensource", "category": "web", "lang": "en", "tech_only": false, "source_name": "dev.to", "max_per_run": 2 },
     { "url": "https://sebsauvage.net/links/index.php?do=rss", "category": "maker", "lang": "fr", "tech_only": false, "source_name": "sebsauvage.net" },
     { "url": "https://www.raspberrypi.com/news/feed/", "category": "maker", "lang": "en", "tech_only": false },
     { "url": "https://www.smashingmagazine.com/feed/", "category": "web", "lang": "en", "tech_only": false },

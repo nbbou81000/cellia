@@ -901,6 +901,28 @@ async function main() {
     .filter(a => a.source === 'korben.info')
     .sort((a,b) => new Date(b.date) - new Date(a.date));
 
+  // ── Diversité des sources : max par source (3 défaut, configurable) ────────
+  if (!IS_KORBEN) {
+    // Construire la map source → max_per_run
+    const srcMaxMap = {};
+    config.sources.forEach(s => {
+      const key = s.source_name || (() => { try { return new URL(s.url).hostname.replace(/^www\./,''); } catch { return ''; } })();
+      if (key && s.max_per_run) srcMaxMap[key] = s.max_per_run;
+    });
+    const DEFAULT_PER_SOURCE = 3;
+
+    // Grouper par source, limiter aux N plus récents
+    const bySource = {};
+    allArticles.forEach(a => { (bySource[a.source] = bySource[a.source]||[]).push(a); });
+    const before = allArticles.length;
+    allArticles = Object.entries(bySource).flatMap(([src, arts]) => {
+      const limit = srcMaxMap[src] ?? DEFAULT_PER_SOURCE;
+      arts.sort((a,b) => new Date(b.date) - new Date(a.date));
+      return arts.slice(0, limit);
+    });
+    if (allArticles.length < before) ok(`Diversité sources : ${before - allArticles.length} articles écrêtés (max ${DEFAULT_PER_SOURCE}/source, dev.to max 2)`);
+  }
+
   // Fonctions de similarité Jaccard (utilisées pour dédup et garantie Korben)
   const FR_STOP = new Set(['le','la','les','de','du','des','un','une','en','et','ou','que','qui','se','sur','par','pour','avec','dans','au','aux','est','sont','a','l','d','ce','il','elle','on','nous','vous','ils','elles','je','tu','sa','son','ses','mon','ton','ma','ta','pas','plus','tout','bien','aussi','mais','donc','car','si','ni','ne','y','s']);
   function titleTokens(t) {
@@ -916,12 +938,28 @@ async function main() {
     const union = new Set([...s1, ...s2]).size;
     return union === 0 ? 0 : inter / union;
   }
+  // Entités nommées (mots capitalisés >3 chars) : détecte les doublons inter-langues
+  // ex: "Fable d'Anthropic bridée" vs "Anthropic Fable AI cut" → shared: [anthropic, fable]
+  function namedEntities(t) {
+    return new Set(
+      t.split(/\s+/)
+        .filter(w => /^[A-ZÉÈÀÂÎÔÙÛŒ]/.test(w) && w.length > 3)
+        .map(w => w.toLowerCase().replace(/[^a-z0-9]/g,''))
+    );
+  }
+  function isDuplicate(t1, t2) {
+    if (jaccard(t1, t2) > 0.30) return true;
+    const ne1 = namedEntities(t1);
+    const ne2 = namedEntities(t2);
+    const shared = [...ne1].filter(w => ne2.has(w));
+    return shared.length >= 2; // ≥2 entités nommées communes = même sujet
+  }
 
   // 2. Déduplication par sujet — désactivée en mode Korben (on veut tout)
   if (!IS_KORBEN) {
     const deduped = [];
     for (const a of allArticles) {
-      const isDup = deduped.some(k => jaccard(k.title, a.title) > 0.35);
+      const isDup = deduped.some(k => isDuplicate(k.title, a.title));
       if (!isDup) deduped.push(a);
       else dim(`  [dup sujet] "${a.title.slice(0,60)}…"`);
     }
@@ -940,8 +978,25 @@ async function main() {
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
   // Limite par catégorie — désactivée en mode Korben (une seule source)
   if (!IS_KORBEN) {
-    const catCount={};
-    allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
+    // Mélange aléatoire dans chaque catégorie pour varier les sources à chaque run
+    function shuffle(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+      return arr;
+    }
+    const byCat = {};
+    allArticles.forEach(a => { (byCat[a.category] = byCat[a.category]||[]).push(a); });
+    allArticles = Object.values(byCat).flatMap(group => {
+      // Séparer les articles récents (<24h) des plus anciens
+      const cutoff = Date.now() - 24 * 3600 * 1000;
+      const recent = group.filter(a => new Date(a.date) > cutoff);
+      const older  = group.filter(a => new Date(a.date) <= cutoff);
+      // Mélanger les récents pour varier les sources qui "gagnent"
+      shuffle(recent);
+      return [...recent, ...older].slice(0, 5);
+    });
   }
   allArticles=allArticles.slice(0,MAX_ARTICLES);
 
@@ -1065,14 +1120,20 @@ async function main() {
       await fs.writeFile(fondPath, JSON.stringify(fondOutput), 'utf-8');
       ok(`Écrit : dist/articles-fond.json (${fondFiltered.length} articles de fond)`);
 
-      // 6. Injecter en tête de articles-full.json (avec body)
-      const fondForFull   = { ...articleFond };
-      const updatedFull   = { ...outputFull, articles: [fondForFull, ...outputFull.articles.filter(a => a.id !== articleFond.id)] };
+      // 6. Injecter en tête de articles-full.json — en retirant la version normale
+      const fondForFull = { ...articleFond };
+      const updatedFull = {
+        ...outputFull,
+        articles: [fondForFull, ...outputFull.articles.filter(a => a.id !== choisi.id)]
+      };
       await fs.writeFile(fullPath, JSON.stringify(updatedFull), 'utf-8');
 
-      // 7. Injecter en tête de articles.json (sans body)
+      // 7. Injecter en tête de articles.json — en retirant la version normale
       const { body: _b, fullText: _ft, ...fondIndex } = fondForFull;
-      const updatedIndex  = { ...outputIndex, articles: [fondIndex, ...outputIndex.articles.filter(a => a.id !== articleFond.id)] };
+      const updatedIndex = {
+        ...outputIndex,
+        articles: [fondIndex, ...outputIndex.articles.filter(a => a.id !== choisi.id)]
+      };
       await fs.writeFile(distPath, JSON.stringify(updatedIndex), 'utf-8');
 
       ok(`Article de fond injecté en tête du site`);
