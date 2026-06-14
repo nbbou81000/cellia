@@ -70,6 +70,7 @@ jobs:
           USE_KORBEN:          ${{ github.event.inputs.korben_mode }}
           USE_FOND:            ${{ github.event.inputs.fond_mode }}
           USE_MISTRAL_BOOST:   ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.mistral_boost }}
+          IS_SCHEDULED:        ${{ github.event_name == 'schedule' && 'true' || 'false' }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
