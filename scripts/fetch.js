@@ -10,7 +10,7 @@ const IS_PAID           = process.env.USE_PAID_GEMINI === 'true';
 const IS_KORBEN         = process.env.USE_KORBEN === 'true';
 const IS_FOND           = process.env.USE_FOND === 'true';
 const IS_MISTRAL_BOOST  = process.env.USE_MISTRAL_BOOST === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN || IS_MISTRAL_BOOST ? 20 : 10;
+const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN ? 20 : IS_MISTRAL_BOOST ? 15 : 10;
 const WINDOW_HOURS = IS_KORBEN ? 24 : 48;
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
