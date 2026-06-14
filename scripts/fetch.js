@@ -21,7 +21,7 @@ let PROVIDERS = [
     envKey:    'MISTRAL_API_KEY',
     type:      'openai',
     url:       'https://api.mistral.ai/v1/chat/completions',
-    model:     'mistral-small-latest',
+    model:     'mistral-small-2506',
     maxTokens: 2000,
   },
   {
@@ -54,9 +54,10 @@ const MISTRAL_BOOST_PROVIDER = {
   envKey:    'MISTRAL_API_KEY',
   type:      'openai',
   url:       'https://api.mistral.ai/v1/chat/completions',
-  model:     'mistral-small-latest',
-  maxTokens: 3000,
-  jsonMode:  true,  // active response_format: json_object
+  model:     'mistral-small-2506',  // 2.25M tok/min · 5 req/s (vs 2603 : 50k tok/min)
+  maxTokens: 4000,
+  temperature: 0.7,
+  jsonMode:  true,
 };
 
 const MONTHS_FR = [
@@ -441,18 +442,18 @@ RÈGLES :
 - Structure l'article avec 2 ou 3 <h2> pour guider la lecture
 - Utilise <p>, <h2>, <strong> uniquement. Pas d'autres balises.
 - L'accroche : une seule phrase punchy, max 25 mots
-- Le titre : accrocheur, en français, max 90 caractères
-- Donne ton analyse personnelle : contexte, enjeux, ce que ça change vraiment
+- Le titre "titre_fr" : OBLIGATOIREMENT en français correct, accrocheur, max 90 caractères, sans fautes, sans mélange anglais/français
 
 FORMAT JSON — CRITIQUE :
 - Réponds UNIQUEMENT avec un objet JSON valide (sans backticks, sans texte avant ou après)
+- COMPLÈTE ENTIÈREMENT la réponse JSON avant de t'arrêter — ne jamais tronquer
 - La valeur "body" DOIT être sur une seule ligne — paragraphes séparés par <p></p> directement collés, AUCUN \\n réel
 - Format exact : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><h2>titre</h2><p>texte</p>"}
 
 SOURCE :
 Titre : ${article.title}
 Source : ${article.source}
-Contenu : ${article.fullText||article.snippet}`;
+Contenu : ${(article.fullText||article.snippet||'').slice(0, 2000)}`;
 }
 
 // ─── callProvider ─────────────────────────────────────────────────────────────
@@ -484,7 +485,7 @@ async function callProvider(provider, systemPrompt, userPrompt) {
       body: JSON.stringify({
         model:       provider.model,
         messages:    [{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],
-        temperature: 0.85,
+        temperature: provider.temperature ?? 0.85,
         max_tokens:  provider.maxTokens||1400,
         ...(provider.jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
@@ -760,7 +761,7 @@ async function main() {
   // Mode Mistral Boost : mistral-small-latest, JSON, 3000 tokens, 20 articles
   if (IS_MISTRAL_BOOST) {
     PROVIDERS = [MISTRAL_BOOST_PROVIDER];
-    console.log(`${c.cyan}${c.bold}  ★ MODE MISTRAL BOOST — mistral-small-latest — JSON — 3000 tokens — 20 articles${c.reset}\n`);
+    console.log(`${c.cyan}${c.bold}  ★ MODE MISTRAL BOOST — mistral-small-2506 — JSON — 4000 tokens — ${MAX_ARTICLES} articles${c.reset}\n`);
   }
 
   const disponibles = PROVIDERS.filter(p=>process.env[p.envKey]).map(p=>p.name);
@@ -877,10 +878,12 @@ async function main() {
   }
 
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  // Filtre catégories — désactivé en mode Korben (une seule source)
+  // Filtre catégories — cap dynamique pour garantir MAX_ARTICLES après le slice
+  // Formule : au moins MAX_ARTICLES/2 par cat (assure la cible même avec 2-3 catégories actives)
   if (!IS_KORBEN) {
+    const CAT_CAP = Math.max(5, Math.ceil(MAX_ARTICLES / 2));
     const catCount={};
-    allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
+    allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=CAT_CAP;});
   }
   allArticles=allArticles.slice(0,MAX_ARTICLES);
 
