@@ -769,114 +769,9 @@
     /* ═══════════════════════════════════════════════════════════════
        ÉPHÉMÉRIDE TECH
     ═══════════════════════════════════════════════════════════════ */
-    .ephemeris-section {
-      margin-bottom: 32px;
-      display: none; /* affiché par JS quand data dispo */
-    }
-
-    .ephemeris-section.visible { display: block; }
-
-    .ephemeris-header {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      margin-bottom: 12px;
-    }
-
-    .ephemeris-tag {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--text-dim);
-    }
-
-    .ephemeris-date-label {
-      font-size: 13px;
-      font-weight: 700;
-      color: var(--text-hi);
-      letter-spacing: -0.02em;
-    }
-
-    .ephemeris-line {
-      flex: 1;
-      height: 1px;
-      background: var(--border-soft);
-    }
-
-    .ephemeris-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-    }
 
     @media (max-width: 600px) {
-      .ephemeris-grid { grid-template-columns: 1fr; }
     }
-
-    .ephemeris-card {
-      background: var(--glass-card);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      overflow: hidden;
-      display: flex;
-      gap: 0;
-      transition: background 0.2s, transform 0.2s;
-      position: relative;
-    }
-
-    .ephemeris-card:hover {
-      background: var(--glass-hover);
-      transform: translateY(-1px);
-    }
-
-    .ephemeris-year-bar {
-      width: 52px;
-      flex-shrink: 0;
-      background: rgba(255,90,78,0.08);
-      border-right: 1px solid var(--border-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      writing-mode: vertical-rl;
-      font-size: 11px;
-      font-weight: 800;
-      letter-spacing: 0.08em;
-      color: var(--red);
-      padding: 14px 0;
-    }
-
-    [data-theme="dark"] .ephemeris-year-bar { background: rgba(255,90,78,0.06); }
-
-    .ephemeris-card-body {
-      padding: 14px 16px;
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    .ephemeris-text {
-      font-size: 13px;
-      line-height: 1.6;
-      color: var(--text-body);
-    }
-
-    [data-theme="dark"] .ephemeris-text { color: #9aa4be; }
-
-    .ephemeris-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 5px;
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--text-dim);
-      transition: color 0.15s;
-      text-decoration: none;
-      margin-top: auto;
-    }
-
-    .ephemeris-link:hover { color: var(--red); }
     @keyframes shimmer {
       0%   { background-position: -600px 0; }
       100% { background-position: 600px 0; }
@@ -1390,16 +1285,6 @@
       <div class="search-results-info" id="search-info"></div>
     </div>
 
-    <!-- ── Éphéméride tech ── -->
-    <div class="ephemeris-section" id="ephemeris-section">
-      <div class="ephemeris-header">
-        <span class="ephemeris-tag">📅 En ce jour…</span>
-        <span class="ephemeris-date-label" id="ephemeris-date-label"></span>
-        <div class="ephemeris-line"></div>
-      </div>
-      <div class="ephemeris-grid" id="ephemeris-grid"></div>
-    </div>
-
     <div class="section-header">
       <span class="section-title">À la une</span>
       <div class="section-line"></div>
@@ -1726,7 +1611,6 @@
         allArticles = data.articles || [];
         updateHero(data.generated_at, data.count);
         buildTicker(allArticles);
-        renderEphemeris(data.ephemeris);
         updateSavedCount();
         updateMoreBtn();
         renderGrid();
@@ -1826,31 +1710,6 @@
     btnTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
 
     // ── Éphéméride ────────────────────────────────────────────────────────
-    function renderEphemeris(ephemeris) {
-      if (!ephemeris || !ephemeris.items?.length) return;
-      const section   = document.getElementById('ephemeris-section');
-      const grid      = document.getElementById('ephemeris-grid');
-      const dateLabel = document.getElementById('ephemeris-date-label');
-      dateLabel.textContent = `${ephemeris.day} ${ephemeris.month_fr}`;
-      grid.innerHTML = ephemeris.items.map(item => `
-        <div class="ephemeris-card">
-          <div class="ephemeris-year-bar">${item.year}</div>
-          <div class="ephemeris-card-body">
-            <p class="ephemeris-text">${safeText(item.summary)}</p>
-            ${item.wikipedia_url
-              ? `<a class="ephemeris-link" href="${item.wikipedia_url}" target="_blank" rel="noopener">
-                   <svg width="10" height="10" viewBox="0 0 10 10" fill="none" stroke="currentColor" stroke-width="1.4">
-                     <path d="M4 2H2a1 1 0 0 0-1 1v5a1 1 0 0 0 1 1h5a1 1 0 0 0 1-1V6"/>
-                     <path d="M6 1h3v3M9 1 5.5 4.5" stroke-linecap="round"/>
-                   </svg>
-                   Wikipedia
-                 </a>`
-              : ''}
-          </div>
-        </div>
-      `).join('');
-      section.classList.add('visible');
-    }
 
     // ── Recherche ────────────────────────────────────────────────────────
     let searchDebounce;
