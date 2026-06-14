@@ -960,27 +960,10 @@ async function main() {
   }
 
   allArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
-  // Limite par catégorie — désactivée en mode Korben (une seule source)
+  // Filtre catégories — désactivé en mode Korben (une seule source)
   if (!IS_KORBEN) {
-    // Mélange aléatoire dans chaque catégorie pour varier les sources à chaque run
-    function shuffle(arr) {
-      for (let i = arr.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [arr[i], arr[j]] = [arr[j], arr[i]];
-      }
-      return arr;
-    }
-    const byCat = {};
-    allArticles.forEach(a => { (byCat[a.category] = byCat[a.category]||[]).push(a); });
-    allArticles = Object.values(byCat).flatMap(group => {
-      // Séparer les articles récents (<24h) des plus anciens
-      const cutoff = Date.now() - 24 * 3600 * 1000;
-      const recent = group.filter(a => new Date(a.date) > cutoff);
-      const older  = group.filter(a => new Date(a.date) <= cutoff);
-      // Mélanger les récents pour varier les sources qui "gagnent"
-      shuffle(recent);
-      return [...recent, ...older].slice(0, 5);
-    });
+    const catCount={};
+    allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=5;});
   }
   allArticles=allArticles.slice(0,MAX_ARTICLES);
 
@@ -1028,14 +1011,22 @@ async function main() {
   // Images
   for (const a of allArticles) if (!a.image||!a.image.startsWith('http')) a.image=getUnsplashImage(a.category);
 
-  // ── Redating universel : les nouveaux articles reçoivent l'heure du CRON ──
-  // Garantit qu'ils remontent en tête quelle que soit leur date de publication source
-  const fetchTime = Date.now();
-  allArticles = allArticles.map((a, i) => ({
-    ...a,
-    date: new Date(fetchTime - i * 60000).toISOString() // 1 min d'écart pour conserver l'ordre
-  }));
-  ok(`Articles redatés au moment du fetch (${new Date(fetchTime).toLocaleTimeString('fr-FR')})`);
+  // ── Redating universel : heure Paris au moment du CRON ───────────────────
+  // Garantit que les nouveaux articles remontent en tête, datés heure française
+  const now = new Date();
+  // Offset Paris (gère automatiquement heure d'été +2 / heure d'hiver +1)
+  const parisOffsetH = (() => {
+    const utcMs   = now.getTime();
+    const parisMs = new Date(now.toLocaleString('en-US', { timeZone: 'Europe/Paris' })).getTime();
+    return Math.round((parisMs - utcMs) / 3600000); // +1 ou +2
+  })();
+  const tzSuffix = `+0${parisOffsetH}:00`; // "+01:00" ou "+02:00"
+
+  allArticles = allArticles.map((a, i) => {
+    const d = new Date(now.getTime() - i * 60000 + parisOffsetH * 3600000);
+    return { ...a, date: d.toISOString().replace('Z', tzSuffix) };
+  });
+  ok(`Articles redatés à l'heure de Paris (UTC+${parisOffsetH}) — ${now.toLocaleTimeString('fr-FR', { timeZone:'Europe/Paris' })}`);
 
   // Fusion historique
   const cutoff=Date.now()-90*24*3600*1000;
