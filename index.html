@@ -503,6 +503,23 @@
       border-color: var(--red-dim);
     }
 
+    /* ── Halo Prisme (option préférences) ────────────────────────────────── */
+    @keyframes prism-halo {
+      0%   { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,90,78,.6),  0 0 22px 5px rgba(255,90,78,.22); border-color: rgba(255,90,78,.5); }
+      17%  { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(249,115,22,.6), 0 0 22px 5px rgba(249,115,22,.22); border-color: rgba(249,115,22,.5); }
+      33%  { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(234,179,8,.6),  0 0 22px 5px rgba(234,179,8,.22);  border-color: rgba(234,179,8,.5); }
+      50%  { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(16,185,129,.6), 0 0 22px 5px rgba(16,185,129,.22); border-color: rgba(16,185,129,.5); }
+      67%  { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(59,130,246,.6), 0 0 22px 5px rgba(59,130,246,.22); border-color: rgba(59,130,246,.5); }
+      83%  { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(168,85,247,.6), 0 0 22px 5px rgba(168,85,247,.22); border-color: rgba(168,85,247,.5); }
+      100% { box-shadow: 0 8px 32px rgba(0,0,0,.5), 0 0 0 1px rgba(255,90,78,.6),  0 0 22px 5px rgba(255,90,78,.22); border-color: rgba(255,90,78,.5); }
+    }
+
+    html.halo-prism .card:hover {
+      animation: prism-halo 3s linear infinite;
+      transform: translateY(-3px);
+      background: var(--glass-hover);
+    }
+
     /* Featured : bordure et ombre plus marquées */
     .card-featured {
       border-color: rgba(255,255,255,0.10);

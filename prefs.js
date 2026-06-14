@@ -509,6 +509,13 @@
           <div class="cp-cream-desc">Réduit la fatigue visuelle</div>
         </span>
       </button>
+      <button class="cp-btn cp-cream-btn" id="cp-halo-btn">
+        <span class="cp-cream-check" id="cp-halo-check"></span>
+        <span>
+          Halo prisme ✦
+          <div class="cp-cream-desc">Halo arc-en-ciel au survol des articles</div>
+        </span>
+      </button>
     </div>
   `;
 
@@ -590,6 +597,20 @@
   document.getElementById('cp-cream-btn').addEventListener('click', () => {
     applyCream(!currentCream);
   });
+
+  // ── Halo prisme ───────────────────────────────────────────────────────────
+  let haloActive = localStorage.getItem('cellia-halo-prism') === 'true';
+  function applyHalo(state, save = true) {
+    haloActive = state;
+    document.documentElement.classList.toggle('halo-prism', state);
+    const btn   = document.getElementById('cp-halo-btn');
+    const check = document.getElementById('cp-halo-check');
+    if (btn)   btn.classList.toggle('active', state);
+    if (check) check.textContent = state ? '✓' : '';
+    if (save)  localStorage.setItem('cellia-halo-prism', state);
+  }
+  if (haloActive) applyHalo(true, false);
+  document.getElementById('cp-halo-btn')?.addEventListener('click', () => applyHalo(!haloActive));
 
   // ── Fermer ────────────────────────────────────────────────────────────────
   document.getElementById('cp-close').addEventListener('click', closePanel);
