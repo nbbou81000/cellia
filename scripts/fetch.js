@@ -10,7 +10,12 @@ const IS_PAID           = process.env.USE_PAID_GEMINI === 'true';
 const IS_KORBEN         = process.env.USE_KORBEN === 'true';
 const IS_FOND           = process.env.USE_FOND === 'true';
 const IS_MISTRAL_BOOST  = process.env.USE_MISTRAL_BOOST === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN ? 20 : IS_MISTRAL_BOOST ? 15 : 10;
+const IS_SCHEDULED      = process.env.IS_SCHEDULED === 'true';
+const MAX_ARTICLES = IS_DEV ? 3
+  : IS_PAID || IS_FOND    ? 15
+  : IS_KORBEN             ? 20
+  : IS_MISTRAL_BOOST      ? (IS_SCHEDULED ? 15 : 20)
+  : 10;
 const WINDOW_HOURS = IS_KORBEN ? 24 : 48;
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
@@ -50,14 +55,15 @@ const PAID_PROVIDER = {
 };
 
 const MISTRAL_BOOST_PROVIDER = {
-  name:      'Mistral-Boost',
-  envKey:    'MISTRAL_API_KEY',
-  type:      'openai',
-  url:       'https://api.mistral.ai/v1/chat/completions',
-  model:     'mistral-small-2506',  // 2.25M tok/min · 5 req/s (vs 2603 : 50k tok/min)
-  maxTokens: 4000,
+  name:        'Mistral-Boost',
+  envKey:      'MISTRAL_API_KEY',
+  type:        'openai',
+  url:         'https://api.mistral.ai/v1/chat/completions',
+  model:       'mistral-small-2506',
+  maxTokens:   8000,
   temperature: 0.7,
-  jsonMode:  true,
+  jsonMode:    true,
+  callTimeout: 90000, // 90s — nécessaire pour générer ~8000 tokens
 };
 
 const MONTHS_FR = [
@@ -432,7 +438,7 @@ Source : ${article.source}
 Contenu : ${article.fullText||article.snippet}`;
 }
 
-// Prompt mode PAYANT — format JSON, articles longs et structurés
+// Prompt mode PAYANT Gemini — JSON, 350-500 mots (inchangé)
 function buildPaidPrompt(article) {
   return `Réécris cet article INTÉGRALEMENT dans le style de Korben.
 
@@ -440,6 +446,30 @@ RÈGLES :
 - Traduis et réécris en français, style Korben : direct, geek, complice, avis tranché
 - Le "body" doit faire entre 350 et 500 mots — vrai article de fond, pas un résumé
 - Structure l'article avec 2 ou 3 <h2> pour guider la lecture
+- Utilise <p>, <h2>, <strong> uniquement. Pas d'autres balises.
+- L'accroche : une seule phrase punchy, max 25 mots
+- Le titre "titre_fr" : OBLIGATOIREMENT en français correct, accrocheur, max 90 caractères, sans fautes, sans mélange anglais/français
+
+FORMAT JSON — CRITIQUE :
+- Réponds UNIQUEMENT avec un objet JSON valide (sans backticks, sans texte avant ou après)
+- COMPLÈTE ENTIÈREMENT la réponse JSON avant de t'arrêter — ne jamais tronquer
+- La valeur "body" DOIT être sur une seule ligne — paragraphes séparés par <p></p> directement collés, AUCUN \\n réel
+- Format exact : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><h2>titre</h2><p>texte</p>"}
+
+SOURCE :
+Titre : ${article.title}
+Source : ${article.source}
+Contenu : ${(article.fullText||article.snippet||'').slice(0, 2000)}`;
+}
+
+// Prompt mode MISTRAL BOOST — JSON, 600-1000 mots, structure plus riche
+function buildMistralBoostPrompt(article) {
+  return `Réécris cet article INTÉGRALEMENT dans le style de Korben.
+
+RÈGLES :
+- Traduis et réécris en français, style Korben : direct, geek, complice, avis tranché
+- Le "body" doit faire entre 600 et 1000 mots — article de fond développé, avec contexte et analyse
+- Structure l'article avec 3 ou 4 <h2> substantiels (chacun suivi de 2-3 paragraphes minimum)
 - Utilise <p>, <h2>, <strong> uniquement. Pas d'autres balises.
 - L'accroche : une seule phrase punchy, max 25 mots
 - Le titre "titre_fr" : OBLIGATOIREMENT en français correct, accrocheur, max 90 caractères, sans fautes, sans mélange anglais/français
@@ -490,7 +520,7 @@ async function callProvider(provider, systemPrompt, userPrompt) {
         ...(provider.jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
     },
-    30000
+    provider.callTimeout || 30000
   );
 }
 
@@ -700,7 +730,9 @@ async function rewriteWithFallback(article) {
     try {
       info(`${provider.name}...`);
       const useJsonMode = IS_PAID || IS_MISTRAL_BOOST;
-      const userPrompt = useJsonMode ? buildPaidPrompt(article) : buildFreePrompt(article);
+      const userPrompt = IS_MISTRAL_BOOST ? buildMistralBoostPrompt(article)
+                       : IS_PAID          ? buildPaidPrompt(article)
+                       :                    buildFreePrompt(article);
       const response   = await callProvider(provider, SYSTEM_PROMPT, userPrompt);
 
       if (response.status===429) { warn(`  ${provider.name} : 429 → suivant`); continue; }
@@ -857,6 +889,10 @@ async function main() {
     return union === 0 ? 0 : inter / union;
   }
 
+  // ── Déduplication par sujet ───────────────────────────────────────────────
+  // Sauvegarder le pool avant Jaccard (filet de sécurité pour garantir MAX_ARTICLES)
+  const preJaccardPool = [...allArticles];
+
   // 2. Déduplication par sujet — désactivée en mode Korben (on veut tout)
   if (!IS_KORBEN) {
     const deduped = [];
@@ -886,6 +922,18 @@ async function main() {
     allArticles=allArticles.filter(a=>{catCount[a.category]=(catCount[a.category]||0)+1;return catCount[a.category]<=CAT_CAP;});
   }
   allArticles=allArticles.slice(0,MAX_ARTICLES);
+
+  // ── Filet de sécurité : compléter si count insuffisant ────────────────────
+  if (allArticles.length < MAX_ARTICLES && !IS_KORBEN) {
+    const existingIds = new Set(allArticles.map(a => a.id));
+    const extras = preJaccardPool
+      .filter(a => !existingIds.has(a.id))
+      .slice(0, MAX_ARTICLES - allArticles.length);
+    if (extras.length > 0) {
+      allArticles = [...allArticles, ...extras];
+      warn(`Filet de sécurité : +${extras.length} article(s) ajouté(s) pour atteindre ${MAX_ARTICLES}`);
+    }
+  }
 
   // Mode payant : garantir au moins 1 article Korben s'il en existe
   if (IS_PAID && korbenPool.length > 0) {
@@ -923,7 +971,7 @@ async function main() {
       article.title=result.title; article.summary=result.summary;
       article.body=result.body;   article.readingTime=result.readingTime;
       newCount++;
-      await sleep(IS_PAID ? 3000 : 5000);
+      await sleep(IS_MISTRAL_BOOST ? 2000 : IS_PAID ? 3000 : 5000);
     }
     delete article.fullText;
   }
