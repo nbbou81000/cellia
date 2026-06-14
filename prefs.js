@@ -417,6 +417,13 @@
         <button class="cp-btn" data-theme-btn="light">☀ Clair</button>
         <button class="cp-btn" data-theme-btn="dark">⏾ Sombre</button>
       </div>
+      <button class="cp-btn cp-cream-btn" id="cp-halo-btn" style="margin-top:8px;width:100%">
+        <span class="cp-cream-check" id="cp-halo-check"></span>
+        <span>
+          ✦ Halo prisme
+          <div class="cp-cream-desc">Halo arc-en-ciel au survol des articles</div>
+        </span>
+      </button>
     </div>
 
     <hr class="cp-divider">
@@ -507,13 +514,6 @@
         <span>
           Fond crème
           <div class="cp-cream-desc">Réduit la fatigue visuelle</div>
-        </span>
-      </button>
-      <button class="cp-btn cp-cream-btn" id="cp-halo-btn">
-        <span class="cp-cream-check" id="cp-halo-check"></span>
-        <span>
-          Halo prisme ✦
-          <div class="cp-cream-desc">Halo arc-en-ciel au survol des articles</div>
         </span>
       </button>
     </div>
