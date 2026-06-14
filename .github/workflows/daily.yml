@@ -29,6 +29,11 @@ on:
         required: false
         default: 'false'
         type: boolean
+      mistral_boost:
+        description: 'CRON Mistral latest — mistral-small-latest JSON 3000 tok · 20 articles'
+        required: false
+        default: 'false'
+        type: boolean
 
 jobs:
   fetch-and-deploy:
@@ -63,6 +68,7 @@ jobs:
           USE_PAID_GEMINI:     ${{ github.event.inputs.paid_mode }}
           USE_KORBEN:          ${{ github.event.inputs.korben_mode }}
           USE_FOND:            ${{ github.event.inputs.fond_mode }}
+          USE_MISTRAL_BOOST:   ${{ github.event.inputs.mistral_boost }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
