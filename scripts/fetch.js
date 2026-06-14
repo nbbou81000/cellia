@@ -59,23 +59,6 @@ const MISTRAL_BOOST_PROVIDER = {
   jsonMode:  true,  // active response_format: json_object
 };
 
-// ─── Mots-clés éphéméride Wikipedia ──────────────────────────────────────────
-const EPHEMERIS_KEYWORDS = [
-  'computer','processor','microchip','transistor','semiconductor','microprocessor',
-  'integrated circuit','circuit','chip','ram','hard disk','floppy','cd-rom','dvd',
-  'usb','gpu','cpu','software','operating system','programming','algorithm','browser',
-  'internet','world wide web','hypertext','email','domain','server','database',
-  'encryption','open source','network','ethernet','modem','fiber optic','wi-fi',
-  'bluetooth','mobile phone','smartphone','telephone','telegraph','radio','satellite',
-  'spacecraft','rocket','orbit','artificial intelligence','robot','automation',
-  'machine learning','apple','microsoft','google','ibm','intel','amd','nvidia',
-  'amazon','facebook','twitter','youtube','spotify','netflix','atari','nintendo',
-  'playstation','xbox','sega','linux','windows','macintosh','iphone','android','ipad',
-  'digital','electronic','laser','pixel','display','graphics','video game','console',
-  'arcade','streaming','podcast','hacker','virus','malware','cybersecurity',
-  'inventor','invention','patent','laboratory','engineer','cloud','hardware',
-];
-
 const MONTHS_FR = [
   'janvier','février','mars','avril','mai','juin',
   'juillet','août','septembre','octobre','novembre','décembre',
@@ -764,81 +747,6 @@ async function rewriteWithFallback(article) {
 }
 
 // ─── Éphéméride tech ─────────────────────────────────────────────────────────
-async function rewriteEphemerisEvent(event, day, monthFR) {
-  const system = `Tu incarnes Korben (korben.info). Style direct, geek, complice, légèrement ironique.`;
-  const user   = `Réécris cet événement tech historique dans le style de Korben pour une section "éphéméride tech du jour".
-
-RÈGLES :
-- 2 à 4 phrases, texte brut (pas de HTML)
-- Commence par "En ${event.year}," ou "C'était en ${event.year},"
-- Traduis intégralement en français
-- Ton Korben : direct, avis personnel, pointe d'humour si pertinent
-
-ÉVÉNEMENT : ${event.text}`;
-
-  for (const provider of PROVIDERS) {
-    if (!process.env[provider.envKey]) continue;
-    try {
-      const response = await callProvider(provider, system, user);
-      if (!response.ok) continue;
-      const data = await response.json();
-      const text = extractText(provider, data);
-      if (text&&text.length>20) return text.trim();
-    } catch { continue; }
-  }
-  return event.text;
-}
-
-async function fetchEphemeris(dateStr) {
-  const [yearStr,monthStr,dayStr] = dateStr.split('-');
-  const month=parseInt(monthStr), day=parseInt(dayStr), monthFR=MONTHS_FR[month-1];
-  log(`Éphéméride tech : ${day} ${monthFR}...`);
-
-  const endpoints = [
-    `https://en.wikipedia.org/api/rest_v1/feed/onthisday/selected/${month}/${day}`,
-    `https://en.wikipedia.org/api/rest_v1/feed/onthisday/events/${month}/${day}`,
-  ];
-  let techEvents=[];
-
-  for (const url of endpoints) {
-    try {
-      const res = await fetchWithTimeout(url,{headers:{'User-Agent':'CelliA-Bot/1.0','Accept':'application/json'}},8000);
-      if (!res.ok) continue;
-      const data   = await res.json();
-      const events = data.events||data.selected||[];
-      techEvents   = events.filter(e => {
-        if (!e.year||parseInt(e.year)>=parseInt(yearStr)) return false;
-        const t=(e.text||'').toLowerCase();
-        return EPHEMERIS_KEYWORDS.some(kw => t.includes(kw));
-      });
-      if (techEvents.length>0) break;
-    } catch(e) { warn(`  Wikipedia : ${e.message}`); }
-  }
-
-  if (!techEvents.length) { warn('Éphéméride : aucun événement tech trouvé'); return null; }
-
-  techEvents.sort((a,b)=>a.year-b.year);
-  const selected = techEvents[0]===techEvents[techEvents.length-1]
-    ? [techEvents[0]]
-    : [techEvents[0], techEvents[techEvents.length-1]];
-
-  const items=[];
-  for (const event of selected) {
-    const summary  = await rewriteEphemerisEvent(event, day, monthFR);
-    const wikiPage = event.pages?.[0];
-    items.push({
-      year:          event.year,
-      original:      event.text,
-      summary,
-      wikipedia_url: wikiPage?.content_urls?.desktop?.page||null,
-      thumbnail:     wikiPage?.thumbnail?.source||null,
-    });
-    await sleep(2000);
-  }
-  ok(`Éphéméride : ${items.length} événement(s) — ${day} ${monthFR}`);
-  return { date:dateStr, day, month, month_fr:monthFR, items };
-}
-
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 async function main() {
   console.log(`\n${c.bold}${c.blue}━━━ CelliA — Veille Tech ━━━${c.reset}  ${IS_DEV?c.yellow+'[DEV]'+c.reset:''}\n`);
@@ -865,7 +773,7 @@ async function main() {
   // Cache — lecture depuis articles-full.json (avec bodies) ou articles.json en fallback
   const fullPath  = path.join(__dirname,'..','dist','articles-full.json');
   const distPath  = path.join(__dirname,'..','dist','articles.json');
-  let cachedData = {articles:[], ephemeris:null};
+  let cachedData = {articles:[]};
   try {
     cachedData = JSON.parse(await fs.readFile(fullPath,'utf-8'));
     ok(`Cache : ${cachedData.articles?.length||0} articles (articles-full.json)`);
@@ -878,16 +786,6 @@ async function main() {
 
   const cachedById={};
   for (const a of (cachedData.articles||[])) if (a.id&&a.body?.length>100) cachedById[a.id]=a;
-
-  // Éphéméride (une fois par jour, toujours — peu importe le mode)
-  const today = new Date().toISOString().slice(0,10);
-  let ephemeris = cachedData.ephemeris||null;
-  if (!ephemeris||ephemeris.date!==today) {
-    ephemeris = await fetchEphemeris(today);
-  } else {
-    ok('Éphéméride du jour déjà en cache');
-  }
-
   // RSS
   log('Fetch des flux RSS...');
   // Sources actives
@@ -1058,17 +956,16 @@ async function main() {
   await fs.mkdir(path.join(__dirname,'..','dist'),{recursive:true});
 
   // 1. articles-full.json — avec bodies, pour article.html et le cache interne
-  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:finalArticles };
+  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, articles:finalArticles };
   await fs.writeFile(fullPath, JSON.stringify(outputFull), 'utf-8');
 
   // 2. articles.json — sans bodies, léger, pour index.html (~8x plus petit)
   const indexArticles = finalArticles.map(({ body, fullText, ...rest }) => rest);
-  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, ephemeris:ephemeris||null, articles:indexArticles };
+  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, articles:indexArticles };
   await fs.writeFile(distPath, JSON.stringify(outputIndex), 'utf-8');
 
   console.log(`\n${c.bold}━━━ Terminé ━━━${c.reset}`);
   ok(`${newCount} nouveaux | ${cachedCount} depuis cache | ${finalArticles.length} total`);
-  if (ephemeris) ok(`Éphéméride : ${ephemeris.items.length} événement(s)`);
   ok(`Écrit : dist/articles.json (index léger) + dist/articles-full.json (complet)`);
   console.log();
 
