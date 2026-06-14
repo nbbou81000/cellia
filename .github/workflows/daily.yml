@@ -5,6 +5,7 @@ on:
     - cron: '0 4 * * *'    # 6h Paris
     - cron: '0 7 * * *'    # 9h Paris
     - cron: '0 10 * * *'   # 12h Paris
+    - cron: '0 12 * * *'   # 14h Paris  ← nouveau
     - cron: '0 14 * * *'   # 16h Paris
     - cron: '0 18 * * *'   # 20h Paris
   workflow_dispatch:
@@ -68,7 +69,7 @@ jobs:
           USE_PAID_GEMINI:     ${{ github.event.inputs.paid_mode }}
           USE_KORBEN:          ${{ github.event.inputs.korben_mode }}
           USE_FOND:            ${{ github.event.inputs.fond_mode }}
-          USE_MISTRAL_BOOST:   ${{ github.event.inputs.mistral_boost }}
+          USE_MISTRAL_BOOST:   ${{ github.event_name == 'schedule' && 'true' || github.event.inputs.mistral_boost }}
         run: |
           if [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
             node fetch.js --dev
