@@ -5,11 +5,12 @@ import crypto  from 'crypto';
 import { fileURLToPath } from 'url';
 
 const __dirname    = path.dirname(fileURLToPath(import.meta.url));
-const IS_DEV       = process.argv.includes('--dev');
-const IS_PAID      = process.env.USE_PAID_GEMINI === 'true';
-const IS_KORBEN    = process.env.USE_KORBEN === 'true';
-const IS_FOND      = process.env.USE_FOND === 'true';
-const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN ? 20 : 10;
+const IS_DEV            = process.argv.includes('--dev');
+const IS_PAID           = process.env.USE_PAID_GEMINI === 'true';
+const IS_KORBEN         = process.env.USE_KORBEN === 'true';
+const IS_FOND           = process.env.USE_FOND === 'true';
+const IS_MISTRAL_BOOST  = process.env.USE_MISTRAL_BOOST === 'true';
+const MAX_ARTICLES = IS_DEV ? 3 : IS_PAID || IS_FOND ? 15 : IS_KORBEN || IS_MISTRAL_BOOST ? 20 : 10;
 const WINDOW_HOURS = IS_KORBEN ? 24 : 48;
 
 // ─── Providers IA ─────────────────────────────────────────────────────────────
@@ -46,6 +47,16 @@ const PAID_PROVIDER = {
   type:      'gemini',
   url:       'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent',
   maxTokens: 6000,
+};
+
+const MISTRAL_BOOST_PROVIDER = {
+  name:      'Mistral-Boost',
+  envKey:    'MISTRAL_API_KEY',
+  type:      'openai',
+  url:       'https://api.mistral.ai/v1/chat/completions',
+  model:     'mistral-small-latest',
+  maxTokens: 3000,
+  jsonMode:  true,  // active response_format: json_object
 };
 
 // ─── Mots-clés éphéméride Wikipedia ──────────────────────────────────────────
@@ -492,6 +503,7 @@ async function callProvider(provider, systemPrompt, userPrompt) {
         messages:    [{role:'system',content:systemPrompt},{role:'user',content:userPrompt}],
         temperature: 0.85,
         max_tokens:  provider.maxTokens||1400,
+        ...(provider.jsonMode ? { response_format: { type: 'json_object' } } : {}),
       }),
     },
     30000
@@ -703,7 +715,8 @@ async function rewriteWithFallback(article) {
     if (!process.env[provider.envKey]) { dim(`  ${provider.name} : clé absente`); continue; }
     try {
       info(`${provider.name}...`);
-      const userPrompt = IS_PAID ? buildPaidPrompt(article) : buildFreePrompt(article);
+      const useJsonMode = IS_PAID || IS_MISTRAL_BOOST;
+      const userPrompt = useJsonMode ? buildPaidPrompt(article) : buildFreePrompt(article);
       const response   = await callProvider(provider, SYSTEM_PROMPT, userPrompt);
 
       if (response.status===429) { warn(`  ${provider.name} : 429 → suivant`); continue; }
@@ -714,10 +727,10 @@ async function rewriteWithFallback(article) {
       if (!text||text.length<50) { warn(`  ${provider.name} : réponse vide → suivant`); continue; }
 
       // Parser selon le mode
-      const result = IS_PAID ? parsePaidResponse(text, article) : parseTextResponse(text, article);
+      const result = useJsonMode ? parsePaidResponse(text, article) : parseTextResponse(text, article);
 
-      // En mode payant : vérifier la longueur du corps, retry si trop court
-      if (IS_PAID) {
+      // En mode JSON : vérifier la longueur du corps, retry si trop court
+      if (useJsonMode) {
         const wc = result.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
         if (wc < 150) {
           warn(`  Corps trop court (${wc} mots) — retry...`);
@@ -834,6 +847,12 @@ async function main() {
   if (IS_PAID) {
     PROVIDERS = [PAID_PROVIDER];
     console.log(`${c.yellow}${c.bold}  ★ MODE PAYANT — Gemini 2.5 Flash — JSON — 3000 tokens${c.reset}\n`);
+  }
+
+  // Mode Mistral Boost : mistral-small-latest, JSON, 3000 tokens, 20 articles
+  if (IS_MISTRAL_BOOST) {
+    PROVIDERS = [MISTRAL_BOOST_PROVIDER];
+    console.log(`${c.cyan}${c.bold}  ★ MODE MISTRAL BOOST — mistral-small-latest — JSON — 3000 tokens — 20 articles${c.reset}\n`);
   }
 
   const disponibles = PROVIDERS.filter(p=>process.env[p.envKey]).map(p=>p.name);
