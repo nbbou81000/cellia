@@ -551,6 +551,48 @@ function repairJSON(raw) {
   return result;
 }
 
+// Répare un body HTML potentiellement tronqué en plein milieu d'une phrase/tag
+function fixTruncatedBody(html) {
+  if (!html) return '';
+
+  // 1. Supprimer les tags HTML incomplets à la toute fin (ex: "<p>texte<h2" ou "</")
+  html = html.replace(/<[^>]*$/, '').trim();
+
+  // 2. Supprimer les <h2> ouverts sans contenu ni fermeture à la fin
+  html = html.replace(/<h2[^>]*>\s*$/, '').trim();
+  html = html.replace(/<h2[^>]*>[^<]{0,60}$/, '').trim(); // h2 ouvert sans </h2>
+
+  // 3. Fermer les <p> non fermés — trouver la dernière phrase complète
+  const lastPOpen  = html.lastIndexOf('<p');
+  const lastPClose = html.lastIndexOf('</p>');
+  if (lastPOpen > lastPClose) {
+    const fragment = html.slice(lastPOpen);
+    // Position de la dernière ponctuation finale dans le fragment
+    const lastDot  = fragment.lastIndexOf('.');
+    const lastExcl = fragment.lastIndexOf('!');
+    const lastQuest= fragment.lastIndexOf('?');
+    const lastPunct= Math.max(lastDot, lastExcl, lastQuest);
+    if (lastPunct > 5) {
+      // Fermer proprement après la dernière ponctuation
+      html = html.slice(0, lastPOpen + lastPunct + 1) + '</p>';
+    } else {
+      // Aucune phrase complète dans ce paragraphe — le supprimer
+      html = html.slice(0, lastPOpen).trim();
+    }
+  }
+
+  // 4. Supprimer les artefacts JSON résiduels en fin de body
+  html = html.replace(/\\n\s*["\\}]+\s*$/, '').replace(/["\\}]+\s*$/, '').trim();
+
+  // 5. S'assurer qu'on finit sur un tag fermant propre
+  if (html && !html.endsWith('>')) {
+    const lastClose = Math.max(html.lastIndexOf('</p>'), html.lastIndexOf('</h2>'));
+    if (lastClose !== -1) html = html.slice(0, lastClose + (html[lastClose + 2] === 'p' ? 4 : 5));
+  }
+
+  return html;
+}
+
 // Extraction regex en dernier recours sur JSON malformé
 function extractBodyFromRawJSON(text, article) {
   const titleM   = text.match(/"titre_fr"\s*:\s*"((?:[^"\\]|\\.)*)"/);
@@ -601,7 +643,7 @@ function parsePaidResponse(rawText, article) {
     const json    = JSON.parse(text);
     const titleFR = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
     const summary = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
-    let   body    = cleanBodyFromJSON((json.body || '').trim());
+    let   body    = fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim()));
     body          = ensureParagraphs(body);
     if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
     const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -616,7 +658,7 @@ function parsePaidResponse(rawText, article) {
     const json     = JSON.parse(repaired);
     const titleFR  = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
     const summary  = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
-    let   body     = cleanBodyFromJSON((json.body || '').trim());
+    let   body     = fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim()));
     body           = ensureParagraphs(body);
     if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
     const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -625,10 +667,14 @@ function parsePaidResponse(rawText, article) {
     return { title: titleFR, summary, body, readingTime };
   } catch (_) {}
 
-  // Niveau 3 : extraction regex (JSON tronqué ou malformé au-delà de la réparation)
+  // Niveau 3 : extraction regex (JSON tronqué ou malformé)
   const regexResult = extractBodyFromRawJSON(text, article);
   if (regexResult && regexResult.body.length > 100) {
-    warn(`    JSON regex ✓ — ${regexResult.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length} mots`);
+    regexResult.body = fixTruncatedBody(regexResult.body);
+    regexResult.body = ensureParagraphs(regexResult.body);
+    const wc = regexResult.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
+    regexResult.readingTime = Math.max(1, Math.round(wc / 200));
+    warn(`    JSON regex ✓ — ${wc} mots`);
     return regexResult;
   }
 
