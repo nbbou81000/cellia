@@ -183,8 +183,8 @@ function calcReadingTime(body) {
 
 // ─── Mode FOND : scorer les articles et choisir le meilleur ──────────────────
 async function scorerMeilleurArticle(articles) {
-  const PAID_KEY = process.env.GEMINI_PAID_API_KEY;
-  if (!PAID_KEY) throw new Error('GEMINI_PAID_API_KEY manquante pour le mode fond');
+  const MISTRAL_KEY = process.env.MISTRAL_API_KEY;
+  if (!MISTRAL_KEY) throw new Error('MISTRAL_API_KEY manquante pour le mode fond');
 
   const liste = articles.map((a, i) =>
     `${i}. ${a.title}\n   ${(a.snippet||'').replace(/<[^>]+>/g,' ').slice(0,180).trim()}`
@@ -202,17 +202,23 @@ FAVORISER : découverte importante, analyse de tendance de fond, enjeu technolog
 
 Réponds UNIQUEMENT avec le numéro de l'article (entre 0 et ${articles.length-1}), rien d'autre.`;
 
-  const body = JSON.stringify({
-    contents: [{ role:'user', parts:[{ text: prompt }] }],
-    generationConfig: { maxOutputTokens: 8, temperature: 0.1 }
-  });
   const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${PAID_KEY}`,
-    { method:'POST', headers:{'Content-Type':'application/json'}, body, signal: AbortSignal.timeout(30000) }
+    'https://api.mistral.ai/v1/chat/completions',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
+      body: JSON.stringify({
+        model: 'mistral-small-2506',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 10,
+        temperature: 0.1,
+      }),
+      signal: AbortSignal.timeout(30000)
+    }
   );
   if (!resp.ok) throw new Error(`Scoring HTTP ${resp.status}`);
-  const data = await resp.json();
-  const text  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '0';
+  const data  = await resp.json();
+  const text  = data?.choices?.[0]?.message?.content || '0';
   const match = text.match(/\d+/);
   const idx   = match ? Math.min(parseInt(match[0]), articles.length - 1) : 0;
   return idx;
@@ -220,7 +226,7 @@ Réponds UNIQUEMENT avec le numéro de l'article (entre 0 et ${articles.length-1
 
 // ─── Mode FOND : réécriture longue forme ─────────────────────────────────────
 async function rewriteFond(article) {
-  const PAID_KEY = process.env.GEMINI_PAID_API_KEY;
+  const MISTRAL_KEY = process.env.MISTRAL_API_KEY;
 
   const prompt = `Tu es Korben, le blogueur tech français légendaire depuis plus de 20 ans.
 Tu vas écrire un GRAND ARTICLE DE FOND exceptionnel sur ce sujet. Pas un simple résumé : une véritable exploration journalistique.
@@ -247,17 +253,23 @@ CONSIGNES IMPÉRATIVES :
 
 Génère l'article maintenant :`;
 
-  const bodyPayload = JSON.stringify({
-    contents: [{ role:'user', parts:[{ text: prompt }] }],
-    generationConfig: { maxOutputTokens: 6000, temperature: 0.75 }
-  });
   const resp = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${PAID_KEY}`,
-    { method:'POST', headers:{'Content-Type':'application/json'}, body: bodyPayload, signal: AbortSignal.timeout(120000) }
+    'https://api.mistral.ai/v1/chat/completions',
+    {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
+      body: JSON.stringify({
+        model: 'mistral-small-2506',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 8000,
+        temperature: 0.75,
+      }),
+      signal: AbortSignal.timeout(120000)
+    }
   );
   if (!resp.ok) throw new Error(`Fond HTTP ${resp.status}`);
-  const data  = await resp.json();
-  const text  = data?.candidates?.[0]?.content?.parts?.[0]?.text || '';
+  const data = await resp.json();
+  const text = data?.choices?.[0]?.message?.content || '';
   if (!text) throw new Error('Réponse fond vide');
   return text.trim();
 }
@@ -464,21 +476,29 @@ Contenu : ${(article.fullText||article.snippet||'').slice(0, 2000)}`;
 
 // Prompt mode MISTRAL BOOST — JSON, 600-1000 mots, structure plus riche
 function buildMistralBoostPrompt(article) {
-  return `Réécris cet article INTÉGRALEMENT dans le style de Korben.
+  return `Réécris cet article dans le style de Korben.
 
-RÈGLES :
-- Traduis et réécris en français, style Korben : direct, geek, complice, avis tranché
-- Le "body" doit faire entre 600 et 1000 mots — article de fond développé, avec contexte et analyse
-- Structure l'article avec 3 ou 4 <h2> substantiels (chacun suivi de 2-3 paragraphes minimum)
-- Utilise <p>, <h2>, <strong> uniquement. Pas d'autres balises.
-- L'accroche : une seule phrase punchy, max 25 mots
-- Le titre "titre_fr" : OBLIGATOIREMENT en français correct, accrocheur, max 90 caractères, sans fautes, sans mélange anglais/français
+⚠️ RÈGLE ABSOLUE N°1 — LONGUEUR : ton "body" doit contenir ENTRE 700 ET 1000 MOTS.
+Ne termine JAMAIS l'article avant d'avoir atteint 700 mots.
+Si tu approches la fin mais n'es pas à 700 mots, continue à développer la dernière section.
 
-FORMAT JSON — CRITIQUE :
-- Réponds UNIQUEMENT avec un objet JSON valide (sans backticks, sans texte avant ou après)
-- COMPLÈTE ENTIÈREMENT la réponse JSON avant de t'arrêter — ne jamais tronquer
-- La valeur "body" DOIT être sur une seule ligne — paragraphes séparés par <p></p> directement collés, AUCUN \\n réel
-- Format exact : {"titre_fr":"...","accroche":"...","body":"<p>texte</p><h2>titre</h2><p>texte</p>"}
+STRUCTURE OBLIGATOIRE — exactement 4 sections <h2> :
+1. <h2>Accroche / Mise en scène</h2> — 3 paragraphes minimum, plante le contexte de façon percutante
+2. <h2>Ce qui se passe vraiment</h2> — 3 paragraphes minimum, analyse technique ou factuelle détaillée
+3. <h2>Ce que ça change</h2> — 3 paragraphes minimum, enjeux concrets, qui est impacté et comment
+4. <h2>La vision Korben</h2> — 2 paragraphes minimum, ton avis tranché et ce qui va se passer ensuite
+
+⚠️ RÈGLE ABSOLUE N°2 — FIDÉLITÉ :
+Reste STRICTEMENT fidèle au contenu source. N'invente rien, ne fabrique aucun chiffre, aucune citation, aucun fait qui ne soit pas dans le texte source.
+Si la source ne suffit pas pour atteindre 700 mots sans inventer, développe uniquement le contexte technique général connu (fonctionnement de la technologie, définitions) — jamais des faits spécifiques inventés.
+
+STYLE : direct, geek, complice, avis tranché, humour sec — style Korben
+BALISES : <p>, <h2>, <strong> UNIQUEMENT. Aucune autre.
+TITRE "titre_fr" : français correct, accrocheur, max 90 caractères, sans fautes
+
+FORMAT JSON — une seule ligne, zéro retour chariot dans "body" :
+{"titre_fr":"...","accroche":"une phrase punchy max 25 mots","body":"<p>...</p><h2>...</h2><p>...</p>"}
+JSON complet et valide — aucun texte avant ou après les accolades.
 
 SOURCE :
 Titre : ${article.title}
@@ -558,51 +578,60 @@ function fixTruncatedBody(html) {
   // 1. Supprimer les tags HTML incomplets à la toute fin (ex: "<p>texte<h2" ou "</")
   html = html.replace(/<[^>]*$/, '').trim();
 
-  // 2. Supprimer les <h2> ouverts sans contenu ni fermeture à la fin
-  html = html.replace(/<h2[^>]*>\s*$/, '').trim();
-  html = html.replace(/<h2[^>]*>[^<]{0,60}$/, '').trim(); // h2 ouvert sans </h2>
+  // 2. Supprimer les <h2> ouverts sans fermeture à la fin
+  html = html.replace(/<h2[^>]*>[^<]*$/, '').trim();
 
-  // 3. Fermer les <p> non fermés — trouver la dernière phrase complète
+  // 3. Fermer les <p> non fermés — SEULEMENT si le fragment final est court (<80 chars)
+  // Pour éviter de couper des articles valides dont le dernier <p> n'est pas fermé
   const lastPOpen  = html.lastIndexOf('<p');
   const lastPClose = html.lastIndexOf('</p>');
   if (lastPOpen > lastPClose) {
     const fragment = html.slice(lastPOpen);
-    // Position de la dernière ponctuation finale dans le fragment
-    const lastDot  = fragment.lastIndexOf('.');
-    const lastExcl = fragment.lastIndexOf('!');
-    const lastQuest= fragment.lastIndexOf('?');
-    const lastPunct= Math.max(lastDot, lastExcl, lastQuest);
-    if (lastPunct > 5) {
-      // Fermer proprement après la dernière ponctuation
-      html = html.slice(0, lastPOpen + lastPunct + 1) + '</p>';
-    } else {
-      // Aucune phrase complète dans ce paragraphe — le supprimer
+    if (fragment.length < 80) {
+      // Fragment très court = clairement tronqué → supprimer
       html = html.slice(0, lastPOpen).trim();
+    } else {
+      // Fragment long = juste fermer le tag proprement
+      html = html + '</p>';
     }
   }
 
   // 4. Supprimer les artefacts JSON résiduels en fin de body
-  html = html.replace(/\\n\s*["\\}]+\s*$/, '').replace(/["\\}]+\s*$/, '').trim();
-
-  // 5. S'assurer qu'on finit sur un tag fermant propre
-  if (html && !html.endsWith('>')) {
-    const lastClose = Math.max(html.lastIndexOf('</p>'), html.lastIndexOf('</h2>'));
-    if (lastClose !== -1) html = html.slice(0, lastClose + (html[lastClose + 2] === 'p' ? 4 : 5));
-  }
+  html = html.replace(/\\n\s*["\\}]+\s*$/, '').replace(/["\\}]{2,}\s*$/, '').trim();
 
   return html;
 }
 
-// Extraction regex en dernier recours sur JSON malformé
+// Extraction manuelle du body depuis un JSON malformé/tronqué (gère les \" échappés)
 function extractBodyFromRawJSON(text, article) {
-  const titleM   = text.match(/"titre_fr"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-  const accM     = text.match(/"accroche"\s*:\s*"((?:[^"\\]|\\.)*)"/);
-  // Pour body on accepte les guillemets non fermés (JSON tronqué)
-  const bodyM    = text.match(/"body"\s*:\s*"([\s\S]+?)(?:"\s*\}|$)/);
-  if (!bodyM) return null;
+  const titleM = text.match(/"titre_fr"\s*:\s*"((?:[^"\\]|\\[\s\S])*)"/);
+  const accM   = text.match(/"accroche"\s*:\s*"((?:[^"\\]|\\[\s\S])*)"/);
 
-  let body = bodyM[1]
-    .replace(/\\n/g, '\n').replace(/\\r/g, '').replace(/\\"/g, '"').replace(/\\\\/g, '\\');
+  // Extraction caractère par caractère — résiste aux guillemets échappés et au JSON tronqué
+  const bodyKeyPos = text.indexOf('"body"');
+  if (bodyKeyPos === -1) return null;
+
+  const quoteOpen = text.indexOf('"', bodyKeyPos + 6);
+  if (quoteOpen === -1) return null;
+
+  let body = '';
+  let i = quoteOpen + 1;
+  while (i < text.length) {
+    const ch = text[i];
+    if (ch === '\\' && i + 1 < text.length) {
+      const next = text[i + 1];
+      if (next === '"')  { body += '"';  i += 2; continue; }
+      if (next === 'n')  { body += '\n'; i += 2; continue; }
+      if (next === 'r')  { i += 2; continue; }
+      if (next === '\\') { body += '\\'; i += 2; continue; }
+      body += ch; i++; continue;
+    }
+    if (ch === '"') break; // guillemet fermant = fin du body
+    body += ch;
+    i++;
+  }
+
+  body = fixTruncatedBody(body.trim());
   body = ensureParagraphs(body);
   if (!body || body.length < 50) return null;
 
@@ -611,9 +640,9 @@ function extractBodyFromRawJSON(text, article) {
     : article.title;
   const summary = accM
     ? truncateToSentences(accM[1].replace(/\\n/g,' ').replace(/\\"/g,'"').trim())
-    : article.snippet.slice(0, 200);
+    : (article.snippet||'').slice(0, 200);
   const wordCount   = body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
-  const readingTime = Math.max(1, Math.round(wordCount/200));
+  const readingTime = Math.max(1, Math.round(wordCount / 200));
   return { title: titleFR, summary, body, readingTime };
 }
 
@@ -775,10 +804,14 @@ async function rewriteWithFallback(article) {
     if (!process.env[provider.envKey]) { dim(`  ${provider.name} : clé absente`); continue; }
     try {
       info(`${provider.name}...`);
-      const useJsonMode = IS_PAID || IS_MISTRAL_BOOST;
-      const userPrompt = IS_MISTRAL_BOOST ? buildMistralBoostPrompt(article)
-                       : IS_PAID          ? buildPaidPrompt(article)
-                       :                    buildFreePrompt(article);
+      const sourceText  = (article.fullText || article.snippet || '').trim();
+      const sourceWords = sourceText.split(/\s+/).filter(Boolean).length;
+      const useJsonMode = IS_PAID || IS_MISTRAL_BOOST; // toujours JSON pour Mistral
+      const userPrompt  = IS_MISTRAL_BOOST
+        ? (sourceWords >= 120 ? buildMistralBoostPrompt(article) : buildPaidPrompt(article))
+        : IS_PAID ? buildPaidPrompt(article)
+        :           buildFreePrompt(article);
+      if (IS_MISTRAL_BOOST && sourceWords < 120) dim(`  Source courte (${sourceWords} mots) → prompt 350 mots (Mistral JSON)`);
       const response   = await callProvider(provider, SYSTEM_PROMPT, userPrompt);
 
       if (response.status===429) { warn(`  ${provider.name} : 429 → suivant`); continue; }
