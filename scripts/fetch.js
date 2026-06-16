@@ -564,32 +564,35 @@ function repairJSON(raw) {
 // Répare un body HTML potentiellement tronqué en plein milieu d'une phrase/tag
 function fixTruncatedBody(html) {
   if (!html) return '';
-
-  // 1. Supprimer les tags HTML incomplets à la toute fin (ex: "<p>texte<h2" ou "</")
   html = html.replace(/<[^>]*$/, '').trim();
-
-  // 2. Supprimer les <h2> ouverts sans fermeture à la fin
   html = html.replace(/<h2[^>]*>[^<]*$/, '').trim();
-
-  // 3. Fermer les <p> non fermés — SEULEMENT si le fragment final est court (<80 chars)
-  // Pour éviter de couper des articles valides dont le dernier <p> n'est pas fermé
   const lastPOpen  = html.lastIndexOf('<p');
   const lastPClose = html.lastIndexOf('</p>');
   if (lastPOpen > lastPClose) {
     const fragment = html.slice(lastPOpen);
     if (fragment.length < 80) {
-      // Fragment très court = clairement tronqué → supprimer
       html = html.slice(0, lastPOpen).trim();
     } else {
-      // Fragment long = juste fermer le tag proprement
       html = html + '</p>';
     }
   }
-
-  // 4. Supprimer les artefacts JSON résiduels en fin de body
   html = html.replace(/\\n\s*["\\}]+\s*$/, '').replace(/["\\}]{2,}\s*$/, '').trim();
-
   return html;
+}
+
+// Vérifie que le body se termine sur une phrase complète — coupe proprement sinon
+function sealBodyEnd(body) {
+  if (!body) return body;
+  const text = body.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+  if (!text || /[.!?»]$/.test(text)) return body; // déjà propre
+  const lastDot   = body.lastIndexOf('.');
+  const lastExcl  = body.lastIndexOf('!');
+  const lastQuest = body.lastIndexOf('?');
+  const lastPunct = Math.max(lastDot, lastExcl, lastQuest);
+  if (lastPunct < body.length * 0.4) return body; // trop loin, on garde tel quel
+  let cut = body.slice(0, lastPunct + 1).trim();
+  if (!cut.endsWith('>')) cut += '</p>';
+  return cut;
 }
 
 // Extraction manuelle du body depuis un JSON malformé/tronqué (gère les \" échappés)
@@ -662,7 +665,7 @@ function parsePaidResponse(rawText, article) {
     const json    = JSON.parse(text);
     const titleFR = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
     const summary = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
-    let   body    = fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim()));
+    let   body    = sealBodyEnd(fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim())));
     body          = ensureParagraphs(body);
     if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
     const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -677,7 +680,7 @@ function parsePaidResponse(rawText, article) {
     const json     = JSON.parse(repaired);
     const titleFR  = (json.titre_fr || article.title).replace(/^["«]|["»]$/g, '').trim();
     const summary  = truncateToSentences(cleanText(json.accroche || '')) || article.snippet.slice(0, 200);
-    let   body     = fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim()));
+    let   body     = sealBodyEnd(fixTruncatedBody(cleanBodyFromJSON((json.body || '').trim())));
     body           = ensureParagraphs(body);
     if (!body || body.length < 50) body = `<p>${article.snippet}</p>`;
     const wordCount   = body.replace(/<[^>]+>/g, ' ').split(/\s+/).filter(Boolean).length;
@@ -689,7 +692,7 @@ function parsePaidResponse(rawText, article) {
   // Niveau 3 : extraction regex (JSON tronqué ou malformé)
   const regexResult = extractBodyFromRawJSON(text, article);
   if (regexResult && regexResult.body.length > 100) {
-    regexResult.body = fixTruncatedBody(regexResult.body);
+    regexResult.body = sealBodyEnd(fixTruncatedBody(regexResult.body));
     regexResult.body = ensureParagraphs(regexResult.body);
     const wc = regexResult.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
     regexResult.readingTime = Math.max(1, Math.round(wc / 200));
@@ -817,10 +820,16 @@ async function rewriteWithFallback(article) {
       // En mode JSON : vérifier la longueur du corps, retry si trop court
       if (useJsonMode) {
         const wc = result.body.replace(/<[^>]+>/g,' ').split(/\s+/).filter(Boolean).length;
-        if (wc < 150) {
-          warn(`  Corps trop court (${wc} mots) — retry...`);
-          await sleep(3000);
-          const r2      = await callProvider(provider, SYSTEM_PROMPT, buildPaidPrompt(article));
+        // Seuil de retry adapté au mode : 400 mots pour Mistral Boost (cible 700), 150 pour Gemini
+        const retryThreshold = IS_MISTRAL_BOOST ? 400 : 150;
+        if (wc < retryThreshold) {
+          warn(`  Corps trop court (${wc} mots < ${retryThreshold}) — retry...`);
+          await sleep(IS_MISTRAL_BOOST ? 2000 : 3000);
+          // Utiliser le bon prompt selon le mode
+          const retryPrompt = IS_MISTRAL_BOOST
+            ? (sourceWords >= 120 ? buildMistralBoostPrompt(article) : buildPaidPrompt(article))
+            : buildPaidPrompt(article);
+          const r2 = await callProvider(provider, SYSTEM_PROMPT, retryPrompt);
           if (r2.ok) {
             const d2 = await r2.json();
             const t2 = extractText(provider, d2);
