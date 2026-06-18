@@ -417,11 +417,18 @@
         <button class="cp-btn" data-theme-btn="light">☀ Clair</button>
         <button class="cp-btn" data-theme-btn="dark">⏾ Sombre</button>
       </div>
-      <button class="cp-btn cp-cream-btn" id="cp-halo-btn" style="margin-top:8px;width:100%">
-        <span class="cp-cream-check" id="cp-halo-check"></span>
+      <button class="cp-btn cp-cream-btn" id="cp-halo-prism-btn" style="margin-top:8px;width:100%">
+        <span class="cp-cream-check" id="cp-halo-prism-check"></span>
         <span>
           ✦ Halo prisme
           <div class="cp-cream-desc">Halo arc-en-ciel au survol des articles</div>
+        </span>
+      </button>
+      <button class="cp-btn cp-cream-btn" id="cp-halo-beam-btn" style="margin-top:6px;width:100%">
+        <span class="cp-cream-check" id="cp-halo-beam-check"></span>
+        <span>
+          ◉ Halo lumineux
+          <div class="cp-cream-desc">Point de lumière animé façon Gemini</div>
         </span>
       </button>
     </div>
@@ -598,19 +605,30 @@
     applyCream(!currentCream);
   });
 
-  // ── Halo prisme ───────────────────────────────────────────────────────────
-  let haloActive = localStorage.getItem('cellia-halo-prism') === 'true';
-  function applyHalo(state, save = true) {
-    haloActive = state;
-    document.documentElement.classList.toggle('halo-prism', state);
-    const btn   = document.getElementById('cp-halo-btn');
-    const check = document.getElementById('cp-halo-check');
-    if (btn)   btn.classList.toggle('active', state);
-    if (check) check.textContent = state ? '✓' : '';
-    if (save)  localStorage.setItem('cellia-halo-prism', state);
+  // ── Halos (prisme et lumineux — mutuellement exclusifs) ──────────────────
+  let haloActive = localStorage.getItem('cellia-halo') || 'none'; // 'none' | 'prism' | 'beam'
+
+  function applyHalo(mode, save = true) {
+    haloActive = mode;
+    document.documentElement.classList.remove('halo-prism', 'halo-beam');
+    if (mode === 'prism') document.documentElement.classList.add('halo-prism');
+    if (mode === 'beam')  document.documentElement.classList.add('halo-beam');
+    // Mettre à jour les boutons
+    document.getElementById('cp-halo-prism-btn')?.classList.toggle('active', mode === 'prism');
+    document.getElementById('cp-halo-beam-btn')?.classList.toggle('active', mode === 'beam');
+    if (save) localStorage.setItem('cellia-halo', mode);
   }
-  if (haloActive) applyHalo(true, false);
-  document.getElementById('cp-halo-btn')?.addEventListener('click', () => applyHalo(!haloActive));
+
+  // Compat ancienne clé
+  if (haloActive === 'none' && localStorage.getItem('cellia-halo-prism') === 'true') haloActive = 'prism';
+  applyHalo(haloActive, false);
+
+  document.getElementById('cp-halo-prism-btn')?.addEventListener('click', () =>
+    applyHalo(haloActive === 'prism' ? 'none' : 'prism')
+  );
+  document.getElementById('cp-halo-beam-btn')?.addEventListener('click', () =>
+    applyHalo(haloActive === 'beam' ? 'none' : 'beam')
+  );
 
   // ── Fermer ────────────────────────────────────────────────────────────────
   document.getElementById('cp-close').addEventListener('click', closePanel);

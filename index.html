@@ -520,6 +520,51 @@
       background: var(--glass-hover);
     }
 
+    /* ── Halo Lumineux — Border beam façon Gemini (option préférences) ───── */
+    @property --beam-angle {
+      syntax: '<angle>';
+      initial-value: 0deg;
+      inherits: false;
+    }
+    @keyframes beam-rotate {
+      to { --beam-angle: 360deg; }
+    }
+
+    html.halo-beam .card {
+      overflow: visible;
+    }
+    html.halo-beam .card .card-img-wrap {
+      overflow: hidden;
+      border-radius: inherit;
+    }
+    html.halo-beam .card::after {
+      content: '';
+      position: absolute;
+      inset: -1.5px;
+      border-radius: inherit;
+      background: conic-gradient(
+        from var(--beam-angle),
+        transparent 0deg,
+        transparent 308deg,
+        rgba(120, 50, 220, 0.5) 326deg,
+        rgba(255, 55, 100, 1.0) 340deg,
+        rgba(255, 160, 55, 0.45) 350deg,
+        transparent 357deg
+      );
+      mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
+      mask-composite: exclude;
+      -webkit-mask-composite: xor;
+      padding: 1.5px;
+      animation: beam-rotate 4s linear infinite;
+      pointer-events: none;
+      z-index: 20;
+    }
+
     /* Featured : bordure et ombre plus marquées */
     .card-featured {
       border-color: rgba(255,255,255,0.10);
@@ -1431,7 +1476,7 @@
       const catLabel = CAT_LABELS[article.category] || article.category || 'Tech';
 
       div.innerHTML = `
-        <div style="position:relative">
+        <div class="card-img-wrap" style="position:relative">
           <img class="card-img"
                src="${article.image || ''}"
                alt=""
