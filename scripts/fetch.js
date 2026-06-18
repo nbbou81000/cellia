@@ -1074,28 +1074,59 @@ async function main() {
   });
   ok(`Articles redatés à l'heure de Paris (UTC+${parisOffsetH}) — ${now.toLocaleTimeString('fr-FR', { timeZone:'Europe/Paris' })}`);
 
-  // Fusion historique
-  const cutoff=Date.now()-90*24*3600*1000;
-  const newIds=new Set(allArticles.map(a=>a.id));
-  const oldArticles=(cachedData.articles||[]).filter(a=>!newIds.has(a.id)&&new Date(a.date).getTime()>cutoff);
-  const finalArticles=[...allArticles,...oldArticles];
-  finalArticles.sort((a,b)=>new Date(b.date)-new Date(a.date));
+  // Fusion historique — fenêtre 30 jours
+  const cutoff = Date.now() - 30 * 24 * 3600 * 1000;
+  const newIds = new Set(allArticles.map(a => a.id));
+  const oldArticles = (cachedData.articles||[]).filter(a => !newIds.has(a.id) && new Date(a.date).getTime() > cutoff);
+  const finalArticles = [...allArticles, ...oldArticles];
+  finalArticles.sort((a,b) => new Date(b.date) - new Date(a.date));
+  // Plafond 500 articles — évite la croissance indéfinie de articles-full.json
+  if (finalArticles.length > 500) finalArticles.splice(500);
 
-  // Écriture — deux fichiers
-  await fs.mkdir(path.join(__dirname,'..','dist'),{recursive:true});
+  // Écriture — fichiers JSON
+  await fs.mkdir(path.join(__dirname,'..','dist'), { recursive: true });
 
-  // 1. articles-full.json — avec bodies, pour article.html et le cache interne
-  const outputFull = { generated_at:new Date().toISOString(), count:finalArticles.length, articles:finalArticles };
+  // 1. articles-full.json — cache interne (conservé pour la compatibilité)
+  const outputFull = { generated_at: new Date().toISOString(), count: finalArticles.length, articles: finalArticles };
   await fs.writeFile(fullPath, JSON.stringify(outputFull), 'utf-8');
 
-  // 2. articles.json — sans bodies, léger, pour index.html (~8x plus petit)
+  // 2. articles.json — sans bodies, léger, pour index.html
   const indexArticles = finalArticles.map(({ body, fullText, ...rest }) => rest);
-  const outputIndex   = { generated_at:new Date().toISOString(), count:finalArticles.length, articles:indexArticles };
+  const outputIndex   = { generated_at: new Date().toISOString(), count: finalArticles.length, articles: indexArticles };
   await fs.writeFile(distPath, JSON.stringify(outputIndex), 'utf-8');
 
+  // 3. Fichiers individuels dist/articles/[id].json — pour article.html (fetch ciblé)
+  const articlesDir = path.join(__dirname, '..', 'dist', 'articles');
+  await fs.mkdir(articlesDir, { recursive: true });
+  for (const article of finalArticles) {
+    const { fullText: _ft, ...articleData } = article;
+    await fs.writeFile(
+      path.join(articlesDir, `${article.id}.json`),
+      JSON.stringify(articleData),
+      'utf-8'
+    );
+  }
+
+  // 4. Nettoyage des fichiers individuels > 30 jours
+  try {
+    const files   = await fs.readdir(articlesDir);
+    let   deleted = 0;
+    for (const file of files) {
+      if (!file.endsWith('.json')) continue;
+      try {
+        const data = JSON.parse(await fs.readFile(path.join(articlesDir, file), 'utf-8'));
+        if (new Date(data.date).getTime() < cutoff) {
+          await fs.unlink(path.join(articlesDir, file));
+          deleted++;
+        }
+      } catch {}
+    }
+    if (deleted > 0) ok(`${deleted} article(s) individuel(s) supprimé(s) (>30j)`);
+  } catch {}
+
   console.log(`\n${c.bold}━━━ Terminé ━━━${c.reset}`);
-  ok(`${newCount} nouveaux | ${cachedCount} depuis cache | ${finalArticles.length} total`);
-  ok(`Écrit : dist/articles.json (index léger) + dist/articles-full.json (complet)`);
+  ok(`${newCount} nouveaux | ${oldArticles.length} depuis cache | ${finalArticles.length} total`);
+  ok(`Écrit : articles.json + articles-full.json + dist/articles/ (${finalArticles.length} fichiers)`);
   console.log();
 
   // ── Mode FOND : sélection + réécriture longue forme ──────────────────────
