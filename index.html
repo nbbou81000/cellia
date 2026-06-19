@@ -1060,32 +1060,47 @@
     [data-theme="dark"] .btn-voir-plus:hover { color: #f0f2f8; }
     .voir-plus-wrap.hidden { display: none; }
     .footer {
-      position: relative;
-      z-index: 1;
+      position: relative; z-index: 1;
       text-align: center;
-      padding: 32px 24px 48px;
-      color: var(--text-dimmer);
-      font-size: 12px;
+      padding: 36px 24px 52px;
       border-top: 1px solid var(--border-soft);
       margin-top: 40px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
+      display: flex; flex-direction: column; gap: 14px;
     }
-    .footer-links {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 16px;
-      flex-wrap: wrap;
+    .footer-row {
+      display: flex; align-items: center; justify-content: center;
+      gap: 20px; flex-wrap: wrap;
     }
-    .footer a {
+    .footer-chip {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 12px; font-weight: 500;
       color: var(--text-dim);
       text-decoration: none;
-      transition: color 0.15s;
+      padding: 4px 10px;
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,.07);
+      background: rgba(255,255,255,.03);
+      transition: color .15s, border-color .15s, background .15s;
     }
-    .footer a:hover { color: var(--red); }
-    .footer-dot { opacity: 0.3; }
+    .footer-chip:hover { color: var(--text-hi); border-color: rgba(255,255,255,.15); background: rgba(255,255,255,.06); }
+    .footer-chip svg { flex-shrink: 0; }
+    .footer-sep { color: rgba(255,255,255,.12); font-size: 14px; }
+    .footer-copy {
+      font-size: 11px; color: var(--text-dimmer, rgba(255,255,255,.25));
+      letter-spacing: .04em;
+    }
+    /* ── Animation vague — légère, CSS pur ── */
+    @keyframes fwave {
+      0%,100% { color: rgba(255,255,255,.28); }
+      50%      { color: rgba(255,90,78,.85); }
+    }
+    .footer-wave { display: inline; }
+    .footer-wave .fw {
+      display: inline-block;
+      animation: fwave 4s ease-in-out infinite;
+      color: rgba(255,255,255,.28);
+    }
+    .footer-wave .fw-sp { display: inline; } /* espaces non animés */
 
     /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE
@@ -1373,18 +1388,62 @@
   </button>
 
   <footer class="footer">
-    <div class="footer-links">
-      <a href="https://meteo-atlas.netlify.app/" target="_blank" rel="noopener noreferrer">
+
+    <!-- Ligne 1 : liens avec logos -->
+    <div class="footer-row">
+      <!-- GitHub -->
+      <a class="footer-chip" href="https://github.com/nbbou81000/cellia" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 16 16" fill="currentColor" aria-hidden="true">
+          <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/>
+        </svg>
+        GitHub
+      </a>
+
+      <span class="footer-sep">·</span>
+
+      <!-- Mistral -->
+      <a class="footer-chip" href="https://mistral.ai" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 32 32" fill="none" aria-hidden="true">
+          <rect x="0"  y="0"  width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="12" y="0"  width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="24" y="0"  width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="0"  y="12" width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="12" y="12" width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="0"  y="24" width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="12" y="24" width="8" height="8" rx="1" fill="#F7491F"/>
+          <rect x="24" y="24" width="8" height="8" rx="1" fill="#F7491F"/>
+        </svg>
+        Mistral AI
+      </a>
+
+      <span class="footer-sep">·</span>
+
+      <!-- Claude / Anthropic -->
+      <a class="footer-chip" href="https://claude.ai" target="_blank" rel="noopener noreferrer">
+        <svg width="14" height="14" viewBox="0 0 48 48" fill="none" aria-hidden="true">
+          <path d="M24 4L6 38h7.5L24 18l10.5 20H42L24 4z" fill="#CC9B7A"/>
+          <path d="M18 30h12l-3-6H21l-3 6z" fill="#CC9B7A" opacity=".5"/>
+        </svg>
+        Claude
+      </a>
+
+      <span class="footer-sep">·</span>
+
+      <a class="footer-chip" href="https://meteo-atlas.netlify.app/" target="_blank" rel="noopener noreferrer">
         🌤 MétéoAtlas
       </a>
-      <span class="footer-dot">·</span>
-      <a href="https://github.com/nbbou81000" target="_blank" rel="noopener noreferrer">GitHub</a>
     </div>
-    <p>
-      Agrégateur d'actualités tech généré par IA &mdash;
-      Réalisé en no-code avec <a href="https://claude.ai" target="_blank" rel="noopener noreferrer">Claude</a>
-    </p>
-    <p>&copy; 2026 Nicolas Bouteiller &mdash; CelliA &mdash; Mis à jour à <span id="footer-time">—</span></p>
+
+    <!-- Ligne 2 : description avec vague -->
+    <div class="footer-copy" id="footer-desc">
+      Agrégateur de veille tech · Articles réécrits par IA · Propulsé par GitHub Pages
+    </div>
+
+    <!-- Ligne 3 : copyright -->
+    <div class="footer-copy">
+      © 2026 Nicolas Bouteiller — CelliA — Mis à jour à <span id="footer-time">—</span>
+    </div>
+
   </footer>
 
   <!-- ═══ SCRIPTS ══════════════════════════════════════════════════════════ -->
@@ -1889,5 +1948,19 @@
   <script src="lofi.js"></script>
   </script>
   <script src="doodles.js"></script>
+  <script>
+    (function waveFooter() {
+      const el = document.getElementById('footer-desc');
+      if (!el) return;
+      const text  = el.textContent;
+      const total = text.length;
+      const period = 5;
+      el.innerHTML = [...text].map((ch, i) => {
+        if (ch === ' ') return ' ';
+        const delay = -(period - (i / total) * period).toFixed(2);
+        return `<span class="fw" style="animation-delay:${delay}s">${ch}</span>`;
+      }).join('');
+    })();
+  </script>
 </body>
 </html>
