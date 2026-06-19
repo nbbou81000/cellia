@@ -431,6 +431,13 @@
           <div class="cp-cream-desc">Point de lumière animé façon Gemini</div>
         </span>
       </button>
+      <button class="cp-btn cp-cream-btn" id="cp-wave-cards-btn" style="margin-top:6px;width:100%">
+        <span class="cp-cream-check" id="cp-wave-cards-check"></span>
+        <span>
+          〜 Titres animés
+          <div class="cp-cream-desc">Vague de couleur sur les titres des articles</div>
+        </span>
+      </button>
     </div>
 
     <hr class="cp-divider">
@@ -605,22 +612,42 @@
     applyCream(!currentCream);
   });
 
-  // ── Halos (prisme et lumineux — mutuellement exclusifs) ──────────────────
-  let haloActive = localStorage.getItem('cellia-halo') || 'none'; // 'none' | 'prism' | 'beam'
+  // ── Vague titres de cards ─────────────────────────────────────────────────
+  let waveCards = localStorage.getItem('cellia-wave-cards') === 'true';
+  function applyWaveCards(state, save = true) {
+    waveCards = state;
+    document.documentElement.classList.toggle('wave-cards', state);
+    const btn = document.getElementById('cp-wave-cards-btn');
+    const chk = document.getElementById('cp-wave-cards-check');
+    if (btn) btn.classList.toggle('active', state);
+    if (chk) chk.textContent = state ? '✓' : '';
+    if (save) localStorage.setItem('cellia-wave-cards', state);
+  }
+  applyWaveCards(waveCards, false);
+  document.getElementById('cp-wave-cards-btn')?.addEventListener('click', () =>
+    applyWaveCards(!waveCards)
+  );
+  let haloActive = localStorage.getItem('cellia-halo') || 'none';
+  if (haloActive === 'none' && localStorage.getItem('cellia-halo-prism') === 'true') haloActive = 'prism';
 
   function applyHalo(mode, save = true) {
     haloActive = mode;
     document.documentElement.classList.remove('halo-prism', 'halo-beam');
     if (mode === 'prism') document.documentElement.classList.add('halo-prism');
     if (mode === 'beam')  document.documentElement.classList.add('halo-beam');
-    // Mettre à jour les boutons
-    document.getElementById('cp-halo-prism-btn')?.classList.toggle('active', mode === 'prism');
-    document.getElementById('cp-halo-beam-btn')?.classList.toggle('active', mode === 'beam');
+    // Mettre à jour les boutons si le panneau est ouvert
+    const prismBtn  = document.getElementById('cp-halo-prism-btn');
+    const beamBtn   = document.getElementById('cp-halo-beam-btn');
+    const prismChk  = document.getElementById('cp-halo-prism-check');
+    const beamChk   = document.getElementById('cp-halo-beam-check');
+    if (prismBtn)  prismBtn.classList.toggle('active', mode === 'prism');
+    if (beamBtn)   beamBtn.classList.toggle('active',  mode === 'beam');
+    if (prismChk)  prismChk.textContent = mode === 'prism' ? '✓' : '';
+    if (beamChk)   beamChk.textContent  = mode === 'beam'  ? '✓' : '';
     if (save) localStorage.setItem('cellia-halo', mode);
   }
 
-  // Compat ancienne clé
-  if (haloActive === 'none' && localStorage.getItem('cellia-halo-prism') === 'true') haloActive = 'prism';
+  // Appliquer au chargement (classe HTML, pas les boutons pas encore visibles)
   applyHalo(haloActive, false);
 
   document.getElementById('cp-halo-prism-btn')?.addEventListener('click', () =>

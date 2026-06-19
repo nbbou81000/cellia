@@ -3,7 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CelliA — Veille Tech</title>
+  <title>CelliA — Veille Tech IA</title>
+  <meta name="description" content="Agrégateur d'actualités tech réécrites par IA · Mis à jour 6 fois par jour · Mistral">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="favicon-192.png">
+  <!-- Open Graph -->
+  <meta property="og:type"         content="website">
+  <meta property="og:title"        content="CelliA — Veille Tech IA">
+  <meta property="og:description"  content="Agrégateur d'actualités tech réécrites par IA · Mis à jour 6 fois par jour">
+  <meta property="og:image"        content="https://nbbou81000.github.io/cellia/og-image.png">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url"          content="https://nbbou81000.github.io/cellia/">
+  <meta property="og:site_name"    content="CelliA">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:image"       content="https://nbbou81000.github.io/cellia/og-image.png">
   <meta name="description" content="Veille technologique quotidienne — IA, Sécurité, Hardware, Maker, Web, Science.">
   <meta property="og:title" content="CelliA — Veille Tech">
   <meta property="og:description" content="Veille technologique quotidienne réécrite par IA.">
@@ -1073,6 +1089,25 @@
       50%      { color: #ff5a4e; }
     }
     .fw { display:inline-block; animation:fwave 5s ease-in-out infinite; }
+    /* ── Vague titres de cards (option préférences) ── */
+    @keyframes card-title-wave {
+      0%,100% { background-position: 0%   center; }
+      50%     { background-position: 100% center; }
+    }
+    html.wave-cards .card-title {
+      background: linear-gradient(90deg,
+        var(--text-hi,#f0f2f8) 0%,
+        var(--text-hi,#f0f2f8) 25%,
+        #ff5a4e 50%,
+        var(--text-hi,#f0f2f8) 75%,
+        var(--text-hi,#f0f2f8) 100%
+      );
+      background-size: 300% auto;
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+      animation: card-title-wave 5s ease-in-out infinite;
+    }
 
     /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE
