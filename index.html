@@ -1059,48 +1059,20 @@
     [data-theme="dark"] .btn-voir-plus { color: #9aa4be; }
     [data-theme="dark"] .btn-voir-plus:hover { color: #f0f2f8; }
     .voir-plus-wrap.hidden { display: none; }
-    .footer {
-      position: relative; z-index: 1;
-      text-align: center;
-      padding: 36px 24px 52px;
-      border-top: 1px solid var(--border-soft);
-      margin-top: 40px;
-      display: flex; flex-direction: column; gap: 14px;
-    }
-    .footer-row {
-      display: flex; align-items: center; justify-content: center;
-      gap: 20px; flex-wrap: wrap;
-    }
-    .footer-chip {
-      display: inline-flex; align-items: center; gap: 6px;
-      font-size: 12px; font-weight: 500;
-      color: var(--text-dim);
-      text-decoration: none;
-      padding: 4px 10px;
-      border-radius: 20px;
-      border: 1px solid rgba(255,255,255,.07);
-      background: rgba(255,255,255,.03);
-      transition: color .15s, border-color .15s, background .15s;
-    }
-    .footer-chip:hover { color: var(--text-hi); border-color: rgba(255,255,255,.15); background: rgba(255,255,255,.06); }
-    .footer-chip svg { flex-shrink: 0; }
-    .footer-sep { color: rgba(255,255,255,.12); font-size: 14px; }
-    .footer-copy {
-      font-size: 11px; color: var(--text-dimmer, rgba(255,255,255,.25));
-      letter-spacing: .04em;
-    }
-    /* ── Animation vague — légère, CSS pur ── */
+    /* ── Footer chips ── */
+    .footer { position:relative;z-index:1;text-align:center;padding:36px 24px 52px;border-top:1px solid var(--border-soft);margin-top:40px;display:flex;flex-direction:column;gap:14px; }
+    .footer-row { display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap; }
+    .footer-chip { display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);transition:color .15s,border-color .15s,background .15s; }
+    .footer-chip:hover { color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1); }
+    .footer-chip svg { flex-shrink:0; }
+    .footer-sep { color:rgba(255,255,255,.2);font-size:14px; }
+    .footer-copy { font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.04em; }
+    /* ── Animation vague ── */
     @keyframes fwave {
-      0%,100% { color: rgba(255,255,255,.28); }
-      50%      { color: rgba(255,90,78,.85); }
+      0%,100% { color: rgba(255,255,255,.55); }
+      50%      { color: #ff5a4e; }
     }
-    .footer-wave { display: inline; }
-    .footer-wave .fw {
-      display: inline-block;
-      animation: fwave 4s ease-in-out infinite;
-      color: rgba(255,255,255,.28);
-    }
-    .footer-wave .fw-sp { display: inline; } /* espaces non animés */
+    .fw { display:inline-block; animation:fwave 5s ease-in-out infinite; }
 
     /* ═══════════════════════════════════════════════════════════════
        RESPONSIVE
