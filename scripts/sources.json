@@ -295,5 +295,10 @@
     "url": "https://www.tomshardware.fr/feeds/all",
     "category": "web",
     "lang": "fr"
+  },
+  {
+    "url": "https://www.canardpc.com/feed",
+    "category": "hardware",
+    "lang": "fr"
   }
 ]
