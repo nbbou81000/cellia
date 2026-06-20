@@ -2103,7 +2103,8 @@
           }
           const data = await res.json();
           _sourcesSha  = data.sha;
-          _sourcesData = JSON.parse(atob(data.content));
+          const raw    = atob(data.content.replace(/\s/g, ''));
+          _sourcesData = JSON.parse(raw);
           window._admSourcesLoaded = true;
           renderAdminSources();
           adTokenInfo.textContent = `${_sourcesData.length} sources chargées · SHA ${_sourcesSha.slice(0,7)}`;
