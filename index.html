@@ -2104,7 +2104,15 @@
           const data = await res.json();
           _sourcesSha  = data.sha;
           const raw    = atob(data.content.replace(/\s/g, ''));
-          _sourcesData = JSON.parse(raw);
+          const parsed = JSON.parse(raw);
+          // Défensif : gérer tableau direct ou objet enveloppé
+          if (Array.isArray(parsed)) {
+            _sourcesData = parsed;
+          } else if (parsed && typeof parsed === 'object') {
+            _sourcesData = parsed.sources || parsed.feeds || Object.values(parsed).find(v => Array.isArray(v)) || [];
+          } else {
+            throw new Error('Format inattendu dans sources.json : ' + typeof parsed);
+          }
           window._admSourcesLoaded = true;
           renderAdminSources();
           adTokenInfo.textContent = `${_sourcesData.length} sources chargées · SHA ${_sourcesSha.slice(0,7)}`;
