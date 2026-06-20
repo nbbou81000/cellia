@@ -1,58 +1,253 @@
-{
-  "sources": [
-    { "url": "https://techcrunch.com/category/artificial-intelligence/feed/", "category": "ai", "lang": "en", "tech_only": false },
-    { "url": "https://huggingface.co/blog/feed.xml", "category": "ai", "lang": "en", "tech_only": false },
-    { "url": "https://bair.berkeley.edu/blog/feed.xml", "category": "ai", "lang": "en", "tech_only": false },
-    { "url": "https://www.deepmind.com/blog/rss.xml", "category": "ai", "lang": "en", "tech_only": false },
-    { "url": "https://feeds.feedburner.com/TheHackersNews", "category": "secu", "lang": "en", "tech_only": false },
-    { "url": "https://www.bleepingcomputer.com/feed/", "category": "secu", "lang": "en", "tech_only": false },
-    { "url": "https://googleprojectzero.blogspot.com/feeds/posts/default", "category": "secu", "lang": "en", "tech_only": false },
-    { "url": "https://portswigger.net/blog/rss", "category": "secu", "lang": "en", "tech_only": false },
-    { "url": "https://www.schneier.com/feed/atom", "category": "secu", "lang": "en", "tech_only": false },
-    { "url": "https://feeds.arstechnica.com/arstechnica/technology-lab", "category": "hardware", "lang": "en", "tech_only": false },
-    { "url": "https://www.numerama.com/feed/", "category": "hardware", "lang": "fr", "tech_only": true },
-    { "url": "https://hackaday.com/blog/feed/", "category": "maker", "lang": "en", "tech_only": false },
-    { "url": "https://news.ycombinator.com/showrss", "category": "maker", "lang": "en", "tech_only": false, "source_name": "Show HN" },
-    { "url": "https://www.reddit.com/r/selfhosted/.rss", "category": "maker", "lang": "en", "tech_only": false, "source_name": "r/selfhosted" },
-    { "url": "https://www.reddit.com/r/LocalLLaMA/.rss", "category": "ai", "lang": "en", "tech_only": false, "source_name": "r/LocalLLaMA" },
-    { "url": "https://www.ghacks.net/feed/", "category": "web", "lang": "en", "tech_only": false, "source_name": "ghacks.net" },
-    { "url": "https://dev.to/feed/tag/opensource", "category": "web", "lang": "en", "tech_only": false, "source_name": "dev.to", "max_per_run": 2 },
-    { "url": "https://sebsauvage.net/links/index.php?do=rss", "category": "maker", "lang": "fr", "tech_only": false, "source_name": "sebsauvage.net" },
-    { "url": "https://www.raspberrypi.com/news/feed/", "category": "maker", "lang": "en", "tech_only": false },
-    { "url": "https://www.smashingmagazine.com/feed/", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://github.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://stackoverflow.blog/feed/", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://changelog.com/feed", "category": "web", "lang": "en", "tech_only": false },
-    { "url": "https://news.google.com/rss/search?q=site:korben.info&hl=fr&gl=FR&ceid=FR:fr", "category": "auto", "lang": "fr", "tech_only": true, "source_name": "korben.info" },
-    { "url": "https://www.journaldugeek.com/feed/", "category": "auto", "lang": "fr", "tech_only": true },
-    { "url": "https://next.ink/feed", "category": "auto", "lang": "fr", "tech_only": true },
-    { "url": "https://www.silicon.fr/feed", "category": "auto", "lang": "fr", "tech_only": true },
-    { "url": "https://www.sciencesetavenir.fr/rss.xml", "category": "science", "lang": "fr", "tech_only": true },
-    { "url": "https://www.rockpapershotgun.com/feed", "category": "gaming", "lang": "en", "tech_only": false },
-    { "url": "https://www.millenium.org/rss/news.xml", "category": "gaming", "lang": "fr", "tech_only": false },
-    { "url": "https://www.frandroid.com/feed", "category": "mobile", "lang": "fr", "tech_only": true },
-    { "url": "https://www.theverge.com/rss/index.xml", "category": "auto", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://krebsonsecurity.com/feed/", "category": "secu", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://hnrss.org/frontpage", "category": "web", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://www.wired.com/feed/rss", "category": "auto", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://feeds.macrumors.com/MacRumors-All", "category": "mobile", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://www.eurogamer.net/feed", "category": "gaming", "lang": "en", "tech_only": false, "paid_only": true },
-    { "url": "https://www.technologyreview.com/feed/", "category": "science", "lang": "en", "tech_only": false, "paid_only": true }
-  ],
-  "keywords": {
-    "ai": ["neural network","machine learning","large language model","llm","gpt-","gemini","claude ai","mistral ai","chatgpt","openai","anthropic","deepmind","stable diffusion","midjourney","intelligence artificielle","transformateur","modèle de langage","chatbot ia","generative ai","deep learning","hugging face","fine-tuning","embedding","rag","agent ia","prompt engineering","inference ia","multimodal ai","image generation","text generation","diffusion model","language model"],
-    "secu": ["vulnerability","exploit","malware","ransomware","data breach","zero-day","cve-","cyberattack","phishing","cybersecurity","faille sécurité","cyberattaque","patch sécurité","chiffrement","fuite données","pentest","botnet","rootkit","spyware","backdoor","injection sql","ddos","pare-feu","intrusion","threat intelligence","apt group","rançongiciel","sécurité informatique","hacker","piratage"],
-    "hardware": ["gpu","graphics card","nvidia rtx","amd radeon","geforce","radeon rx","cpu","processor","intel core","ryzen","chip fabrication","semiconductor","tsmc","ddr5","ddr4","ssd nvme","m.2","motherboard","overclocking","data center hardware","server hardware","fpga","wafer","gravure nm","carte graphique","processeur desktop","mémoire vive","refroidissement pc","alimentation pc","carte mère","benchmark gaming pc"],
-    "gaming": ["jeu vidéo","jeux vidéo","playstation","xbox","nintendo switch","steam","epic games","twitch","esport","fps game","rpg","indie game","émulateur","retrogaming","speedrun","dlc","mod game","gamer","roguelike","metroidvania","souls","zelda","mario","pokémon","minecraft","fortnite","valorant","league of legends","game pass","ps5","xbox series","game studio","video game","gaming pc","console de jeu"],
-    "mobile": ["iphone","android","samsung galaxy","google pixel","oneplus","xiaomi","huawei phone","app store","google play","apk","5g smartphone","apple watch","wear os","foldable phone","téléphone","smartphone","tablette","ios update","android update","autonomie batterie mobile","recharge rapide","écran amoled","snapdragon mobile","mobile gaming"],
-    "maker": ["raspberry pi","arduino","esp32","maker","diy","circuit imprimé","3d printing","impression 3d","pcb","microcontroller","gpio","home automation","domotique","filament pla","cnc","laser cutter","oscilloscope","micropython","circuitpython","platformio","fritzing","kicad","breadboard","capteur iot","servomoteur","électronique amateur"],
-    "web": ["javascript","typescript","css","html5","react","vue.js","angular","node.js","rest api","open source","github","npm package","frontend","backend","devops","docker","kubernetes","graphql","web assembly","python","rust lang","golang","postgresql","mongodb","ci/cd","cloudflare","windows 11","windows 10","macos","linux ubuntu","microsoft office","logiciel","software update","navigateur web","chrome","firefox","antivirus","driver","mise à jour système","operating system","saas","application desktop","extension navigateur"],
-    "science": ["physique","biologie","astrophysique","climate change","nasa","quantum computing","espace","découverte scientifique","arxiv","cern","station spatiale","telescope","satellite spatial","mars mission","lune mission","astronomie","génétique","adn","chimie","énergie","fusion nucléaire","changement climatique","recherche scientifique","étude scientifique","neurologie","cosmologie","particule","planète"],
-    "auto": ["technologie","numérique","digital","startup","innovation","industrie"]
+[
+  {
+    "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+    "category": "ai",
+    "lang": "en",
+    "tech_only": false
   },
-  "exclude_keywords": [
-    "star wars","marvel","film","cinéma","série","netflix","disney",
-    "musique","album","concert","sport","football","recette","cuisine",
-    "politique","élection","économie","bourse","immobilier","mode","beauté"
-  ]
-}
+  {
+    "url": "https://huggingface.co/blog/feed.xml",
+    "category": "ai",
+    "lang": "en",
+    "tech_only": false,
+    "disabled": true
+  },
+  {
+    "url": "https://bair.berkeley.edu/blog/feed.xml",
+    "category": "ai",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.deepmind.com/blog/rss.xml",
+    "category": "ai",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://feeds.feedburner.com/TheHackersNews",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.bleepingcomputer.com/feed/",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://googleprojectzero.blogspot.com/feeds/posts/default",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://portswigger.net/blog/rss",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.schneier.com/feed/atom",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false,
+    "disabled": true
+  },
+  {
+    "url": "https://feeds.arstechnica.com/arstechnica/technology-lab",
+    "category": "hardware",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.numerama.com/feed/",
+    "category": "hardware",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://hackaday.com/blog/feed/",
+    "category": "maker",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://news.ycombinator.com/showrss",
+    "category": "maker",
+    "lang": "en",
+    "tech_only": false,
+    "source_name": "Show HN"
+  },
+  {
+    "url": "https://www.reddit.com/r/selfhosted/.rss",
+    "category": "maker",
+    "lang": "en",
+    "tech_only": false,
+    "source_name": "r/selfhosted",
+    "disabled": true
+  },
+  {
+    "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
+    "category": "ai",
+    "lang": "en",
+    "tech_only": false,
+    "source_name": "r/LocalLLaMA",
+    "disabled": true
+  },
+  {
+    "url": "https://www.ghacks.net/feed/",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false,
+    "source_name": "ghacks.net"
+  },
+  {
+    "url": "https://dev.to/feed/tag/opensource",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false,
+    "source_name": "dev.to",
+    "max_per_run": 2,
+    "disabled": true
+  },
+  {
+    "url": "https://sebsauvage.net/links/index.php?do=rss",
+    "category": "maker",
+    "lang": "fr",
+    "tech_only": false,
+    "source_name": "sebsauvage.net"
+  },
+  {
+    "url": "https://www.raspberrypi.com/news/feed/",
+    "category": "maker",
+    "lang": "en",
+    "tech_only": false,
+    "disabled": true
+  },
+  {
+    "url": "https://www.smashingmagazine.com/feed/",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://github.blog/feed/",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false,
+    "disabled": true
+  },
+  {
+    "url": "https://stackoverflow.blog/feed/",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://changelog.com/feed",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://news.google.com/rss/search?q=site:korben.info&hl=fr&gl=FR&ceid=FR:fr",
+    "category": "auto",
+    "lang": "fr",
+    "tech_only": true,
+    "source_name": "korben.info"
+  },
+  {
+    "url": "https://www.journaldugeek.com/feed/",
+    "category": "auto",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://next.ink/feed",
+    "category": "auto",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://www.silicon.fr/feed",
+    "category": "auto",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://www.sciencesetavenir.fr/rss.xml",
+    "category": "science",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://www.rockpapershotgun.com/feed",
+    "category": "gaming",
+    "lang": "en",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.millenium.org/rss/news.xml",
+    "category": "gaming",
+    "lang": "fr",
+    "tech_only": false
+  },
+  {
+    "url": "https://www.frandroid.com/feed",
+    "category": "mobile",
+    "lang": "fr",
+    "tech_only": true
+  },
+  {
+    "url": "https://www.theverge.com/rss/index.xml",
+    "category": "auto",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  },
+  {
+    "url": "https://krebsonsecurity.com/feed/",
+    "category": "secu",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  },
+  {
+    "url": "https://hnrss.org/frontpage",
+    "category": "web",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true,
+    "disabled": true
+  },
+  {
+    "url": "https://www.wired.com/feed/rss",
+    "category": "auto",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  },
+  {
+    "url": "https://feeds.macrumors.com/MacRumors-All",
+    "category": "mobile",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  },
+  {
+    "url": "https://www.eurogamer.net/feed",
+    "category": "gaming",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  },
+  {
+    "url": "https://www.technologyreview.com/feed/",
+    "category": "science",
+    "lang": "en",
+    "tech_only": false,
+    "paid_only": true
+  }
+]
