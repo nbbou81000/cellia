@@ -255,5 +255,11 @@
     "tech_only": false,
     "paid_only": true,
     "paid_override": true
+  },
+  {
+    "url": "https://www.lemondeinformatique.fr/flux-rss/thematique/toutes-les-actualites/rss.xml",
+    "category": "web",
+    "lang": "fr",
+    "max_per_run": 2
   }
 ]
