@@ -285,5 +285,10 @@
     "url": "https://www.lesnumeriques.com/rss.xml",
     "category": "web",
     "lang": "fr"
+  },
+  {
+    "url": "https://www.clubic.com/feed/rss.xml",
+    "category": "web",
+    "lang": "fr"
   }
 ]
