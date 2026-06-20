@@ -205,14 +205,16 @@
     "category": "auto",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": true
   },
   {
     "url": "https://krebsonsecurity.com/feed/",
     "category": "secu",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": false
   },
   {
     "url": "https://hnrss.org/frontpage",
@@ -227,27 +229,31 @@
     "category": "auto",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": true
   },
   {
     "url": "https://feeds.macrumors.com/MacRumors-All",
     "category": "mobile",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": true
   },
   {
     "url": "https://www.eurogamer.net/feed",
     "category": "gaming",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": true
   },
   {
     "url": "https://www.technologyreview.com/feed/",
     "category": "science",
     "lang": "en",
     "tech_only": false,
-    "paid_only": true
+    "paid_only": true,
+    "paid_override": true
   }
 ]
