@@ -290,5 +290,10 @@
     "url": "https://www.clubic.com/feed/rss.xml",
     "category": "web",
     "lang": "fr"
+  },
+  {
+    "url": "https://www.tomshardware.fr/feeds/all",
+    "category": "web",
+    "lang": "fr"
   }
 ]
