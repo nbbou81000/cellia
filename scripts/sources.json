@@ -10,7 +10,7 @@
     "category": "ai",
     "lang": "en",
     "tech_only": false,
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://bair.berkeley.edu/blog/feed.xml",
@@ -110,7 +110,7 @@
     "tech_only": false,
     "source_name": "dev.to",
     "max_per_run": 2,
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://sebsauvage.net/links/index.php?do=rss",
@@ -124,7 +124,7 @@
     "category": "maker",
     "lang": "en",
     "tech_only": false,
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://www.smashingmagazine.com/feed/",
