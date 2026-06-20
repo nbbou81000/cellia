@@ -267,5 +267,11 @@
     "category": "ai",
     "lang": "fr",
     "max_per_run": 2
+  },
+  {
+    "url": "https://thegradient.pub/rss/",
+    "category": "ai",
+    "lang": "fr",
+    "max_per_run": 2
   }
 ]
