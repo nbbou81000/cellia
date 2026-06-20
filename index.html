@@ -655,6 +655,76 @@
     .btn-delete-admin:hover   { background: #dc2626; }
     .btn-delete-admin:disabled { opacity: .5; cursor: wait; }
 
+    /* ── Panneau admin latéral ── */
+    #admin-toggle {
+      display:none;position:fixed;top:72px;right:0;z-index:1000;
+      background:#ff5a4e;color:#fff;border:none;border-radius:10px 0 0 10px;
+      padding:10px 8px;cursor:pointer;writing-mode:vertical-rl;
+      font-size:11px;font-weight:700;letter-spacing:.08em;
+      box-shadow:-2px 0 12px rgba(255,90,78,.3);transition:background .15s;
+    }
+    #admin-toggle:hover{background:#e04a40;}
+    #admin-panel {
+      display:none;position:fixed;top:0;right:0;width:360px;height:100vh;
+      z-index:999;background:rgba(8,10,18,.97);border-left:1px solid rgba(255,255,255,.1);
+      backdrop-filter:blur(20px);overflow-y:auto;
+      transform:translateX(100%);transition:transform .3s cubic-bezier(.16,1,.3,1);
+      padding-bottom:40px;
+    }
+    #admin-panel.open{transform:translateX(0);}
+    .adm-header{
+      position:sticky;top:0;z-index:10;background:rgba(8,10,18,.97);
+      border-bottom:1px solid rgba(255,255,255,.07);padding:16px;
+      display:flex;flex-direction:column;gap:10px;
+    }
+    .adm-title{font-size:13px;font-weight:800;color:#f0f2f8;letter-spacing:.04em;}
+    .adm-token-info{font-size:10px;color:#4b5563;}
+    .adm-actions{display:flex;gap:8px;}
+    .adm-btn{
+      flex:1;padding:9px 12px;border-radius:8px;border:none;
+      font-size:12px;font-weight:700;cursor:pointer;
+      font-family:inherit;transition:opacity .15s,transform .1s;
+    }
+    .adm-btn:hover{opacity:.85;} .adm-btn:active{transform:scale(.97);}
+    .adm-btn:disabled{opacity:.4;cursor:wait;}
+    .adm-btn-boost{background:#ff5a4e;color:#fff;}
+    .adm-btn-save{background:#10b981;color:#fff;}
+    .adm-btn-close{background:rgba(255,255,255,.07);color:#94a3b8;flex:0 0 auto;padding:9px 14px;}
+    .adm-status{font-size:11px;padding:6px 10px;border-radius:6px;margin:8px 16px 0;display:none;}
+    .adm-status.ok{background:rgba(16,185,129,.15);color:#10b981;display:block;}
+    .adm-status.err{background:rgba(239,68,68,.15);color:#ef4444;display:block;}
+    .adm-status.inf{background:rgba(99,102,241,.15);color:#818cf8;display:block;}
+    .adm-section{padding:12px 16px 4px;}
+    .adm-section-label{
+      font-size:10px;font-weight:700;letter-spacing:.1em;color:#4b5563;
+      text-transform:uppercase;margin-bottom:8px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    .adm-section-label span{font-weight:400;color:#374151;text-transform:none;letter-spacing:0;}
+    .adm-source-row{
+      display:flex;align-items:center;gap:10px;padding:7px 0;
+      border-bottom:1px solid rgba(255,255,255,.04);
+    }
+    .adm-source-row:last-child{border-bottom:none;}
+    .adm-source-toggle{
+      flex-shrink:0;width:32px;height:18px;border-radius:9px;
+      background:rgba(255,255,255,.1);border:none;cursor:pointer;
+      position:relative;transition:background .2s;
+    }
+    .adm-source-toggle::after{
+      content:'';position:absolute;top:2px;left:2px;
+      width:14px;height:14px;border-radius:50%;
+      background:#6b7280;transition:left .2s,background .2s;
+    }
+    .adm-source-toggle.on{background:rgba(16,185,129,.3);}
+    .adm-source-toggle.on::after{left:16px;background:#10b981;}
+    .adm-source-info{flex:1;min-width:0;}
+    .adm-source-name{font-size:12px;color:#e2e8f0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .adm-source-url{font-size:10px;color:#4b5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+    .adm-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;flex-shrink:0;}
+    .adm-badge-paid{background:rgba(245,158,11,.15);color:#f59e0b;}
+    .adm-badge-limit{background:rgba(99,102,241,.12);color:#818cf8;}
+
     /* Card body */
     .card-body {
       padding: 16px;
@@ -1453,6 +1523,26 @@
 
   </footer>
 
+  <!-- ═══ PANNEAU ADMIN ══════════════════════════════════════════════════════ -->
+  <button id="admin-toggle" title="Administration CelliA">⚙ ADMIN</button>
+  <div id="admin-panel">
+    <div class="adm-header">
+      <div style="display:flex;align-items:center;justify-content:space-between">
+        <div class="adm-title">🔧 Administration CelliA</div>
+        <button class="adm-btn adm-btn-close" id="adm-close">✕</button>
+      </div>
+      <div class="adm-actions">
+        <button class="adm-btn adm-btn-boost" id="adm-boost">🚀 Mistral Boost 20 articles</button>
+      </div>
+      <div class="adm-actions">
+        <button class="adm-btn adm-btn-save" id="adm-save">💾 Sauvegarder les sources</button>
+      </div>
+      <div id="adm-status" class="adm-status"></div>
+      <div class="adm-token-info" id="adm-token-info">Chargement des sources…</div>
+    </div>
+    <div id="adm-sources-container"></div>
+  </div>
+
   <!-- ═══ SCRIPTS ══════════════════════════════════════════════════════════ -->
   <script src="prefs.js"></script>
   <script>
@@ -1947,6 +2037,212 @@
       btn.setAttribute('aria-label', `Supprimer l'article ${articleId}`);
       btn.addEventListener('click', e => { e.preventDefault(); e.stopPropagation(); deleteArticle(articleId, cardEl); });
       target.appendChild(btn);
+    }
+
+
+    // ═══════════════════════════════════════════════════════════════════════
+    // PANNEAU ADMIN — sources + workflow dispatch
+    // ═══════════════════════════════════════════════════════════════════════
+    if (IS_ADMIN) {
+      const adminToggle = document.getElementById('admin-toggle');
+      const adminPanel  = document.getElementById('admin-panel');
+      const adClose     = document.getElementById('adm-close');
+      const adBoost     = document.getElementById('adm-boost');
+      const adSave      = document.getElementById('adm-save');
+      const adStatus    = document.getElementById('adm-status');
+      const adContainer = document.getElementById('adm-sources-container');
+      const adTokenInfo = document.getElementById('adm-token-info');
+
+      if (adminToggle) adminToggle.style.display = 'block';
+      if (adminPanel)  adminPanel.style.display  = 'block';
+
+      const CAT_ICONS = {
+        ai:'🤖', secu:'🔒', hardware:'💻', maker:'🛠', web:'🌐',
+        auto:'📰', science:'🔬', gaming:'🎮', mobile:'📱'
+      };
+
+      function adShowStatus(msg, type = 'inf') {
+        adStatus.textContent = msg;
+        adStatus.className = 'adm-status ' + type;
+        if (type !== 'err') setTimeout(() => { adStatus.className = 'adm-status'; }, 4000);
+      }
+
+      function sourceName(s) {
+        if (s.name) return s.name;
+        try {
+          return new URL(s.url).hostname.replace(/^(www|feeds|feed)\./, '');
+        } catch { return s.url.slice(0, 40); }
+      }
+
+      // Ouvrir / fermer le panneau
+      adminToggle?.addEventListener('click', () => {
+        adminPanel.classList.toggle('open');
+        if (adminPanel.classList.contains('open') && !window._admSourcesLoaded) {
+          loadAdminSources();
+        }
+      });
+      adClose?.addEventListener('click', () => adminPanel.classList.remove('open'));
+
+      // ── Charger sources.json depuis GitHub API ──────────────────────────
+      let _sourcesData  = [];  // données courantes
+      let _sourcesSha   = '';  // SHA nécessaire pour le PUT
+
+      async function loadAdminSources() {
+        const token = getAdminToken();
+        if (!token) return;
+        adTokenInfo.textContent = 'Chargement…';
+        try {
+          const res = await fetch(
+            `https://api.github.com/repos/${REPO}/contents/scripts/sources.json`,
+            { headers: { 'Authorization': `Bearer ${token}`, 'Accept': 'application/vnd.github+json' } }
+          );
+          if (res.status === 401 || res.status === 403) {
+            sessionStorage.removeItem('cellia-admin-token');
+            adShowStatus('Token invalide — recharge la page', 'err');
+            return;
+          }
+          const data = await res.json();
+          _sourcesSha  = data.sha;
+          _sourcesData = JSON.parse(atob(data.content));
+          window._admSourcesLoaded = true;
+          renderAdminSources();
+          adTokenInfo.textContent = `${_sourcesData.length} sources chargées · SHA ${_sourcesSha.slice(0,7)}`;
+        } catch(e) {
+          adShowStatus('Erreur chargement : ' + e.message, 'err');
+        }
+      }
+
+      // ── Rendre les sources groupées par catégorie ───────────────────────
+      function renderAdminSources() {
+        const cats = {};
+        _sourcesData.forEach((s, i) => {
+          const c = s.category || 'autre';
+          cats[c] = cats[c] || [];
+          cats[c].push({ ...s, _idx: i });
+        });
+
+        adContainer.innerHTML = '';
+        for (const [cat, sources] of Object.entries(cats)) {
+          const enabled  = sources.filter(s => !s.disabled).length;
+          const section  = document.createElement('div');
+          section.className = 'adm-section';
+          section.innerHTML = `
+            <div class="adm-section-label">
+              <span>${CAT_ICONS[cat] || '📁'} ${cat.toUpperCase()}</span>
+              <span>${enabled}/${sources.length} actives</span>
+            </div>
+            ${sources.map(s => `
+              <div class="adm-source-row">
+                <button class="adm-source-toggle ${s.disabled ? '' : 'on'}"
+                        data-idx="${s._idx}" title="${s.disabled ? 'Activer' : 'Désactiver'}"></button>
+                <div class="adm-source-info">
+                  <div class="adm-source-name">${sourceName(s)}</div>
+                  <div class="adm-source-url">${s.url}</div>
+                </div>
+                ${s.paid_only ? '<span class="adm-badge adm-badge-paid">PAYANT</span>' : ''}
+                ${s.max_per_run ? `<span class="adm-badge adm-badge-limit">max ${s.max_per_run}</span>` : ''}
+              </div>
+            `).join('')}
+          `;
+          adContainer.appendChild(section);
+        }
+
+        // Listeners sur les toggles
+        adContainer.querySelectorAll('.adm-source-toggle').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx = parseInt(btn.dataset.idx);
+            _sourcesData[idx].disabled = !_sourcesData[idx].disabled;
+            btn.classList.toggle('on', !_sourcesData[idx].disabled);
+            btn.title = _sourcesData[idx].disabled ? 'Activer' : 'Désactiver';
+            // Mettre à jour le compteur de la section
+            const section = btn.closest('.adm-section');
+            const label   = section.querySelector('.adm-section-label span:last-child');
+            const rows    = section.querySelectorAll('.adm-source-toggle');
+            const on      = [...rows].filter(b => b.classList.contains('on')).length;
+            label.textContent = `${on}/${rows.length} actives`;
+            adShowStatus('Modification en attente — cliquez Sauvegarder', 'inf');
+          });
+        });
+      }
+
+      // ── Sauvegarder sources.json via GitHub API ─────────────────────────
+      adSave?.addEventListener('click', async () => {
+        const token = getAdminToken();
+        if (!token || !_sourcesSha) return;
+        adSave.disabled = true;
+        adShowStatus('Sauvegarde en cours…', 'inf');
+        try {
+          const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(_sourcesData, null, 2))));
+          const res = await fetch(
+            `https://api.github.com/repos/${REPO}/contents/scripts/sources.json`,
+            {
+              method: 'PUT',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({
+                message: 'admin: mise à jour sources.json',
+                content: newContent,
+                sha: _sourcesSha
+              })
+            }
+          );
+          if (res.status === 200) {
+            const data = await res.json();
+            _sourcesSha = data.content.sha;
+            adShowStatus('✅ Sources sauvegardées — effectif au prochain run', 'ok');
+          } else if (res.status === 401 || res.status === 403) {
+            sessionStorage.removeItem('cellia-admin-token');
+            adShowStatus('Token invalide ou droits insuffisants', 'err');
+          } else {
+            const body = await res.text();
+            adShowStatus('Erreur ' + res.status + ' : ' + body.slice(0,100), 'err');
+          }
+        } catch(e) {
+          adShowStatus('Erreur réseau : ' + e.message, 'err');
+        } finally {
+          adSave.disabled = false;
+        }
+      });
+
+      // ── Lancer Mistral Boost 20 articles ───────────────────────────────
+      adBoost?.addEventListener('click', async () => {
+        if (!confirm('Lancer un run Mistral Boost 20 articles ?\nLe CRON sera déclenché immédiatement.')) return;
+        const token = getAdminToken();
+        if (!token) return;
+        adBoost.disabled = true;
+        adBoost.textContent = '⏳ Lancement…';
+        adShowStatus('Envoi de la requête…', 'inf');
+        try {
+          const res = await fetch(
+            `https://api.github.com/repos/${REPO}/actions/workflows/daily.yml/dispatches`,
+            {
+              method: 'POST',
+              headers: {
+                'Authorization': `Bearer ${token}`,
+                'Accept': 'application/vnd.github+json',
+                'Content-Type': 'application/json'
+              },
+              body: JSON.stringify({ ref: 'main', inputs: { mistral_boost: 'true' } })
+            }
+          );
+          if (res.status === 204) {
+            adShowStatus('✅ Run lancé ! Résultat dans ~10 min via ntfy', 'ok');
+          } else if (res.status === 401 || res.status === 403) {
+            sessionStorage.removeItem('cellia-admin-token');
+            adShowStatus('Token invalide ou droits insuffisants', 'err');
+          } else {
+            adShowStatus('Erreur ' + res.status, 'err');
+          }
+        } catch(e) {
+          adShowStatus('Erreur réseau : ' + e.message, 'err');
+        } finally {
+          adBoost.disabled = false;
+          adBoost.textContent = '🚀 Mistral Boost 20 articles';
+        }
+      });
     }
 
     // ── GO ───────────────────────────────────────────────────────────────

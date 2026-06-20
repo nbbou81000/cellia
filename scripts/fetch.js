@@ -895,7 +895,11 @@ async function main() {
   log(`Providers : ${disponibles.join(' → ')||'aucun !'}`);
 
   // Config
-  const config = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
+  const allConfig = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
+  // Sources désactivées depuis le panneau admin (disabled: true)
+  const config    = allConfig.filter(s => !s.disabled);
+  if (allConfig.length !== config.length)
+    ok(`Sources : ${config.length}/${allConfig.length} actives (${allConfig.length - config.length} désactivées)`);
   log(`${config.sources.length} sources configurées`);
 
   // Cache — lecture depuis articles-full.json (avec bodies) ou articles.json en fallback
