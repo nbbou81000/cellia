@@ -895,11 +895,14 @@ async function main() {
   log(`Providers : ${disponibles.join(' → ')||'aucun !'}`);
 
   // Config
-  const allConfig = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
-  // Sources désactivées depuis le panneau admin (disabled: true)
-  const config    = allConfig.filter(s => !s.disabled);
-  if (allConfig.length !== config.length)
-    ok(`Sources : ${config.length}/${allConfig.length} actives (${allConfig.length - config.length} désactivées)`);
+  const rawConfig  = JSON.parse(await fs.readFile(path.join(__dirname,'sources.json'),'utf-8'));
+  const allSources = Array.isArray(rawConfig) ? rawConfig : (rawConfig.sources || []);
+  // Filtrer les sources désactivées depuis le panneau admin (disabled: true)
+  const activeSrcs = allSources.filter(s => !s.disabled);
+  if (allSources.length !== activeSrcs.length)
+    ok(`Sources : ${activeSrcs.length}/${allSources.length} actives (${allSources.length - activeSrcs.length} désactivées)`);
+  // config expose toujours .sources (tableau) pour compatibilité avec le reste du code
+  const config = { ...(Array.isArray(rawConfig) ? {} : rawConfig), sources: activeSrcs };
   log(`${config.sources.length} sources configurées`);
 
   // Cache — lecture depuis articles-full.json (avec bodies) ou articles.json en fallback
@@ -923,7 +926,7 @@ async function main() {
   // Sources actives
   const activeSources = IS_KORBEN
     ? config.sources.filter(s => s.source_name === 'korben.info' || s.url.includes('korben'))
-    : config.sources.filter(s => !s.paid_only || IS_PAID);
+    : config.sources.filter(s => !s.paid_only || IS_PAID || s.paid_override);
 
   if (IS_KORBEN) {
     log(`★ MODE SPÉCIAL KORBEN — ${activeSources.length} source(s) · fenêtre 24h · max ${MAX_ARTICLES} articles`);

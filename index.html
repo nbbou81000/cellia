@@ -724,6 +724,25 @@
     .adm-badge{font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;flex-shrink:0;}
     .adm-badge-paid{background:rgba(245,158,11,.15);color:#f59e0b;}
     .adm-badge-limit{background:rgba(99,102,241,.12);color:#818cf8;}
+    .adm-badge-override{background:rgba(16,185,129,.15);color:#10b981;cursor:pointer;}
+    .adm-badge-paid-btn{background:rgba(245,158,11,.12);color:#f59e0b;cursor:pointer;border:none;font-family:inherit;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;}
+    .adm-badge-paid-btn:hover{background:rgba(245,158,11,.25);}
+    .adm-add-form{padding:12px 16px;border-top:1px solid rgba(255,255,255,.07);margin-top:8px;}
+    .adm-add-title{font-size:10px;font-weight:700;color:#4b5563;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px;}
+    .adm-input{
+      width:100%;padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);color:#e2e8f0;font-size:12px;
+      font-family:inherit;box-sizing:border-box;margin-bottom:8px;
+      outline:none;transition:border-color .15s;
+    }
+    .adm-input:focus{border-color:rgba(255,90,78,.5);}
+    .adm-select{
+      width:100%;padding:7px 10px;border-radius:7px;border:1px solid rgba(255,255,255,.1);
+      background:#0d1020;color:#e2e8f0;font-size:12px;
+      font-family:inherit;box-sizing:border-box;margin-bottom:8px;
+    }
+    .adm-row{display:flex;gap:8px;align-items:center;margin-bottom:8px;}
+    .adm-checkbox-label{font-size:11px;color:#94a3b8;display:flex;align-items:center;gap:6px;cursor:pointer;}
 
     /* Card body */
     .card-body {
@@ -1541,6 +1560,32 @@
       <div class="adm-token-info" id="adm-token-info">Chargement des sources…</div>
     </div>
     <div id="adm-sources-container"></div>
+
+    <!-- Formulaire ajout source -->
+    <div class="adm-add-form">
+      <div class="adm-add-title">➕ Ajouter une source</div>
+      <input class="adm-input" id="adm-new-url"      type="url"    placeholder="URL du flux RSS (https://...)" />
+      <input class="adm-input" id="adm-new-name"     type="text"   placeholder="Nom affiché (optionnel)" />
+      <select class="adm-select" id="adm-new-cat">
+        <option value="ai">🤖 AI</option>
+        <option value="secu">🔒 Sécurité</option>
+        <option value="hardware">💻 Hardware</option>
+        <option value="maker">🛠 Maker</option>
+        <option value="web">🌐 Web</option>
+        <option value="auto">📰 Auto</option>
+        <option value="science">🔬 Science</option>
+        <option value="gaming">🎮 Gaming</option>
+        <option value="mobile">📱 Mobile</option>
+      </select>
+      <div class="adm-row">
+        <input class="adm-input" id="adm-new-max" type="number" placeholder="Max/run (optionnel)" min="1" max="10" style="margin-bottom:0;width:50%"/>
+        <label class="adm-checkbox-label">
+          <input type="checkbox" id="adm-new-paid" style="accent-color:#f59e0b"/>
+          Payant uniquement
+        </label>
+      </div>
+      <button class="adm-btn adm-btn-boost" id="adm-add-source" style="margin-top:4px">➕ Ajouter et sauvegarder</button>
+    </div>
   </div>
 
   <!-- ═══ SCRIPTS ══════════════════════════════════════════════════════════ -->
@@ -2084,8 +2129,9 @@
       adClose?.addEventListener('click', () => adminPanel.classList.remove('open'));
 
       // ── Charger sources.json depuis GitHub API ──────────────────────────
-      let _sourcesData  = [];  // données courantes
-      let _sourcesSha   = '';  // SHA nécessaire pour le PUT
+      let _sourcesData    = [];  // tableau des sources
+      let _sourcesSha     = '';  // SHA pour le PUT
+      let _sourcesWrapper = null; // wrapper { sources: [...] } si présent
 
       async function loadAdminSources() {
         const token = getAdminToken();
@@ -2121,6 +2167,14 @@
         }
       }
 
+      function buildSavePayload() {
+        // Reconstruire le JSON en préservant la structure originale
+        if (_sourcesWrapper) {
+          return JSON.stringify({ ..._sourcesWrapper, sources: _sourcesData }, null, 2);
+        }
+        return JSON.stringify(_sourcesData, null, 2);
+      }
+
       // ── Rendre les sources groupées par catégorie ───────────────────────
       function renderAdminSources() {
         const cats = {};
@@ -2148,7 +2202,12 @@
                   <div class="adm-source-name">${sourceName(s)}</div>
                   <div class="adm-source-url">${s.url}</div>
                 </div>
-                ${s.paid_only ? '<span class="adm-badge adm-badge-paid">PAYANT</span>' : ''}
+                ${s.paid_only
+                  ? `<button class="adm-badge-paid-btn" data-idx="${s._idx}" data-override="${s.paid_override ? '1' : '0'}"
+                       title="${s.paid_override ? 'Restreindre au mode payant' : 'Activer dans tous les modes'}">
+                       ${s.paid_override ? '🔓 LIBRE' : '🔒 PAYANT'}
+                     </button>`
+                  : ''}
                 ${s.max_per_run ? `<span class="adm-badge adm-badge-limit">max ${s.max_per_run}</span>` : ''}
               </div>
             `).join('')}
@@ -2156,32 +2215,46 @@
           adContainer.appendChild(section);
         }
 
-        // Listeners sur les toggles
+        // Toggles actif/inactif
         adContainer.querySelectorAll('.adm-source-toggle').forEach(btn => {
           btn.addEventListener('click', () => {
             const idx = parseInt(btn.dataset.idx);
             _sourcesData[idx].disabled = !_sourcesData[idx].disabled;
             btn.classList.toggle('on', !_sourcesData[idx].disabled);
             btn.title = _sourcesData[idx].disabled ? 'Activer' : 'Désactiver';
-            // Mettre à jour le compteur de la section
             const section = btn.closest('.adm-section');
-            const label   = section.querySelector('.adm-section-label span:last-child');
             const rows    = section.querySelectorAll('.adm-source-toggle');
             const on      = [...rows].filter(b => b.classList.contains('on')).length;
-            label.textContent = `${on}/${rows.length} actives`;
+            section.querySelector('.adm-section-label span:last-child').textContent = `${on}/${rows.length} actives`;
+            adShowStatus('Modification en attente — cliquez Sauvegarder', 'inf');
+          });
+        });
+
+        // Toggles paid_override
+        adContainer.querySelectorAll('.adm-badge-paid-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const idx      = parseInt(btn.dataset.idx);
+            const override = btn.dataset.override !== '1';
+            _sourcesData[idx].paid_override = override;
+            btn.dataset.override  = override ? '1' : '0';
+            btn.textContent       = override ? '🔓 LIBRE' : '🔒 PAYANT';
+            btn.title             = override ? 'Restreindre au mode payant' : 'Activer dans tous les modes';
             adShowStatus('Modification en attente — cliquez Sauvegarder', 'inf');
           });
         });
       }
 
-      // ── Sauvegarder sources.json via GitHub API ─────────────────────────
-      adSave?.addEventListener('click', async () => {
+      // ── Fonction save réutilisable ────────────────────────────────────────
+      async function saveToGitHub() {
         const token = getAdminToken();
-        if (!token || !_sourcesSha) return;
+        if (!token || !_sourcesSha) return false;
         adSave.disabled = true;
         adShowStatus('Sauvegarde en cours…', 'inf');
         try {
-          const newContent = btoa(unescape(encodeURIComponent(JSON.stringify(_sourcesData, null, 2))));
+          const payload    = _sourcesWrapper
+            ? JSON.stringify({ ..._sourcesWrapper, sources: _sourcesData }, null, 2)
+            : JSON.stringify(_sourcesData, null, 2);
+          const newContent = btoa(unescape(encodeURIComponent(payload)));
           const res = await fetch(
             `https://api.github.com/repos/${REPO}/contents/scripts/sources.json`,
             {
@@ -2191,17 +2264,14 @@
                 'Accept': 'application/vnd.github+json',
                 'Content-Type': 'application/json'
               },
-              body: JSON.stringify({
-                message: 'admin: mise à jour sources.json',
-                content: newContent,
-                sha: _sourcesSha
-              })
+              body: JSON.stringify({ message: 'admin: mise à jour sources.json', content: newContent, sha: _sourcesSha })
             }
           );
           if (res.status === 200) {
             const data = await res.json();
             _sourcesSha = data.content.sha;
             adShowStatus('✅ Sources sauvegardées — effectif au prochain run', 'ok');
+            return true;
           } else if (res.status === 401 || res.status === 403) {
             sessionStorage.removeItem('cellia-admin-token');
             adShowStatus('Token invalide ou droits insuffisants', 'err');
@@ -2213,6 +2283,35 @@
           adShowStatus('Erreur réseau : ' + e.message, 'err');
         } finally {
           adSave.disabled = false;
+        }
+        return false;
+      }
+
+      adSave?.addEventListener('click', saveToGitHub);
+
+      // ── Ajouter une source ────────────────────────────────────────────────
+      document.getElementById('adm-add-source')?.addEventListener('click', async () => {
+        const url  = document.getElementById('adm-new-url')?.value.trim();
+        const name = document.getElementById('adm-new-name')?.value.trim();
+        const cat  = document.getElementById('adm-new-cat')?.value;
+        const max  = parseInt(document.getElementById('adm-new-max')?.value) || null;
+        const paid = document.getElementById('adm-new-paid')?.checked;
+        if (!url || !url.startsWith('http')) { adShowStatus('URL invalide', 'err'); return; }
+        if (_sourcesData.some(s => s.url === url)) { adShowStatus('URL déjà présente', 'err'); return; }
+        const newSrc = { url, category: cat, lang: 'fr' };
+        if (name) newSrc.source_name = name;
+        if (max)  newSrc.max_per_run = max;
+        if (paid) newSrc.paid_only   = true;
+        _sourcesData.push(newSrc);
+        const saved = await saveToGitHub();
+        if (saved) {
+          document.getElementById('adm-new-url').value    = '';
+          document.getElementById('adm-new-name').value   = '';
+          document.getElementById('adm-new-max').value    = '';
+          document.getElementById('adm-new-paid').checked = false;
+          renderAdminSources();
+        } else {
+          _sourcesData.pop();
         }
       });
 
