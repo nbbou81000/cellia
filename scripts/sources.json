@@ -266,7 +266,8 @@
     "url": "https://risky.biz/feeds/risky-business-news/",
     "category": "ai",
     "lang": "fr",
-    "max_per_run": 2
+    "max_per_run": 2,
+    "disabled": false
   },
   {
     "url": "https://thegradient.pub/rss/",
@@ -279,5 +280,10 @@
     "category": "ai",
     "lang": "fr",
     "max_per_run": 2
+  },
+  {
+    "url": "https://www.lesnumeriques.com/rss.xml",
+    "category": "web",
+    "lang": "fr"
   }
 ]
