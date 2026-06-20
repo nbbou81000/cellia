@@ -300,5 +300,10 @@
     "url": "https://www.canardpc.com/feed",
     "category": "hardware",
     "lang": "fr"
+  },
+  {
+    "url": "https://www.01net.com/feed/",
+    "category": "hardware",
+    "lang": "fr"
   }
 ]
