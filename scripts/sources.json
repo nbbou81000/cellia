@@ -110,7 +110,7 @@
     "tech_only": false,
     "source_name": "dev.to",
     "max_per_run": 2,
-    "disabled": false
+    "disabled": true
   },
   {
     "url": "https://sebsauvage.net/links/index.php?do=rss",
