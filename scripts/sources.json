@@ -261,5 +261,11 @@
     "category": "web",
     "lang": "fr",
     "max_per_run": 2
+  },
+  {
+    "url": "https://risky.biz/feeds/risky-business-news/",
+    "category": "ai",
+    "lang": "fr",
+    "max_per_run": 2
   }
 ]
