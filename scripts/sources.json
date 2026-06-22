@@ -86,7 +86,7 @@
     "lang": "en",
     "tech_only": false,
     "source_name": "r/selfhosted",
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://www.reddit.com/r/LocalLLaMA/.rss",
@@ -110,7 +110,7 @@
     "tech_only": false,
     "source_name": "dev.to",
     "max_per_run": 2,
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://sebsauvage.net/links/index.php?do=rss",
@@ -137,7 +137,7 @@
     "category": "web",
     "lang": "en",
     "tech_only": false,
-    "disabled": true
+    "disabled": false
   },
   {
     "url": "https://stackoverflow.blog/feed/",
