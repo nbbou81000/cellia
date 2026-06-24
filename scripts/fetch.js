@@ -944,6 +944,38 @@ async function main() {
   let allArticles = feedResults.filter(r=>r.status==='fulfilled').flatMap(r=>r.value);
   ok(`${allArticles.length} articles bruts récupérés`);
 
+  // ── Blacklist globale — exclure bons plans, promos, électroménager ────────
+  const BLACKLIST = [
+    // Promotions & deals
+    'bon plan', 'bons plans', 'promo', 'promotion', 'soldes', 'remise',
+    'réduction', 'code promo', 'code de réduction', 'offre du jour',
+    'meilleur prix', 'moins cher', 'à saisir', 'deal', 'vente flash',
+    'en ce moment', 'grosse promo', 'prix cassé', 'prix réduit',
+    // Électroménager & gadgets grand public
+    'aspirateur', 'robot aspirateur', 'aspirateur robot',
+    'ventilateur', 'climatiseur', 'climatisation',
+    'robot cuisine', 'robot culinaire', 'cafetière', 'machine à café',
+    'friteuse', 'airfryer', 'air fryer', 'lave-linge', 'sèche-linge',
+    'lave-vaisselle', 'réfrigérateur', 'congélateur',
+    'tondeuse', 'trottinette électrique',
+    'brosse à dents', 'rasoir électrique',
+    // Autres contenus non pertinents
+    'test cuisine', 'meilleure vente', 'top vente',
+  ];
+
+  const blacklistRe = new RegExp(
+    BLACKLIST.map(w => w.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&')).join('|'),
+    'i'
+  );
+
+  const beforeBlacklist = allArticles.length;
+  allArticles = allArticles.filter(a => {
+    const haystack = `${a.title || ''} ${a.snippet || ''}`;
+    return !blacklistRe.test(haystack);
+  });
+  if (allArticles.length < beforeBlacklist)
+    ok(`Blacklist : ${beforeBlacklist - allArticles.length} article(s) exclus`);
+
   // 1. Déduplication par URL exacte
   const seenUrls=new Set();
   allArticles=allArticles.filter(a=>{if(seenUrls.has(a.url))return false;seenUrls.add(a.url);return true;});
