@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html lang="fr" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CelliA — Statut des services IA</title>
+  <meta name="description" content="Disponibilité en temps réel des APIs IA : Mistral, OpenAI, Claude, Gemini, Groq">
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <script src="prefs.js" defer></script>
+  <style>
+    :root {
+      --bg:#1a1c22;--bg2:#12141a;--glass-card:rgba(255,255,255,.04);
+      --border:rgba(255,255,255,.08);--border-soft:rgba(255,255,255,.05);
+      --text-hi:#f0f2f8;--text-dim:#94a3b8;--text-dimmer:#475569;
+      --red:#ff5a4e;--font-ui:system-ui,-apple-system,sans-serif;
+      --radius:12px;
+    }
+    [data-theme="light"] {
+      --bg:#f4f4f0;--bg2:#ebebea;--glass-card:rgba(0,0,0,.03);
+      --border:rgba(0,0,0,.08);--border-soft:rgba(0,0,0,.04);
+      --text-hi:#1a1c22;--text-dim:#64748b;--text-dimmer:#94a3b8;
+    }
+    * { box-sizing:border-box; margin:0; padding:0; }
+    body { font-family:var(--font-ui);background:var(--bg);color:var(--text-hi);min-height:100vh; }
+
+    /* Navbar */
+    .navbar {
+      position:sticky;top:0;z-index:100;
+      background:rgba(26,28,34,.88);backdrop-filter:blur(20px);
+      border-bottom:1px solid var(--border);
+      height:48px;padding:0 20px;
+      display:flex;align-items:center;justify-content:space-between;
+    }
+    [data-theme="light"] .navbar { background:rgba(244,244,240,.88); }
+    .nav-logo { font-weight:800;font-size:15px;letter-spacing:-.03em;text-decoration:none;color:var(--text-hi); }
+    .nav-logo span { color:var(--red); }
+    .nav-back {
+      font-size:12px;color:var(--text-dim);text-decoration:none;
+      padding:5px 12px;border:1px solid var(--border);border-radius:8px;
+      transition:color .15s,border-color .15s;
+    }
+    .nav-back:hover { color:var(--text-hi);border-color:rgba(255,255,255,.2); }
+
+    /* Layout */
+    .wrap { max-width:820px;margin:0 auto;padding:28px 20px 48px; }
+
+    /* Header */
+    .page-header { margin-bottom:24px; }
+    .page-eyebrow { font-size:10px;font-weight:700;color:var(--red);letter-spacing:.1em;text-transform:uppercase;margin-bottom:6px; }
+    .page-title { font-size:22px;font-weight:800;letter-spacing:-.03em;margin-bottom:4px; }
+    .page-sub { font-size:13px;color:var(--text-dim); }
+
+    /* Barre globale */
+    .global-bar {
+      display:flex;align-items:center;gap:12px;
+      padding:12px 16px;border-radius:10px;margin-bottom:20px;
+      transition:background .3s,border-color .3s;
+    }
+    .global-dot { width:10px;height:10px;border-radius:50%;flex-shrink:0; }
+    .global-text { font-size:14px;font-weight:700;flex:1; }
+    .global-time { font-size:10px;color:var(--text-dimmer);font-family:monospace; }
+
+    /* Mini stats */
+    .stats-grid { display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:20px; }
+    .stat-card {
+      background:var(--glass-card);border:1px solid var(--border-soft);
+      border-radius:10px;padding:10px 12px;text-align:center;
+    }
+    .stat-icon { font-size:18px;margin-bottom:4px; }
+    .stat-name { font-size:10px;color:var(--text-dim);margin-bottom:2px; }
+    .stat-pct  { font-size:12px;font-weight:700; }
+
+    /* Section label */
+    .section-label {
+      display:flex;align-items:center;gap:12px;margin-bottom:12px;
+    }
+    .section-title { font-size:10px;font-weight:700;color:var(--text-dimmer);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap; }
+    .section-line  { flex:1;height:1px;background:var(--border); }
+
+    /* Provider card */
+    .provider-card { margin-bottom:10px;border-radius:12px;overflow:hidden; }
+    .provider-btn {
+      width:100%;padding:14px 18px;text-align:left;cursor:pointer;
+      background:var(--glass-card);border:1px solid var(--border);
+      border-radius:12px;font-family:var(--font-ui);
+      transition:border-color .2s,background .2s;
+    }
+    .provider-btn:hover { background:rgba(255,255,255,.06); }
+    .provider-btn.open  { border-radius:12px 12px 0 0; }
+    .provider-row { display:flex;align-items:center;gap:12px;margin-bottom:10px; }
+    .provider-icon { font-size:20px; }
+    .provider-info { flex:1; }
+    .provider-name { font-size:14px;font-weight:800;color:var(--text-hi);margin-bottom:3px; }
+    .provider-name-row { display:flex;align-items:center;gap:8px; }
+    .provider-desc { font-size:11px;color:var(--text-dimmer); }
+    .provider-uptime { text-align:right; }
+    .provider-pct  { font-size:13px;font-weight:700; }
+    .provider-label{ font-size:10px;color:var(--text-dimmer); }
+    .provider-chevron { font-size:11px;color:var(--text-dimmer);margin-left:4px; }
+
+    /* Sparkline */
+    .sparkline-row { display:flex;align-items:center;gap:8px; }
+    .sparkline-labels { display:flex;flex-direction:column;justify-content:space-between;height:32px; }
+    .sparkline-label { font-size:8px;color:var(--text-dimmer);font-family:monospace; }
+
+    /* Badge */
+    .badge {
+      display:inline-flex;align-items:center;gap:4px;
+      font-size:10px;font-weight:700;padding:2px 8px;
+      border-radius:20px;border:1px solid transparent;
+    }
+    .badge-dot { width:5px;height:5px;border-radius:50%;display:inline-block; }
+
+    /* Composants */
+    .components-panel {
+      border:1px solid var(--border);border-top:none;
+      border-radius:0 0 12px 12px;
+      background:rgba(0,0,0,.2);
+      display:none;padding:6px 0;
+    }
+    .components-panel.open { display:block; }
+    .components-grid { display:grid;grid-template-columns:1fr 1fr; }
+    .component-row {
+      display:flex;align-items:center;justify-content:space-between;
+      padding:5px 16px;
+    }
+    .component-name { font-size:11px;color:var(--text-dim); }
+    .component-name.issue { color:var(--text-hi);font-weight:600; }
+    .component-status { display:flex;align-items:center;gap:4px;font-size:10px; }
+    .component-dot { width:5px;height:5px;border-radius:50%; }
+    .components-footer { padding:5px 16px 2px;font-size:10px;color:var(--text-dimmer); }
+
+    /* Info footer */
+    .info-box {
+      margin-top:24px;padding:14px 16px;border-radius:8px;
+      background:var(--glass-card);border:1px solid var(--border-soft);
+      font-size:11px;color:var(--text-dimmer);line-height:1.7;
+    }
+    .info-box a { color:var(--text-dim);text-decoration:none; }
+    .info-box a:hover { color:var(--text-hi); }
+
+    /* Loading */
+    .loading { text-align:center;padding:60px 20px;color:var(--text-dim); }
+    .loading-spinner {
+      width:28px;height:28px;border-radius:50%;
+      border:2px solid var(--border);border-top-color:var(--red);
+      animation:spin .8s linear infinite;
+      margin:0 auto 12px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+
+    @media(max-width:600px) {
+      .stats-grid { grid-template-columns:repeat(3,1fr); }
+      .components-grid { grid-template-columns:1fr; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="navbar">
+    <a href="./" class="nav-logo">Celli<span>A</span></a>
+    <a href="./" class="nav-back">← Retour</a>
+  </nav>
+
+  <div class="wrap">
+    <div class="page-header">
+      <div class="page-eyebrow">CELLIA · MONITORING</div>
+      <h1 class="page-title">Statut des services IA</h1>
+      <p class="page-sub">Disponibilité en temps réel · Vérification automatique toutes les 15 min</p>
+    </div>
+
+    <div id="status-content">
+      <div class="loading">
+        <div class="loading-spinner"></div>
+        Chargement des données de statut…
+      </div>
+    </div>
+  </div>
+
+  <script>
+  // ── Configuration ─────────────────────────────────────────────────────────
+  const PROVIDERS_META = {
+    openai:    { name:'OpenAI',             icon:'⬡' },
+    anthropic: { name:'Anthropic (Claude)', icon:'◈' },
+    google:    { name:'Google (Gemini)',     icon:'✦' },
+    mistral:   { name:'Mistral AI',          icon:'🌊' },
+    groq:      { name:'Groq',               icon:'⚡' },
+  };
+
+  const STATUS_CFG = {
+    operational:    { color:'#10b981', bg:'rgba(16,185,129,.1)',  label:'Opérationnel' },
+    degraded:       { color:'#f59e0b', bg:'rgba(245,158,11,.1)',  label:'Dégradé'      },
+    partial_outage: { color:'#f97316', bg:'rgba(249,115,22,.1)',  label:'Partiel'      },
+    outage:         { color:'#ef4444', bg:'rgba(239,68,68,.1)',   label:'Panne'        },
+    maintenance:    { color:'#6366f1', bg:'rgba(99,102,241,.1)',  label:'Maintenance'  },
+    unknown:        { color:'#6b7280', bg:'rgba(107,114,128,.1)', label:'Inconnu'      },
+  };
+
+  function cfg(s) { return STATUS_CFG[s] || STATUS_CFG.unknown; }
+
+  // ── Sparkline SVG ─────────────────────────────────────────────────────────
+  function sparkline(data, color) {
+    const w=200, h=36, pad=2;
+    if (!data || !data.length) return '';
+    const pts = data.map((v,i) => {
+      const x = pad + (i/(data.length-1))*(w-pad*2);
+      const val = v==='operational'?1:v==='degraded'||v==='partial_outage'?0.5:0;
+      const y = h - pad - val*(h-pad*2);
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    }).join(' ');
+    const first = pts.split(' ')[0].split(',')[0];
+    const last  = pts.split(' ').slice(-1)[0].split(',')[0];
+    return `<svg width="${w}" height="${h}" style="display:block;width:100%">
+      <defs>
+        <linearGradient id="sg${color.replace('#','')}" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="${color}" stop-opacity=".25"/>
+          <stop offset="100%" stop-color="${color}" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <polygon points="${first},${h} ${pts} ${last},${h}" fill="url(#sg${color.replace('#','')})"/>
+      <polyline points="${pts}" fill="none" stroke="${color}" stroke-width="1.5"
+        stroke-linejoin="round" stroke-linecap="round"/>
+    </svg>`;
+  }
+
+  // ── Badge ─────────────────────────────────────────────────────────────────
+  function badge(status) {
+    const c = cfg(status);
+    return `<span class="badge" style="background:${c.bg};color:${c.color};border-color:${c.color}44">
+      <span class="badge-dot" style="background:${c.color}"></span>${c.label}
+    </span>`;
+  }
+
+  // ── Uptime depuis historique ──────────────────────────────────────────────
+  function computeUptime(entries, serviceId) {
+    if (!entries || !entries.length) return null;
+    const ok = entries.filter(e => e.services?.[serviceId] === 'operational').length;
+    return ((ok / entries.length) * 100).toFixed(1);
+  }
+
+  // ── Render ────────────────────────────────────────────────────────────────
+  async function render() {
+    const container = document.getElementById('status-content');
+    try {
+      const [statusRes, histRes] = await Promise.all([
+        fetch('status.json?t=' + Date.now()),
+        fetch('status-history.json?t=' + Date.now()).catch(() => null),
+      ]);
+      const data    = await statusRes.json();
+      const hist    = histRes?.ok ? await histRes.json() : { entries:[] };
+      const svcs    = data.services;
+      const entries = hist.entries || [];
+
+      // Global status
+      const allOk   = Object.values(svcs).every(s => s.overall === 'operational');
+      const hasPb   = Object.values(svcs).some(s => !['operational','unknown'].includes(s.overall));
+      const gColor  = allOk ? '#10b981' : hasPb ? '#f59e0b' : '#6b7280';
+      const gText   = allOk ? 'Tous les services sont opérationnels' : 'Perturbations en cours sur certains services';
+      const updated = new Date(data.last_updated).toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'});
+
+      // Histogramme par provider (séries)
+      const histByProvider = {};
+      for (const key of Object.keys(PROVIDERS_META)) {
+        histByProvider[key] = entries.map(e => e.services?.[key] || 'unknown');
+      }
+
+      let html = `
+        <div class="global-bar" style="background:${allOk?'rgba(16,185,129,.08)':'rgba(245,158,11,.08)'};border:1px solid ${gColor}33">
+          <span class="global-dot" style="background:${gColor};box-shadow:0 0 10px ${gColor}"></span>
+          <span class="global-text" style="color:${gColor}">${gText}</span>
+          <span class="global-time">MÀJ ${updated} · auto 15 min</span>
+        </div>
+
+        <div class="stats-grid">
+          ${Object.entries(PROVIDERS_META).map(([id,meta]) => {
+            const svc    = svcs[id];
+            const uptime = computeUptime(entries, id);
+            const c      = cfg(svc?.overall||'unknown');
+            return `<div class="stat-card" style="border-color:${c.color}33">
+              <div class="stat-icon">${meta.icon}</div>
+              <div class="stat-name">${meta.name.split(' ')[0]}</div>
+              <div class="stat-pct" style="color:${c.color}">${uptime !== null ? uptime+'%' : c.label}</div>
+            </div>`;
+          }).join('')}
+        </div>
+
+        <div class="section-label">
+          <span class="section-title">DÉTAIL PAR SERVICE — 24H</span>
+          <div class="section-line"></div>
+          <span style="font-size:10px;color:var(--text-dimmer);white-space:nowrap">${entries.length} points de données</span>
+        </div>
+      `;
+
+      for (const [id, meta] of Object.entries(PROVIDERS_META)) {
+        const svc      = svcs[id] || { overall:'unknown', description:'', components:[] };
+        const c        = cfg(svc.overall);
+        const issues   = svc.components.filter(comp => comp.status !== 'operational');
+        const uptime   = computeUptime(entries, id);
+        const sparkData= histByProvider[id];
+
+        html += `
+        <div class="provider-card">
+          <button class="provider-btn" onclick="toggleCard('${id}',this)">
+            <div class="provider-row">
+              <span class="provider-icon">${meta.icon}</span>
+              <div class="provider-info">
+                <div class="provider-name-row">
+                  <span class="provider-name">${meta.name}</span>
+                  ${badge(svc.overall)}
+                  ${issues.length ? `<span style="font-size:10px;color:#f59e0b;background:rgba(245,158,11,.1);padding:1px 6px;border-radius:10px">⚠ ${issues.length}</span>` : ''}
+                </div>
+                <div class="provider-desc">${svc.description || '—'}</div>
+              </div>
+              <div class="provider-uptime">
+                <div class="provider-pct" style="color:${c.color}">${uptime !== null ? uptime+'%' : '—'}</div>
+                <div class="provider-label">24h uptime</div>
+              </div>
+              <span class="provider-chevron">▼</span>
+            </div>
+            <div class="sparkline-row">
+              <div style="flex:1">${sparkline(sparkData, c.color)}</div>
+              <div class="sparkline-labels">
+                <span class="sparkline-label">-24h</span>
+                <span class="sparkline-label">now</span>
+              </div>
+            </div>
+          </button>
+          <div class="components-panel" id="panel-${id}">
+            <div class="components-grid">
+              ${svc.components.map(comp => `
+                <div class="component-row" style="${comp.status!=='operational'?'background:rgba(245,158,11,.04)':''}">
+                  <span class="component-name${comp.status!=='operational'?' issue':''}">${comp.name}</span>
+                  <span class="component-status">
+                    <span class="component-dot" style="background:${cfg(comp.status).color}"></span>
+                    <span style="color:${cfg(comp.status).color}">${cfg(comp.status).label}</span>
+                  </span>
+                </div>`).join('')}
+            </div>
+            <div class="components-footer">
+              ${svc.components.filter(c=>c.status==='operational').length}/${svc.components.length} composants opérationnels
+            </div>
+          </div>
+        </div>`;
+      }
+
+      html += `
+        <div class="info-box">
+          📡 Sources officielles :
+          <a href="https://status.openai.com" target="_blank">status.openai.com</a> ·
+          <a href="https://status.anthropic.com" target="_blank">status.anthropic.com</a> ·
+          <a href="https://status.cloud.google.com" target="_blank">status.cloud.google.com</a> ·
+          <a href="https://status.mistral.ai" target="_blank">status.mistral.ai</a> ·
+          <a href="https://groqstatus.com" target="_blank">groqstatus.com</a><br>
+          ⏱ Vérification automatique toutes les 15 minutes via GitHub Actions ·
+          Historique sur ${Math.round(entries.length/4)} heures
+        </div>`;
+
+      container.innerHTML = html;
+    } catch(e) {
+      container.innerHTML = `<div class="loading">
+        <div style="font-size:32px;margin-bottom:12px">⚡</div>
+        <p style="color:var(--text-dim)">Données non disponibles.<br>Lance le workflow <code>status.yml</code> pour générer les données.</p>
+      </div>`;
+    }
+  }
+
+  function toggleCard(id, btn) {
+    const panel = document.getElementById('panel-' + id);
+    const open  = panel.classList.toggle('open');
+    btn.classList.toggle('open', open);
+    btn.querySelector('.provider-chevron').textContent = open ? '▲' : '▼';
+  }
+
+  render();
+  </script>
+</body>
+</html>

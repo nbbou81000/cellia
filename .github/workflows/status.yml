@@ -1,0 +1,33 @@
+name: 🔍 API Status Check
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'   # toutes les 15 minutes
+  workflow_dispatch:          # déclenchement manuel possible
+
+jobs:
+  check-status:
+    name: Vérification statuts API
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Vérifier les statuts
+        run: node scripts/check-status.js
+
+      - name: Commit status.json
+        run: |
+          git config user.name  "CelliA Status Bot"
+          git config user.email "cellia-bot@noreply.github.com"
+          git add status.json status-history.json 2>/dev/null || git add status.json
+          git diff --staged --quiet && echo "Aucun changement de statut" || \
+            git commit -m "status: mise à jour $(date -u '+%H:%M UTC')" && git push

@@ -1305,6 +1305,34 @@
     .card:nth-child(8)  { animation-delay: 0.40s; }
     .card:nth-child(9)  { animation-delay: 0.45s; }
     .card:nth-child(10) { animation-delay: 0.50s; }
+    /* ── Bandeau statut services IA ── */
+    #status-banner {
+      display:none;
+      border-bottom:1px solid transparent;
+      transition:background .3s, border-color .3s;
+    }
+    #status-banner a {
+      display:flex;align-items:center;gap:10px;
+      padding:7px 20px;text-decoration:none;
+      transition:opacity .15s;
+    }
+    #status-banner a:hover { opacity:.85; }
+    #status-banner-dot {
+      width:7px;height:7px;border-radius:50%;flex-shrink:0;
+      transition:background .3s,box-shadow .3s;
+    }
+    #status-banner-text {
+      font-size:12px;font-weight:600;flex:1;
+      transition:color .3s;
+    }
+    #status-banner-providers { display:flex;gap:5px;align-items:center; }
+    #status-banner-providers span {
+      width:6px;height:6px;border-radius:50%;
+    }
+    .status-banner-cta {
+      font-size:11px;color:rgba(255,255,255,.35);
+      white-space:nowrap;
+    }
     /* ════════════════════════════════════════════════════════════════════
        GLASSMORPHISM RÉGLABLE
     ════════════════════════════════════════════════════════════════════ */
@@ -1390,6 +1418,17 @@
   </style>
   <script data-goatcounter="https://cellia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head><body>
+
+  <!-- ── Bandeau statut services IA ── -->
+  <div id="status-banner">
+    <a href="status.html">
+      <span id="status-banner-dot"></span>
+      <span id="status-banner-text">Vérification des services IA…</span>
+      <span id="status-banner-providers"></span>
+      <span class="status-banner-cta">Voir détails →</span>
+    </a>
+  </div>
+
   <!-- Fond ambient -->
   <div class="ambient"></div>
 
@@ -2436,6 +2475,50 @@
     }
 
     // ── GO ───────────────────────────────────────────────────────────────
+
+    // ── Bandeau statut services IA ──────────────────────────────────────────
+    (function loadStatusBanner() {
+      fetch('status.json?t=' + Date.now())
+        .then(r => r.ok ? r.json() : null)
+        .then(data => {
+          if (!data) return;
+          const banner = document.getElementById('status-banner');
+          if (!banner) return;
+          const svcs   = data.services;
+          const STATUS_COLOR = {
+            operational:'#10b981',degraded:'#f59e0b',
+            partial_outage:'#f97316',outage:'#ef4444',
+            maintenance:'#6366f1',unknown:'#6b7280'
+          };
+          const STATUS_LABEL = { operational:'Opérationnel',degraded:'Dégradé',partial_outage:'Partiel',outage:'Panne',maintenance:'Maintenance',unknown:'Inconnu' };
+          const NAMES = { openai:'OpenAI',anthropic:'Anthropic',google:'Gemini',mistral:'Mistral',groq:'Groq' };
+          const allOk  = Object.values(svcs).every(s => s.overall === 'operational');
+          const issues = Object.entries(svcs).filter(([,s]) => s.overall !== 'operational');
+          const gColor = allOk ? '#10b981' : issues.some(([,s])=>s.overall==='outage') ? '#ef4444' : '#f59e0b';
+
+          banner.style.display      = 'block';
+          banner.style.background   = allOk ? 'rgba(16,185,129,.06)' : 'rgba(245,158,11,.07)';
+          banner.style.borderColor  = allOk ? 'rgba(16,185,129,.2)'  : 'rgba(245,158,11,.2)';
+
+          const dot  = document.getElementById('status-banner-dot');
+          const text = document.getElementById('status-banner-text');
+          const dots = document.getElementById('status-banner-providers');
+
+          if (dot)  { dot.style.background  = gColor; dot.style.boxShadow = `0 0 8px ${gColor}`; }
+          if (text) {
+            text.style.color = gColor;
+            text.textContent = allOk
+              ? 'Tous les services IA sont opérationnels'
+              : issues.map(([k,s]) => `${NAMES[k]} ${STATUS_LABEL[s.overall]||s.overall}`).join(' · ');
+          }
+          if (dots) {
+            dots.innerHTML = Object.entries(svcs).map(([k,s]) =>
+              `<span title="${NAMES[k]}: ${STATUS_LABEL[s.overall]||s.overall}" style="background:${STATUS_COLOR[s.overall]||'#6b7280'}"></span>`
+            ).join('');
+          }
+        })
+        .catch(() => {});
+    })();
     loadArticles();
   </script>
   <script src="lofi.js"></script>
