@@ -115,7 +115,8 @@
   let currentBgAnim     = localStorage.getItem('cellia-bg-anim')    || 'none';
   let currentSize       = localStorage.getItem('cellia-size')       || 'normal';
   let currentBrightness = parseInt(localStorage.getItem('cellia-brightness') ?? '65', 10);
-  let currentLS    = parseInt(localStorage.getItem('cellia-ls')  ?? '0',  10);
+  let currentGlass    = parseInt(localStorage.getItem('cellia-glass') ?? '0', 10);
+  let currentProgress = localStorage.getItem('cellia-progress') || 'none';
   let currentLH    = parseInt(localStorage.getItem('cellia-lh')  ?? '7',  10);
   let currentCol   = parseInt(localStorage.getItem('cellia-col') ?? '0',  10);
   let currentCream = localStorage.getItem('cellia-cream') === 'true';
@@ -254,8 +255,40 @@
   function applyBg(bgId, save = true) {
     currentBg = bgId;
     if (save) localStorage.setItem('cellia-bg', bgId);
-    const bg = CELLIA_BGCOLORS.find(b => b.id === bgId) || CELLIA_BGCOLORS[0];
-    document.documentElement.style.setProperty('--bg', currentTheme === 'dark' ? bg.dark : bg.light);
+    const bg  = CELLIA_BGCOLORS.find(b => b.id === bgId) || CELLIA_BGCOLORS[0];
+    const hex = currentTheme === 'dark' ? bg.dark : bg.light;
+    document.documentElement.style.setProperty('--bg', hex);
+    // Triple RGB pour glassmorphism (syntaxe : "R G B")
+    const [r,g,b] = hexToRgb(hex);
+    document.documentElement.style.setProperty('--bg-rgb', `${r} ${g} ${b}`);
+    if (currentGlass > 0) applyGlass(currentGlass, false);
+    updateButtons();
+  }
+
+  // ── Glassmorphisme ────────────────────────────────────────────────────────
+  function applyGlass(val, save = true) {
+    currentGlass = val;
+    if (save) localStorage.setItem('cellia-glass', val);
+    const t = val / 100;
+    const el = document.documentElement;
+    el.classList.toggle('glass-active', val > 0);
+    el.style.setProperty('--cellia-g-alpha',  (0.88 - t * 0.86).toFixed(3));
+    el.style.setProperty('--cellia-g-blur',   `${Math.round(t * 40)}px`);
+    el.style.setProperty('--cellia-g-sat',    (1 + t * 0.9).toFixed(2));
+    el.style.setProperty('--cellia-g-bright', (1 + t * 0.06).toFixed(3));
+    el.style.setProperty('--cellia-g-bd',     (0.05 + t * 0.28).toFixed(3));
+    el.style.setProperty('--cellia-g-inner',  (t * 0.35).toFixed(3));
+    const glassSlider = document.getElementById('cp-glass-slider');
+    const glassLabel  = document.getElementById('cp-glass-label');
+    if (glassSlider) glassSlider.value = val;
+    if (glassLabel)  glassLabel.textContent = val === 0 ? 'Désactivé' : val < 30 ? 'Givré' : val < 60 ? 'Verre' : val < 85 ? 'Cristal' : 'Verre parfait';
+  }
+
+  // ── Barre de progression de lecture ───────────────────────────────────────
+  const PROGRESS_LABELS = { none:'Aucune', slim:'Fil de soie', gradient:'Arc-en-ciel', cursor:'Comète', dots:'Constellation', circle:'Sphère', ambient:'Lueur ambiante' };
+  function applyProgress(styleId, save = true) {
+    currentProgress = styleId;
+    if (save) localStorage.setItem('cellia-progress', styleId);
     updateButtons();
   }
 
@@ -635,6 +668,33 @@
     <hr class="cp-divider">
 
     <div class="cp-section">
+      <div class="cp-section-label">Effet de verre</div>
+      <div class="cp-slider-row">
+        <span style="font-size:13px;opacity:.4">○</span>
+        <input type="range" class="cp-slider" id="cp-glass-slider" min="0" max="100" step="5" value="${currentGlass}">
+        <span style="font-size:13px;opacity:.9">◉</span>
+      </div>
+      <div style="font-size:10px;color:var(--text-dimmer);text-align:center;margin-top:4px" id="cp-glass-label">
+        ${currentGlass === 0 ? 'Désactivé' : currentGlass < 30 ? 'Givré' : currentGlass < 60 ? 'Verre' : currentGlass < 85 ? 'Cristal' : 'Verre parfait'}
+      </div>
+    </div>
+
+    <hr class="cp-divider">
+
+    <div class="cp-section">
+      <div class="cp-section-label">Barre de lecture</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:4px">
+        ${['none','slim','gradient','cursor','dots','circle','ambient'].map(id => `
+          <button class="cp-btn ${currentProgress === id ? 'active' : ''}" data-progress-btn="${id}"
+                  style="font-size:10.5px;padding:6px 8px;text-align:left">
+            ${{ none:'— Aucune', slim:'Fil de soie', gradient:'Arc-en-ciel', cursor:'Comète', dots:'Constellation', circle:'Sphère', ambient:'Lueur ambiante' }[id]}
+          </button>`).join('')}
+      </div>
+    </div>
+
+    <hr class="cp-divider">
+
+    <div class="cp-section">
       <div class="cp-section-label">Taille du texte</div>
       <div class="cp-grid-4">
         ${CELLIA_SIZES.map(s => `
@@ -729,8 +789,9 @@
     panel.querySelectorAll('[data-anim-btn]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.animBtn === currentBgAnim);
     });
-    panel.querySelectorAll('[data-size-btn]').forEach(btn => {
-      btn.classList.toggle('active', btn.dataset.sizeBtn === currentSize);
+    panel.querySelectorAll('[data-progress-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.progressBtn === currentProgress);
+    });
     });
     const creamBtn   = document.getElementById('cp-cream-btn');
     const creamCheck = document.getElementById('cp-cream-check');
@@ -752,7 +813,14 @@
     btn.addEventListener('click', () => applyBgAnim(btn.dataset.animBtn));
   });
 
-  // ── Events taille ─────────────────────────────────────────────────────────
+  // ── Event glassmorphisme ─────────────────────────────────────────────────
+  const glassSlider = document.getElementById('cp-glass-slider');
+  if (glassSlider) glassSlider.addEventListener('input', e => applyGlass(parseInt(e.target.value)));
+
+  // ── Events barre de lecture ───────────────────────────────────────────────
+  panel.querySelectorAll('[data-progress-btn]').forEach(btn => {
+    btn.addEventListener('click', () => applyProgress(btn.dataset.progressBtn));
+  });
   panel.querySelectorAll('[data-size-btn]').forEach(btn => {
     btn.addEventListener('click', () => applySize(btn.dataset.sizeBtn));
   });
@@ -891,6 +959,8 @@
 
   // ── Init ──────────────────────────────────────────────────────────────────
   applyTheme(currentTheme);
+  applyGlass(currentGlass, false);
+  applyProgress(currentProgress, false);
   applyFont(currentFont);
   applyBg(currentBg, false);
   applyBgAnim(currentBgAnim, false);

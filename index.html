@@ -1306,6 +1306,26 @@
     .card:nth-child(9)  { animation-delay: 0.45s; }
     .card:nth-child(10) { animation-delay: 0.50s; }
     /* ════════════════════════════════════════════════════════════════════
+       GLASSMORPHISM RÉGLABLE
+    ════════════════════════════════════════════════════════════════════ */
+    html.glass-active .card {
+      background: rgb(var(--bg-rgb,26 28 34) / var(--cellia-g-alpha,.88)) !important;
+      backdrop-filter: blur(var(--cellia-g-blur,0px)) saturate(var(--cellia-g-sat,1)) brightness(var(--cellia-g-bright,1)) !important;
+      -webkit-backdrop-filter: blur(var(--cellia-g-blur,0px)) saturate(var(--cellia-g-sat,1)) !important;
+      border-color: rgba(255,255,255,var(--cellia-g-bd,.05)) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,var(--cellia-g-inner,0)), 0 4px 32px rgba(0,0,0,.18) !important;
+    }
+    html.glass-active[data-theme="light"] .card {
+      background: rgb(var(--bg-rgb,244 244 240) / var(--cellia-g-alpha,.88)) !important;
+      border-color: rgba(0,0,0,var(--cellia-g-bd,.06)) !important;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,var(--cellia-g-inner,0)), 0 2px 16px rgba(0,0,0,.07) !important;
+    }
+    html.glass-active .card-featured {
+      background: rgb(var(--bg-rgb,26 28 34) / var(--cellia-g-alpha,.88)) !important;
+      backdrop-filter: blur(var(--cellia-g-blur,0px)) saturate(var(--cellia-g-sat,1)) !important;
+      -webkit-backdrop-filter: blur(var(--cellia-g-blur,0px)) saturate(var(--cellia-g-sat,1)) !important;
+    }
+    /* ════════════════════════════════════════════════════════════════════
        THÈME QUANTUM — Raycast × Supabase
     ════════════════════════════════════════════════════════════════════ */
     html.theme-quantum {

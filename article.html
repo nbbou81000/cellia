@@ -473,6 +473,93 @@
       .article-title { font-size: 24px; }
     }
     /* ════════════════════════════════════════════════════════════════════
+       BARRES DE PROGRESSION DE LECTURE
+    ════════════════════════════════════════════════════════════════════ */
+    #rp-bar {
+      position:fixed;top:0;left:0;z-index:500;
+      height:2px;width:0%;pointer-events:none;
+      transition:width .08s linear;
+      display:none;
+    }
+    html.progress-slim #rp-bar {
+      display:block;height:1.5px;background:#ff5a4e;
+    }
+    html.progress-gradient #rp-bar {
+      display:block;height:2px;
+      background:linear-gradient(90deg,#ff5a4e,#f59e0b,#10b981,#3b82f6,#8b5cf6);
+    }
+    html.progress-cursor #rp-bar {
+      display:block;height:1.5px;
+      background:linear-gradient(90deg,rgba(255,90,78,.2),#ff5a4e);
+    }
+    html.progress-ambient #rp-bar {
+      display:block;height:1px;top:52px;
+      background:linear-gradient(90deg,rgba(255,90,78,.6),rgba(139,92,246,.5));
+    }
+
+    /* Comète — point lumineux */
+    #rp-dot {
+      position:fixed;top:0;z-index:501;
+      width:7px;height:7px;border-radius:50%;
+      background:#ff5a4e;transform:translate(-50%,-50%);
+      box-shadow:0 0 10px 3px rgba(255,90,78,.65),0 0 22px 8px rgba(255,90,78,.25);
+      pointer-events:none;display:none;
+      animation:rp-pulse 1.5s ease-in-out infinite;
+    }
+    html.progress-cursor #rp-dot { display:block; }
+    @keyframes rp-pulse {
+      0%,100%{box-shadow:0 0 10px 3px rgba(255,90,78,.6),0 0 20px 7px rgba(255,90,78,.2)}
+      50%{box-shadow:0 0 16px 6px rgba(255,90,78,.9),0 0 30px 12px rgba(255,90,78,.35)}
+    }
+
+    /* Constellation — points */
+    #rp-dots-wrap {
+      position:fixed;top:0;left:0;right:0;z-index:500;
+      height:8px;display:none;align-items:center;
+      padding:0 6px;gap:3px;pointer-events:none;
+    }
+    html.progress-dots #rp-dots-wrap { display:flex; }
+    .rp-dot-item {
+      border-radius:50%;flex-shrink:0;
+      transition:all .3s ease;
+      background:rgba(255,255,255,.1);
+    }
+    .rp-dot-item.lit {
+      background:#ff5a4e;
+      box-shadow:0 0 8px rgba(255,90,78,.6);
+    }
+    @keyframes rp-twinkle {
+      0%,100%{opacity:1}50%{opacity:.55}
+    }
+
+    /* Sphère — cercle discret */
+    #rp-circle-wrap {
+      position:fixed;bottom:22px;right:18px;z-index:500;
+      display:none;align-items:center;gap:6px;
+      pointer-events:none;
+    }
+    html.progress-circle #rp-circle-wrap { display:flex; }
+    #rp-pct-label {
+      font-size:10px;font-family:monospace;
+      color:rgba(255,255,255,.4);letter-spacing:.04em;
+    }
+
+    /* Lueur ambiante — teinte navbar */
+    #rp-ambient {
+      position:fixed;top:0;left:0;right:0;z-index:498;
+      height:52px;pointer-events:none;display:none;
+      transition:background .3s;
+    }
+    html.progress-ambient #rp-ambient { display:block; }
+
+    /* Glass sur article */
+    html.glass-active .article-wrap {
+      background:rgb(var(--bg-rgb,26 28 34)/var(--cellia-g-alpha,.88)) !important;
+      backdrop-filter:blur(var(--cellia-g-blur,0px)) saturate(var(--cellia-g-sat,1)) !important;
+      border-color:rgba(255,255,255,var(--cellia-g-bd,.05)) !important;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,var(--cellia-g-inner,0)) !important;
+    }
+    /* ════════════════════════════════════════════════════════════════════
        THÈME QUANTUM — article.html
     ════════════════════════════════════════════════════════════════════ */
     html.theme-quantum {
@@ -998,5 +1085,107 @@
     loadArticle();
   </script>
   <script src="lofi.js"></script>
+
+  <script>
+  // ── Barre de progression de lecture ──────────────────────────────────────
+  (function() {
+    const style = localStorage.getItem('cellia-progress') || 'none';
+    if (style === 'none') return;
+
+    const html = document.documentElement;
+    html.classList.add('progress-' + style);
+
+    // Créer les éléments selon le style
+    const bar = document.createElement('div'); bar.id = 'rp-bar';
+    document.body.appendChild(bar);
+
+    if (style === 'cursor') {
+      const dot = document.createElement('div'); dot.id = 'rp-dot';
+      document.body.appendChild(dot);
+    }
+
+    let dotsWrap = null, dotItems = [];
+    if (style === 'dots') {
+      dotsWrap = document.createElement('div'); dotsWrap.id = 'rp-dots-wrap';
+      const N = 28;
+      for (let i = 0; i < N; i++) {
+        const d = document.createElement('div');
+        d.className = 'rp-dot-item';
+        const size = (i % 4 === 0) ? 6 : (i % 3 === 0) ? 5 : 4;
+        d.style.width = d.style.height = size + 'px';
+        if (i % 5 === 0) d.style.animation = 'rp-twinkle 2s ease-in-out infinite';
+        d.style.animationDelay = (i * 0.08) + 's';
+        dotsWrap.appendChild(d); dotItems.push(d);
+      }
+      document.body.appendChild(dotsWrap);
+    }
+
+    let circleWrap = null, circleEl = null, pctLabel = null;
+    if (style === 'circle') {
+      circleWrap  = document.createElement('div'); circleWrap.id = 'rp-circle-wrap';
+      pctLabel    = document.createElement('span'); pctLabel.id  = 'rp-pct-label'; pctLabel.textContent = '0%';
+      const ns    = 'http://www.w3.org/2000/svg';
+      const svg   = document.createElementNS(ns, 'svg');
+      const R = 16, C = 20, circ = 2 * Math.PI * R;
+      svg.setAttribute('width', C*2); svg.setAttribute('height', C*2);
+      svg.style.transform = 'rotate(-90deg)';
+      const track = document.createElementNS(ns, 'circle');
+      track.setAttribute('cx', C); track.setAttribute('cy', C); track.setAttribute('r', R);
+      track.setAttribute('fill', 'none'); track.setAttribute('stroke-width', '2.5');
+      track.setAttribute('stroke', 'rgba(255,255,255,.1)');
+      circleEl = document.createElementNS(ns, 'circle');
+      circleEl.setAttribute('cx', C); circleEl.setAttribute('cy', C); circleEl.setAttribute('r', R);
+      circleEl.setAttribute('fill', 'none'); circleEl.setAttribute('stroke-width', '2.5');
+      circleEl.setAttribute('stroke', '#ff5a4e'); circleEl.setAttribute('stroke-linecap', 'round');
+      circleEl.setAttribute('stroke-dasharray', '0 ' + circ);
+      circleEl.style.transition = 'stroke-dasharray .2s';
+      svg.appendChild(track); svg.appendChild(circleEl);
+      circleWrap.appendChild(pctLabel); circleWrap.appendChild(svg);
+      document.body.appendChild(circleWrap);
+    }
+
+    let ambientEl = null;
+    if (style === 'ambient') {
+      ambientEl = document.createElement('div'); ambientEl.id = 'rp-ambient';
+      document.body.appendChild(ambientEl);
+    }
+
+    // Scroll listener
+    const circ = 2 * Math.PI * 16;
+    window.addEventListener('scroll', function() {
+      const doc  = document.documentElement;
+      const top  = doc.scrollTop || document.body.scrollTop;
+      const max  = doc.scrollHeight - doc.clientHeight;
+      const pct  = max > 0 ? Math.min(100, (top / max) * 100) : 0;
+
+      bar.style.width = pct + '%';
+
+      if (style === 'cursor') {
+        const dot = document.getElementById('rp-dot');
+        if (dot) dot.style.left = pct + '%';
+      }
+
+      if (style === 'dots' && dotItems.length) {
+        dotItems.forEach((d, i) => {
+          const lit = (i + 1) / dotItems.length * 100 <= pct;
+          d.classList.toggle('lit', lit);
+        });
+      }
+
+      if (style === 'circle' && circleEl) {
+        const dash = circ * pct / 100;
+        circleEl.setAttribute('stroke-dasharray', dash + ' ' + (circ - dash));
+        if (pctLabel) pctLabel.textContent = Math.round(pct) + '%';
+      }
+
+      if (style === 'ambient' && ambientEl) {
+        const a1 = (pct / 100 * 0.18).toFixed(3);
+        const a2 = (pct / 100 * 0.10).toFixed(3);
+        ambientEl.style.background =
+          'linear-gradient(90deg, rgba(255,90,78,' + a1 + ') 0%, rgba(139,92,246,' + a2 + ') 100%)';
+      }
+    }, { passive: true });
+  })();
+  </script>
 </body>
 </html>
