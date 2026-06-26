@@ -115,8 +115,9 @@
   let currentBgAnim     = localStorage.getItem('cellia-bg-anim')    || 'none';
   let currentSize       = localStorage.getItem('cellia-size')       || 'normal';
   let currentBrightness = parseInt(localStorage.getItem('cellia-brightness') ?? '65', 10);
-  let currentGlass    = parseInt(localStorage.getItem('cellia-glass') ?? '0', 10);
+  let currentGlass    = parseInt(localStorage.getItem('cellia-glass')    ?? '0', 10);
   let currentProgress = localStorage.getItem('cellia-progress') || 'none';
+  let currentLS    = parseInt(localStorage.getItem('cellia-ls')  ?? '0',  10);
   let currentLH    = parseInt(localStorage.getItem('cellia-lh')  ?? '7',  10);
   let currentCol   = parseInt(localStorage.getItem('cellia-col') ?? '0',  10);
   let currentCream = localStorage.getItem('cellia-cream') === 'true';
