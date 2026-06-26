@@ -1307,8 +1307,9 @@
     .card:nth-child(10) { animation-delay: 0.50s; }
     /* ── Bandeau statut services IA ── */
     #status-banner {
-      display:none;
-      border-bottom:1px solid transparent;
+      display:block;
+      border-bottom:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.03);
       transition:background .3s, border-color .3s;
     }
     #status-banner a {
@@ -2496,7 +2497,6 @@
           const issues = Object.entries(svcs).filter(([,s]) => s.overall !== 'operational');
           const gColor = allOk ? '#10b981' : issues.some(([,s])=>s.overall==='outage') ? '#ef4444' : '#f59e0b';
 
-          banner.style.display      = 'block';
           banner.style.background   = allOk ? 'rgba(16,185,129,.06)' : 'rgba(245,158,11,.07)';
           banner.style.borderColor  = allOk ? 'rgba(16,185,129,.2)'  : 'rgba(245,158,11,.2)';
 
