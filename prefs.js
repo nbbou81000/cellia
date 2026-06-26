@@ -792,7 +792,6 @@
     panel.querySelectorAll('[data-progress-btn]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.progressBtn === currentProgress);
     });
-    });
     const creamBtn   = document.getElementById('cp-cream-btn');
     const creamCheck = document.getElementById('cp-cream-check');
     if (creamBtn)   creamBtn.classList.toggle('active', currentCream);
