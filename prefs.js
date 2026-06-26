@@ -936,7 +936,7 @@
   );
 
   // ── Fermer ────────────────────────────────────────────────────────────────
-  document.getElementById('cp-close').addEventListener('click', closePanel);
+  document.getElementById('cp-close')?.addEventListener('click', closePanel);
 
   let isOpen = false;
   function openPanel()  { isOpen = true;  panel.classList.add('open'); }
