@@ -1308,22 +1308,24 @@
     /* ── Bandeau statut services IA ── */
     #status-banner {
       display:block;
-      border-bottom:1px solid rgba(255,255,255,.06);
-      background:rgba(255,255,255,.03);
+      border-bottom:1px solid rgba(255,255,255,.1);
+      background:rgba(255,255,255,.05);
       transition:background .3s, border-color .3s;
     }
     #status-banner a {
       display:flex;align-items:center;gap:10px;
-      padding:7px 20px;text-decoration:none;
+      padding:8px 20px;text-decoration:none;color:inherit;
       transition:opacity .15s;
     }
-    #status-banner a:hover { opacity:.85; }
+    #status-banner a:hover { opacity:.8; }
     #status-banner-dot {
       width:7px;height:7px;border-radius:50%;flex-shrink:0;
+      background:#6b7280;
       transition:background .3s,box-shadow .3s;
     }
     #status-banner-text {
       font-size:12px;font-weight:600;flex:1;
+      color:var(--text-dim);
       transition:color .3s;
     }
     #status-banner-providers { display:flex;gap:5px;align-items:center; }
