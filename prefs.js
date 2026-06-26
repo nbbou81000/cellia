@@ -721,12 +721,13 @@
     panel.querySelectorAll('[data-font-btn]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.fontBtn === currentFont);
     });
-  panel.querySelectorAll('[data-anim-btn]').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.animBtn === currentBgAnim);
-  });
+    panel.querySelectorAll('[data-bg-btn]').forEach(btn => {
       const bg = CELLIA_BGCOLORS.find(b => b.id === btn.dataset.bgBtn);
       btn.classList.toggle('active', btn.dataset.bgBtn === currentBg);
       if (bg) btn.style.background = currentTheme === 'dark' ? bg.dark : bg.light;
+    });
+    panel.querySelectorAll('[data-anim-btn]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.animBtn === currentBgAnim);
     });
     panel.querySelectorAll('[data-size-btn]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.sizeBtn === currentSize);
