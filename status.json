@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-26T16:28:25.293Z",
+  "last_updated": "2026-06-26T18:09:33.695Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -120,20 +120,8 @@
           "group": null
         },
         {
-          "name": "CLI",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "VS Code extension",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
           "name": "Codex Web",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-06-23T18:25:14Z",
           "group": null
         },
@@ -151,7 +139,19 @@
         },
         {
           "name": "App",
-          "status": "operational",
+          "status": "degraded",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Codex API",
+          "status": "degraded",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "FedRAMP",
+          "status": "degraded",
           "updated_at": "2026-06-23T18:25:14Z",
           "group": null
         }
