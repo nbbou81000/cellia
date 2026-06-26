@@ -1305,6 +1305,68 @@
     .card:nth-child(8)  { animation-delay: 0.40s; }
     .card:nth-child(9)  { animation-delay: 0.45s; }
     .card:nth-child(10) { animation-delay: 0.50s; }
+    /* ════════════════════════════════════════════════════════════════════
+       THÈME QUANTUM — Raycast × Supabase
+    ════════════════════════════════════════════════════════════════════ */
+    html.theme-quantum {
+      --bg:#0A0A0A;--bg2:#111111;--glass-card:#111111;--glass-hover:#161616;
+      --border:rgba(255,255,255,.07);--border-soft:rgba(255,255,255,.05);
+      --text-hi:#e5e5e5;--text-dim:#a3a3a3;--text-dimmer:#525252;
+      --red:#3ECF8E;--accent-q:#3ECF8E;
+      --font-ui:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      --font-mono:'JetBrains Mono','Fira Mono',monospace;
+    }
+    html.theme-quantum.light {
+      --bg:#F9FAFB;--bg2:#ffffff;--glass-card:#ffffff;--glass-hover:#fafafa;
+      --border:#e5e7eb;--border-soft:#f3f4f6;
+      --text-hi:#111827;--text-dim:#6b7280;--text-dimmer:#9ca3af;
+      --red:#059669;--accent-q:#059669;
+    }
+    html.theme-quantum body { font-family:var(--font-ui); background:var(--bg); }
+
+    /* Navbar */
+    html.theme-quantum .navbar { background:rgba(10,10,10,.88);backdrop-filter:blur(20px) saturate(150%);border-bottom:1px solid var(--border);box-shadow:none; }
+    html.theme-quantum.light .navbar { background:rgba(249,250,251,.88); }
+    html.theme-quantum .nav-logo { font-family:var(--font-ui);font-weight:800;letter-spacing:-0.04em;font-size:15px; }
+    html.theme-quantum .nav-link { font-family:var(--font-mono);font-size:10.5px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;border-radius:6px;border:1px solid transparent;padding:5px 10px;color:var(--text-dimmer);transition:all 200ms ease; }
+    html.theme-quantum .nav-link:hover { color:var(--text-dim);border-color:var(--border); }
+    html.theme-quantum .nav-link.active { color:var(--accent-q);background:rgba(62,207,142,.08);border-color:rgba(62,207,142,.25); }
+    html.theme-quantum.light .nav-link.active { background:rgba(5,150,105,.06);border-color:rgba(5,150,105,.25); }
+
+    /* Cards */
+    html.theme-quantum .card { background:var(--glass-card);border:1px solid var(--border);border-radius:10px;box-shadow:none;transition:border-color 300ms ease;overflow:hidden; }
+    html.theme-quantum .card:hover { border-color:rgba(62,207,142,.45);transform:none;box-shadow:none; }
+    html.theme-quantum.light .card:hover { border-color:rgba(5,150,105,.4);box-shadow:0 1px 3px rgba(0,0,0,.04); }
+    html.theme-quantum .card-img { transition:transform 500ms ease; }
+    html.theme-quantum .card:hover .card-img { transform:scale(1.03); }
+    html.theme-quantum .card-body { padding:14px 16px;border-top:1px solid var(--border-soft); }
+    html.theme-quantum .card-title { font-family:var(--font-ui);font-size:13.5px;font-weight:700;line-height:1.35;letter-spacing:-0.025em;color:var(--text-hi); }
+    html.theme-quantum .card-featured .card-title { font-size:17px; }
+    html.theme-quantum .card-summary { font-family:var(--font-ui);font-size:12.5px;font-weight:400;line-height:1.7;letter-spacing:-0.01em;color:var(--text-dim); }
+    html.theme-quantum .card-source { font-family:var(--font-mono);font-size:10.5px;font-weight:500;letter-spacing:.02em;color:var(--text-dimmer); }
+    html.theme-quantum .card-meta { font-family:var(--font-mono);font-size:10px;letter-spacing:.02em;border-top:1px solid var(--border-soft); }
+    /* Désactiver halos en Quantum */
+    html.theme-quantum .card:hover { animation:none !important; }
+    html.theme-quantum.halo-beam .card::after { display:none; }
+
+    /* Badges */
+    html.theme-quantum .badge-new { font-family:var(--font-mono);font-size:9px;font-weight:600;letter-spacing:.06em;background:var(--accent-q);color:#0A0A0A;border-radius:4px;padding:2px 7px;border:none; }
+    html.theme-quantum.light .badge-new { color:#fff; }
+    html.theme-quantum .badge-fresh { font-family:var(--font-mono);background:rgba(62,207,142,.1);color:var(--accent-q);border-radius:4px;border:1px solid rgba(62,207,142,.2); }
+
+    /* Section headers */
+    html.theme-quantum .section-title { font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--accent-q); }
+    html.theme-quantum .section-line { background:var(--border); }
+
+    /* Footer */
+    html.theme-quantum .footer { border-top:1px solid var(--border); }
+    html.theme-quantum .footer-chip { font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dimmer); }
+    html.theme-quantum .footer-chip:hover { border-color:rgba(62,207,142,.3);color:var(--accent-q);background:rgba(62,207,142,.05); }
+    html.theme-quantum .footer-copy { font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase; }
+    html.theme-quantum .fw { color:var(--accent-q); }
+
+    /* Wave désactivé en Quantum */
+    html.theme-quantum.wave-cards .card-title { background:none;-webkit-text-fill-color:var(--text-hi);animation:none; }
   </style>
   <script data-goatcounter="https://cellia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head><body>

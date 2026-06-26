@@ -417,7 +417,14 @@
         <button class="cp-btn" data-theme-btn="light">☀ Clair</button>
         <button class="cp-btn" data-theme-btn="dark">⏾ Sombre</button>
       </div>
-      <button class="cp-btn cp-cream-btn" id="cp-halo-prism-btn" style="margin-top:8px;width:100%">
+      <button class="cp-btn cp-cream-btn" id="cp-quantum-btn" style="margin-top:8px;width:100%;border-color:rgba(62,207,142,.2)">
+        <span class="cp-cream-check" id="cp-quantum-check"></span>
+        <span>
+          ⬡ Thème Quantum
+          <div class="cp-cream-desc">Raycast × Supabase · Mono · Émeraude</div>
+        </span>
+      </button>
+      <button class="cp-btn cp-cream-btn" id="cp-halo-prism-btn" style="margin-top:6px;width:100%">
         <span class="cp-cream-check" id="cp-halo-prism-check"></span>
         <span>
           ✦ Halo prisme
@@ -612,7 +619,33 @@
     applyCream(!currentCream);
   });
 
-  // ── Vague titres de cards ─────────────────────────────────────────────────
+  // ── Thème Quantum (Raycast × Supabase) ───────────────────────────────────
+  let quantumActive = localStorage.getItem('cellia-theme-quantum') === 'true';
+
+  function loadQuantumFonts() {
+    if (document.getElementById('quantum-fonts')) return;
+    const link  = document.createElement('link');
+    link.id     = 'quantum-fonts';
+    link.rel    = 'stylesheet';
+    link.href   = 'https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700;14..32,800&family=JetBrains+Mono:wght@400;500;600&display=swap';
+    document.head.appendChild(link);
+  }
+
+  function applyQuantum(state, save = true) {
+    quantumActive = state;
+    document.documentElement.classList.toggle('theme-quantum', state);
+    if (state) loadQuantumFonts();
+    const btn = document.getElementById('cp-quantum-btn');
+    const chk = document.getElementById('cp-quantum-check');
+    if (btn) btn.classList.toggle('active', state);
+    if (chk) chk.textContent = state ? '✓' : '';
+    if (save) localStorage.setItem('cellia-theme-quantum', state);
+  }
+
+  applyQuantum(quantumActive, false);
+  document.getElementById('cp-quantum-btn')?.addEventListener('click', () =>
+    applyQuantum(!quantumActive)
+  );
   let waveCards = localStorage.getItem('cellia-wave-cards') === 'true';
   function applyWaveCards(state, save = true) {
     waveCards = state;

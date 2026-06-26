@@ -4,6 +4,22 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>CelliA — Article</title>
+  <meta name="description" content="Agrégateur d'actualités tech réécrites par IA">
+  <!-- Favicon -->
+  <link rel="icon" href="favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+  <link rel="apple-touch-icon" href="favicon-192.png">
+  <!-- Open Graph (mis à jour dynamiquement par JS après chargement de l'article) -->
+  <meta property="og:type"         content="article">
+  <meta property="og:title"        id="og-title"        content="CelliA — Veille Tech IA">
+  <meta property="og:description"  id="og-description"  content="Agrégateur d'actualités tech réécrites par IA">
+  <meta property="og:image"        id="og-image"        content="https://nbbou81000.github.io/cellia/og-image.png">
+  <meta property="og:image:width"  content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:url"          id="og-url"          content="https://nbbou81000.github.io/cellia/">
+  <meta property="og:site_name"    content="CelliA">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:image"       id="twitter-image"   content="https://nbbou81000.github.io/cellia/og-image.png">
   <meta name="description" content="Article de veille tech CelliA.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -456,6 +472,113 @@
       .related-grid { grid-template-columns: 1fr; }
       .article-title { font-size: 24px; }
     }
+    /* ════════════════════════════════════════════════════════════════════
+       THÈME QUANTUM — article.html
+    ════════════════════════════════════════════════════════════════════ */
+    html.theme-quantum {
+      --bg:#0A0A0A;--bg2:#111111;--glass-card:#111111;--glass-hover:#161616;
+      --border:rgba(255,255,255,.07);--border-soft:rgba(255,255,255,.05);
+      --text-hi:#e5e5e5;--text-dim:#a3a3a3;--text-dimmer:#525252;
+      --red:#3ECF8E;--accent-q:#3ECF8E;
+      --font-ui:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      --font-mono:'JetBrains Mono','Fira Mono',monospace;
+    }
+    html.theme-quantum.light {
+      --bg:#F9FAFB;--bg2:#ffffff;--glass-card:#ffffff;--glass-hover:#fafafa;
+      --border:#e5e7eb;--border-soft:#f3f4f6;
+      --text-hi:#111827;--text-dim:#6b7280;--text-dimmer:#9ca3af;
+      --red:#059669;--accent-q:#059669;
+    }
+    html.theme-quantum body { font-family:var(--font-ui);background:var(--bg); }
+
+    /* Navbar */
+    html.theme-quantum .navbar { background:rgba(10,10,10,.88);backdrop-filter:blur(20px) saturate(150%);border-bottom:1px solid var(--border);box-shadow:none; }
+    html.theme-quantum.light .navbar { background:rgba(249,250,251,.88); }
+    html.theme-quantum .nav-logo { font-family:var(--font-ui);font-weight:800;letter-spacing:-0.04em; }
+
+    /* En-tête article */
+    html.theme-quantum .article-title {
+      font-family:var(--font-ui);
+      font-weight:800;
+      letter-spacing:-0.03em;
+      line-height:1.2;
+      color:var(--text-hi);
+    }
+    html.theme-quantum .article-meta {
+      font-family:var(--font-mono);
+      font-size:11px;
+      letter-spacing:.06em;
+      color:var(--text-dimmer);
+    }
+    html.theme-quantum .article-source {
+      font-family:var(--font-mono);
+      font-size:11px;
+      font-weight:500;
+      letter-spacing:.04em;
+      color:var(--accent-q);
+    }
+
+    /* Corps de l'article */
+    html.theme-quantum .article-body {
+      font-family:var(--font-ui);
+      font-size:16px;
+      line-height:1.8;
+      letter-spacing:-0.01em;
+      color:var(--text-dim);
+    }
+    html.theme-quantum .article-body p {
+      color:var(--text-dim);
+      line-height:1.8;
+    }
+    html.theme-quantum .article-body h2 {
+      font-family:var(--font-ui);
+      font-weight:700;
+      letter-spacing:-0.025em;
+      color:var(--text-hi);
+    }
+    html.theme-quantum .article-body strong {
+      color:var(--text-hi);
+      font-weight:600;
+    }
+
+    /* Wrap article */
+    html.theme-quantum .article-wrap {
+      background:var(--glass-card);
+      border:1px solid var(--border);
+      border-radius:12px;
+      box-shadow:none;
+    }
+    html.theme-quantum.light .article-wrap {
+      box-shadow:0 1px 3px rgba(0,0,0,.04);
+    }
+
+    /* Cards liées */
+    html.theme-quantum .related-card {
+      background:var(--glass-card);
+      border:1px solid var(--border);
+      border-radius:10px;
+      box-shadow:none;
+      transition:border-color 300ms ease;
+    }
+    html.theme-quantum .related-card:hover {
+      border-color:rgba(62,207,142,.4);
+      transform:none;
+      box-shadow:none;
+    }
+    html.theme-quantum.light .related-card:hover {
+      border-color:rgba(5,150,105,.35);
+    }
+
+    /* Boutons actions */
+    html.theme-quantum .btn-action {
+      font-family:var(--font-mono);
+      font-size:10px;
+      letter-spacing:.06em;
+      text-transform:uppercase;
+    }
+
+    /* Reading mode en Quantum */
+    body.reading-mode.theme-quantum .article-body p { font-size:17px;line-height:1.9; }
   </style>
   <script data-goatcounter="https://cellia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -539,7 +662,7 @@
 
   <script src="prefs.js"></script>
   <script>
-    const FEED_URL = 'dist/articles-full.json';
+    const FEED_INDEX = 'dist/articles.json'; // pour les articles liés (index léger)
 
     function getParam(name) {
       return new URLSearchParams(window.location.search).get(name);
@@ -641,6 +764,15 @@
 
     // ── Rendu de l'article ────────────────────────────────────────────────
     function renderArticle(article, allArticles) {
+      // ── Mise à jour Open Graph dynamique ──────────────────────────────────
+      const BASE = 'https://nbbou81000.github.io/cellia';
+      const setMeta = (id, val) => { const el = document.getElementById(id); if (el) el.content = val; };
+      document.title = `${article.title} — CelliA`;
+      setMeta('og-title',       article.title);
+      setMeta('og-description', article.summary || '');
+      setMeta('og-image',       article.image || `${BASE}/og-image.png`);
+      setMeta('og-url',         `${BASE}/article.html?id=${article.id}`);
+      setMeta('twitter-image',  article.image || `${BASE}/og-image.png`);
       const wrap = document.getElementById('article-wrap');
       const cat  = article.category || 'web';
       const CAT_LABELS = { ai:'IA', secu:'Sécu', hardware:'Hardware', maker:'Maker', web:'Web', science:'Science', auto:'Tech' };
@@ -838,29 +970,27 @@
       }
 
       try {
-        const res  = await fetch(FEED_URL + '?t=' + Date.now());
-        const data = await res.json();
-        const all  = data.articles || [];
-        const art  = all.find(a => a.id === id);
+        // Fetch ciblé — uniquement le fichier de cet article (~3 Ko au lieu de 3+ Mo)
+        const res = await fetch(`dist/articles/${id}.json?t=${Date.now()}`);
+        if (!res.ok) throw new Error('not_found');
+        const art = await res.json();
 
-        if (!art) {
-          document.getElementById('article-wrap').innerHTML = `
-            <div class="state-message">
-              <span class="state-icon">🔍</span>
-              <h2>Article non trouvé</h2>
-              <p>L'article demandé n'existe plus ou a expiré.</p>
-              <br><a href="./" style="color:var(--red)">← Retourner à l'accueil</a>
-            </div>`;
-          return;
-        }
+        // Articles liés — depuis l'index léger (sans body)
+        let allForRelated = [];
+        try {
+          const idxRes   = await fetch(FEED_INDEX + '?t=' + Date.now());
+          const idxData  = await idxRes.json();
+          allForRelated  = idxData.articles || [];
+        } catch {}
 
-        renderArticle(art, all);
+        renderArticle(art, allForRelated);
       } catch (e) {
+        const isNotFound = e.message === 'not_found';
         document.getElementById('article-wrap').innerHTML = `
           <div class="state-message">
-            <span class="state-icon">⚡</span>
-            <h2>Données non disponibles</h2>
-            <p>Lance <code>node scripts/fetch.js</code> pour générer les articles.</p>
+            <span class="state-icon">${isNotFound ? '🔍' : '⚡'}</span>
+            <h2>${isNotFound ? 'Article non trouvé' : 'Données non disponibles'}</h2>
+            <p>${isNotFound ? 'L\'article demandé n\'existe plus ou a expiré (30 jours).' : 'Lance <code>node scripts/fetch.js</code> pour générer les articles.'}</p>
             <br><a href="./" style="color:var(--red)">← Retourner à l'accueil</a>
           </div>`;
       }
