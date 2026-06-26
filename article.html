@@ -662,7 +662,8 @@
 
   <script src="prefs.js"></script>
   <script>
-    const FEED_INDEX = 'dist/articles.json'; // pour les articles liés (index léger)
+    const FEED_FULL  = 'dist/articles-full.json';
+    const FEED_INDEX = 'dist/articles.json';
 
     function getParam(name) {
       return new URLSearchParams(window.location.search).get(name);
@@ -970,18 +971,16 @@
       }
 
       try {
-        // Fetch ciblé — uniquement le fichier de cet article (~3 Ko au lieu de 3+ Mo)
-        const res = await fetch(`dist/articles/${id}.json?t=${Date.now()}`);
+        // Charger articles-full.json et trouver l'article par ID
+        const res  = await fetch(FEED_FULL + '?t=' + Date.now());
         if (!res.ok) throw new Error('not_found');
-        const art = await res.json();
+        const data = await res.json();
+        const all  = data.articles || [];
+        const art  = all.find(a => a.id === id);
+        if (!art) throw new Error('not_found');
 
-        // Articles liés — depuis l'index léger (sans body)
-        let allForRelated = [];
-        try {
-          const idxRes   = await fetch(FEED_INDEX + '?t=' + Date.now());
-          const idxData  = await idxRes.json();
-          allForRelated  = idxData.articles || [];
-        } catch {}
+        // Articles liés depuis l'index léger
+        let allForRelated = all;
 
         renderArticle(art, allForRelated);
       } catch (e) {
