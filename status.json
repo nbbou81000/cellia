@@ -1,0 +1,364 @@
+{
+  "last_updated": "2026-06-26T15:01:28.030Z",
+  "services": {
+    "openai": {
+      "overall": "degraded",
+      "description": "Partial System Degradation",
+      "components": [
+        {
+          "name": "Batch",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Audio",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Login",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Compliance API",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Search",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "GPTs",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Image Generation",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Atlas",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Connectors/Apps",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Ads API",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Fine-tuning",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Files",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Responses",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Realtime",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Sora",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Conversations",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Deep Research",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Images",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:13Z",
+          "group": null
+        },
+        {
+          "name": "CLI",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "VS Code extension",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Codex Web",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "File uploads",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "Agent",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        },
+        {
+          "name": "App",
+          "status": "operational",
+          "updated_at": "2026-06-23T18:25:14Z",
+          "group": null
+        }
+      ]
+    },
+    "anthropic": {
+      "overall": "operational",
+      "description": "All Systems Operational",
+      "components": [
+        {
+          "name": "claude.ai",
+          "status": "operational",
+          "updated_at": "2026-06-24T14:56:21.743Z",
+          "group": null
+        },
+        {
+          "name": "Claude Console (platform.claude.com)",
+          "status": "operational",
+          "updated_at": "2026-06-24T14:56:21.760Z",
+          "group": null
+        },
+        {
+          "name": "Claude API (api.anthropic.com)",
+          "status": "operational",
+          "updated_at": "2026-06-24T14:56:21.774Z",
+          "group": null
+        },
+        {
+          "name": "Claude Code",
+          "status": "operational",
+          "updated_at": "2026-06-24T14:56:21.789Z",
+          "group": null
+        },
+        {
+          "name": "Claude Cowork",
+          "status": "operational",
+          "updated_at": "2026-06-24T14:56:21.806Z",
+          "group": null
+        },
+        {
+          "name": "Claude for Government",
+          "status": "operational",
+          "updated_at": "2026-05-08T10:26:46.717Z",
+          "group": null
+        }
+      ]
+    },
+    "google": {
+      "overall": "operational",
+      "description": "All Systems Operational",
+      "components": [
+        {
+          "name": "Gemini API",
+          "status": "operational",
+          "updated_at": null,
+          "group": "Google Cloud AI"
+        },
+        {
+          "name": "Vertex AI",
+          "status": "operational",
+          "updated_at": null,
+          "group": "Google Cloud AI"
+        },
+        {
+          "name": "Google AI Studio",
+          "status": "operational",
+          "updated_at": null,
+          "group": "Google Cloud AI"
+        },
+        {
+          "name": "Natural Language API",
+          "status": "operational",
+          "updated_at": null,
+          "group": "Google Cloud AI"
+        }
+      ]
+    },
+    "mistral": {
+      "overall": "unknown",
+      "description": "Page de statut inaccessible",
+      "components": []
+    },
+    "groq": {
+      "overall": "operational",
+      "description": "All Systems Operational",
+      "components": [
+        {
+          "name": "meta-llama/llama-guard-4-12b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "openai/gpt-oss-20b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "groq/compound-mini",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "Canopy Labs Orpheus Arabic Saudi",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-prompt-guard-2-86m",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "moonshotai/kimi-k2-instruct-0905",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "openai/gpt-oss-safeguard-20b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "qwen/qwen3-32b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "Website",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "llama-3.1-8b-instant",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "API",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "Canopy Labs Orpheus English",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-prompt-guard-2-22m",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "whisper-large-v3",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "groq/compound",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "whisper-large-v3-turbo",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "openai/gpt-oss-120b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-4-maverick-17b-128e-instruct",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "llama-3.3-70b-versatile",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        }
+      ]
+    }
+  }
+}

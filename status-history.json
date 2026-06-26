@@ -1,0 +1,14 @@
+{
+  "entries": [
+    {
+      "timestamp": "2026-06-26T15:01:28.030Z",
+      "services": {
+        "openai": "degraded",
+        "anthropic": "operational",
+        "google": "operational",
+        "mistral": "unknown",
+        "groq": "operational"
+      }
+    }
+  ]
+}
