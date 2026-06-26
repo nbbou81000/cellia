@@ -4,25 +4,66 @@
 
   // ── Polices ──────────────────────────────────────────────────────────────
   const CELLIA_FONTS = [
-    { id: 'editorial',  label: 'Éditoriale',   family: "'Bricolage Grotesque', sans-serif", google: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800' },
-    { id: 'inter',      label: 'Inter',         family: "'Inter', sans-serif",               google: 'Inter:wght@300;400;500;600;700' },
-    { id: 'geist',      label: 'Geist',         family: "'Geist', sans-serif",               google: 'Geist:wght@300;400;500;700' },
-    { id: 'system',     label: 'Système',       family: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", system: true },
-    { id: 'claude',     label: 'Claude',        family: "'DM Sans', sans-serif",             google: 'DM+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400' },
-    { id: 'classique',  label: 'Classique',     family: "'Lora', serif",                     google: 'Lora:ital,wght@0,400;0,600;1,400' },
-    { id: 'technique',  label: 'Technique',     family: "'JetBrains Mono', monospace",       google: 'JetBrains+Mono:wght@300;400;600' },
-    { id: 'raffinee',   label: 'Raffinée',      family: "'Playfair Display', serif",         google: 'Playfair+Display:ital,wght@0,400;0,700;1,400' },
-    { id: 'dyslexic',   label: 'Atkinson',      family: "'Atkinson Hyperlegible', sans-serif", google: 'Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400' },
+    // Sans-serif modernes
+    { id: 'editorial',   label: 'Bricolage',       family: "'Bricolage Grotesque', sans-serif",    google: 'Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800' },
+    { id: 'inter',       label: 'Inter',            family: "'Inter', sans-serif",                  google: 'Inter:wght@300;400;500;600;700' },
+    { id: 'geist',       label: 'Geist',            family: "'Geist', sans-serif",                  google: 'Geist:wght@300;400;500;700' },
+    { id: 'space',       label: 'Space Grotesk',    family: "'Space Grotesk', sans-serif",          google: 'Space+Grotesk:wght@300;400;500;600;700' },
+    { id: 'jakarta',     label: 'Plus Jakarta',     family: "'Plus Jakarta Sans', sans-serif",      google: 'Plus+Jakarta+Sans:wght@300;400;500;600;700;800' },
+    { id: 'onest',       label: 'Onest',            family: "'Onest', sans-serif",                  google: 'Onest:wght@300;400;500;600;700;800' },
+    { id: 'outfit',      label: 'Outfit',           family: "'Outfit', sans-serif",                 google: 'Outfit:wght@300;400;500;600;700' },
+    { id: 'syne',        label: 'Syne',             family: "'Syne', sans-serif",                   google: 'Syne:wght@400;500;600;700;800' },
+    { id: 'ibmplex',     label: 'IBM Plex Sans',    family: "'IBM Plex Sans', sans-serif",          google: 'IBM+Plex+Sans:wght@300;400;500;600;700' },
+    { id: 'nunito',      label: 'Nunito',           family: "'Nunito', sans-serif",                 google: 'Nunito:wght@300;400;500;600;700;800' },
+    { id: 'claude',      label: 'DM Sans',          family: "'DM Sans', sans-serif",                google: 'DM+Sans:ital,wght@0,300;0,400;0,600;0,700;1,400' },
+    { id: 'system',      label: 'Système',          family: "system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", system: true },
+    // Serif
+    { id: 'classique',   label: 'Lora',             family: "'Lora', serif",                        google: 'Lora:ital,wght@0,400;0,600;1,400' },
+    { id: 'raffinee',    label: 'Playfair',         family: "'Playfair Display', serif",            google: 'Playfair+Display:ital,wght@0,400;0,700;1,400' },
+    { id: 'fraunces',    label: 'Fraunces',         family: "'Fraunces', serif",                    google: 'Fraunces:opsz,wght@9..144,300;9..144,400;9..144,600;9..144,700' },
+    { id: 'sourceserif', label: 'Source Serif',     family: "'Source Serif 4', serif",              google: 'Source+Serif+4:wght@300;400;600;700' },
+    // Monospace
+    { id: 'technique',   label: 'JetBrains Mono',  family: "'JetBrains Mono', monospace",          google: 'JetBrains+Mono:wght@300;400;600' },
+    // Accessibilité
+    { id: 'dyslexic',    label: 'Atkinson',         family: "'Atkinson Hyperlegible', sans-serif",  google: 'Atkinson+Hyperlegible:ital,wght@0,400;0,700;1,400' },
   ];
 
   // ── Couleurs de fond ──────────────────────────────────────────────────────
   const CELLIA_BGCOLORS = [
-    { id: 'default', label: 'Défaut',  dark: '#1a1c22', light: '#f4f4f0' },
-    { id: 'noir',    label: 'Noir',    dark: '#0b0c10', light: '#e8e8e3' },
-    { id: 'chaud',   label: 'Chaud',   dark: '#1c1814', light: '#faf6ee' },
-    { id: 'ocean',   label: 'Océan',   dark: '#0d1520', light: '#eef3fb' },
-    { id: 'nuit',    label: 'Nuit',    dark: '#181828', light: '#ededfd' },
-    { id: 'foret',   label: 'Forêt',   dark: '#111a13', light: '#eef5ef' },
+    // ── Tons sombres ────────────────────────────────────────────────────────
+    { id: 'default',      label: 'Défaut',      dark: '#1a1c22', light: '#f4f4f0' },
+    { id: 'noir',         label: 'Noir',        dark: '#0a0a0a', light: '#e8e8e3' },
+    { id: 'charbon',      label: 'Charbon',     dark: '#111111', light: '#e2e2df' },
+    { id: 'encre',        label: 'Encre',       dark: '#0a0a0f', light: '#dde0ec' },
+    { id: 'slate',        label: 'Slate',       dark: '#0f172a', light: '#e8edf8' },
+    { id: 'minuit',       label: 'Minuit',      dark: '#0d0d1f', light: '#e8e8f5' },
+    { id: 'profond',      label: 'Profond',     dark: '#0a0f1a', light: '#e4eaf6' },
+    { id: 'abyssal',      label: 'Abyssal',     dark: '#05080f', light: '#dce3f2' },
+    { id: 'petrole',      label: 'Pétrole',     dark: '#071218', light: '#daeaf0' },
+    { id: 'sequoia',      label: 'Séquoia',     dark: '#0a120a', light: '#e0f0e0' },
+    { id: 'foret',        label: 'Forêt',       dark: '#111a13', light: '#eef5ef' },
+    { id: 'prune',        label: 'Prune',       dark: '#120a1a', light: '#ede8f5' },
+    { id: 'volcanique',   label: 'Volcanique',  dark: '#130808', light: '#f5e8e8' },
+    { id: 'acajou',       label: 'Acajou',      dark: '#150a05', light: '#f5ede6' },
+    { id: 'chaud',        label: 'Chaud',       dark: '#1c1814', light: '#faf6ee' },
+    // ── Tons clairs ─────────────────────────────────────────────────────────
+    { id: 'ivoire',       label: 'Ivoire',      dark: '#18161a', light: '#fffef7' },
+    { id: 'lin',          label: 'Lin',         dark: '#1a1714', light: '#f5f0e8' },
+    { id: 'sable',        label: 'Sable',       dark: '#1a1810', light: '#f8f4ec' },
+    { id: 'peche',        label: 'Pêche',       dark: '#1a1210', light: '#fdf0ea' },
+    { id: 'brume',        label: 'Brume',       dark: '#101418', light: '#f0f4f8' },
+    { id: 'lavande',      label: 'Lavande',     dark: '#110f1a', light: '#f0eef8' },
+    { id: 'pistache',     label: 'Pistache',    dark: '#0f1510', light: '#eef5ee' },
+    { id: 'aqua',         label: 'Aqua',        dark: '#0a1518', light: '#eef6f5' },
+    { id: 'nuit',         label: 'Nuit',        dark: '#181828', light: '#ededfd' },
+  ];
+
+  const CELLIA_BGANIMATIONS = [
+    { id: 'none',       label: 'Aucun'       },
+    { id: 'particles',  label: 'Particules'  },
+    { id: 'aurora',     label: 'Aurore'      },
+    { id: 'stars',      label: 'Étoiles'     },
+    { id: 'grid',       label: 'Grille'      },
   ];
 
   // ── Tailles de texte ──────────────────────────────────────────────────────
@@ -71,12 +112,132 @@
   let currentTheme      = localStorage.getItem('cellia-theme')      || 'dark';
   let currentFont       = localStorage.getItem('cellia-font')       || 'editorial';
   let currentBg         = localStorage.getItem('cellia-bg')         || 'default';
+  let currentBgAnim     = localStorage.getItem('cellia-bg-anim')    || 'none';
   let currentSize       = localStorage.getItem('cellia-size')       || 'normal';
   let currentBrightness = parseInt(localStorage.getItem('cellia-brightness') ?? '65', 10);
   let currentLS    = parseInt(localStorage.getItem('cellia-ls')  ?? '0',  10);
   let currentLH    = parseInt(localStorage.getItem('cellia-lh')  ?? '7',  10);
-  let currentCol   = parseInt(localStorage.getItem('cellia-col') ?? '0',  10); // 0 → 780px
+  let currentCol   = parseInt(localStorage.getItem('cellia-col') ?? '0',  10);
   let currentCream = localStorage.getItem('cellia-cream') === 'true';
+
+  // ── Système d'animation de fond ───────────────────────────────────────────
+  let _animCanvas = null, _animRAF = null, _animParticles = [];
+
+  function stopBgAnimation() {
+    if (_animRAF) { cancelAnimationFrame(_animRAF); _animRAF = null; }
+    if (_animCanvas) { _animCanvas.remove(); _animCanvas = null; }
+    document.getElementById('cellia-aurora-style')?.remove();
+  }
+
+  function startBgAnimation(type) {
+    stopBgAnimation();
+    if (type === 'none') return;
+
+    if (type === 'aurora') {
+      const style = document.createElement('style');
+      style.id = 'cellia-aurora-style';
+      style.textContent = `
+        body::before, body::after {
+          content:''; position:fixed; inset:0; z-index:0; pointer-events:none; opacity:.25;
+        }
+        body::before {
+          background: radial-gradient(ellipse 60% 40% at 20% 30%, var(--red, #ff5a4e) 0%, transparent 70%);
+          animation: aurora-a 12s ease-in-out infinite alternate;
+        }
+        body::after {
+          background: radial-gradient(ellipse 50% 35% at 80% 70%, #6366f1 0%, transparent 70%);
+          animation: aurora-b 15s ease-in-out infinite alternate;
+        }
+        @keyframes aurora-a { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(5%,8%) scale(1.15)} }
+        @keyframes aurora-b { 0%{transform:translate(0,0) scale(1)} 100%{transform:translate(-8%,-5%) scale(1.2)} }
+      `;
+      document.head.appendChild(style);
+      return;
+    }
+
+    _animCanvas = document.createElement('canvas');
+    _animCanvas.style.cssText = 'position:fixed;inset:0;z-index:0;pointer-events:none;opacity:.35';
+    document.body.prepend(_animCanvas);
+    const ctx = _animCanvas.getContext('2d');
+
+    function resize() {
+      _animCanvas.width  = window.innerWidth;
+      _animCanvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    if (type === 'particles') {
+      _animParticles = Array.from({length:50}, () => ({
+        x: Math.random() * window.innerWidth,
+        y: Math.random() * window.innerHeight,
+        vx: (Math.random()-.5)*.25, vy: (Math.random()-.5)*.25,
+        r: Math.random()*1.5+.5, o: Math.random()*.4+.1
+      }));
+      let last = 0;
+      const tick = t => {
+        if (t - last < 33) { _animRAF = requestAnimationFrame(tick); return; }
+        last = t;
+        ctx.clearRect(0,0,_animCanvas.width,_animCanvas.height);
+        _animParticles.forEach(p => {
+          p.x += p.vx; p.y += p.vy;
+          if (p.x<0) p.x=_animCanvas.width; if (p.x>_animCanvas.width) p.x=0;
+          if (p.y<0) p.y=_animCanvas.height; if (p.y>_animCanvas.height) p.y=0;
+          ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+          ctx.fillStyle=`rgba(255,255,255,${p.o})`; ctx.fill();
+        });
+        _animParticles.forEach((a,i) => {
+          for (let j=i+1;j<_animParticles.length;j++) {
+            const b=_animParticles[j], dx=a.x-b.x, dy=a.y-b.y, d=Math.sqrt(dx*dx+dy*dy);
+            if (d<100) { ctx.beginPath(); ctx.strokeStyle=`rgba(255,255,255,${(1-d/100)*.1})`; ctx.lineWidth=.5; ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+          }
+        });
+        _animRAF = requestAnimationFrame(tick);
+      };
+      _animRAF = requestAnimationFrame(tick);
+    }
+
+    if (type === 'stars') {
+      const stars = Array.from({length:120}, () => ({
+        x: Math.random()*window.innerWidth, y: Math.random()*window.innerHeight,
+        r: Math.random()*.8+.2, o: Math.random()*.5+.1,
+        twinkle: Math.random()*Math.PI*2
+      }));
+      let last=0;
+      const tick = t => {
+        if (t-last<50) { _animRAF=requestAnimationFrame(tick); return; }
+        last=t;
+        ctx.clearRect(0,0,_animCanvas.width,_animCanvas.height);
+        stars.forEach(s => {
+          s.twinkle+=.02;
+          const alpha = s.o*(0.6+0.4*Math.sin(s.twinkle));
+          ctx.beginPath(); ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+          ctx.fillStyle=`rgba(255,255,255,${alpha})`; ctx.fill();
+        });
+        _animRAF=requestAnimationFrame(tick);
+      };
+      _animRAF=requestAnimationFrame(tick);
+    }
+
+    if (type === 'grid') {
+      const draw = () => {
+        ctx.clearRect(0,0,_animCanvas.width,_animCanvas.height);
+        ctx.strokeStyle='rgba(255,255,255,.04)'; ctx.lineWidth=.5;
+        const sz=40;
+        for(let x=0;x<_animCanvas.width;x+=sz) { ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,_animCanvas.height);ctx.stroke(); }
+        for(let y=0;y<_animCanvas.height;y+=sz) { ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(_animCanvas.width,y);ctx.stroke(); }
+      };
+      draw();
+      window.addEventListener('resize', draw);
+    }
+  }
+
+  function applyBgAnim(animId, save=true) {
+    currentBgAnim = animId;
+    if (save) localStorage.setItem('cellia-bg-anim', animId);
+    startBgAnimation(animId);
+    updateButtons();
+  }
 
   // ── Appliquer thème ───────────────────────────────────────────────────────
   function applyTheme(theme) {
@@ -450,13 +611,23 @@
     <hr class="cp-divider">
 
     <div class="cp-section">
-      <div class="cp-section-label">Fond</div>
+      <div class="cp-section-label">Couleur de fond</div>
       <div class="cp-bg-grid">
         ${CELLIA_BGCOLORS.map(bg => `
           <button class="cp-bg-swatch ${currentBg === bg.id ? 'active' : ''}"
                   data-bg-btn="${bg.id}"
                   style="background:${currentTheme === 'dark' ? bg.dark : bg.light}"
                   title="${bg.label}"></button>
+        `).join('')}
+      </div>
+    </div>
+
+    <div class="cp-section" style="padding-top:0">
+      <div class="cp-section-label">Animation du fond</div>
+      <div class="cp-grid-2" style="gap:4px">
+        ${CELLIA_BGANIMATIONS.map(a => `
+          <button class="cp-btn ${currentBgAnim === a.id ? 'active' : ''}" data-anim-btn="${a.id}"
+                  style="font-size:11px;padding:6px 8px">${a.label}</button>
         `).join('')}
       </div>
     </div>
@@ -550,7 +721,9 @@
     panel.querySelectorAll('[data-font-btn]').forEach(btn => {
       btn.classList.toggle('active', btn.dataset.fontBtn === currentFont);
     });
-    panel.querySelectorAll('[data-bg-btn]').forEach(btn => {
+  panel.querySelectorAll('[data-anim-btn]').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.animBtn === currentBgAnim);
+  });
       const bg = CELLIA_BGCOLORS.find(b => b.id === btn.dataset.bgBtn);
       btn.classList.toggle('active', btn.dataset.bgBtn === currentBg);
       if (bg) btn.style.background = currentTheme === 'dark' ? bg.dark : bg.light;
@@ -572,6 +745,10 @@
   // ── Events fond ───────────────────────────────────────────────────────────
   panel.querySelectorAll('[data-bg-btn]').forEach(btn => {
     btn.addEventListener('click', () => applyBg(btn.dataset.bgBtn));
+  });
+
+  panel.querySelectorAll('[data-anim-btn]').forEach(btn => {
+    btn.addEventListener('click', () => applyBgAnim(btn.dataset.animBtn));
   });
 
   // ── Events taille ─────────────────────────────────────────────────────────
@@ -715,6 +892,7 @@
   applyTheme(currentTheme);
   applyFont(currentFont);
   applyBg(currentBg, false);
+  applyBgAnim(currentBgAnim, false);
   applySize(currentSize);
   applyBrightness(currentBrightness, false);
   applyLS(currentLS);
