@@ -31,7 +31,7 @@ function worstStatus(components) {
   return 'operational';
 }
 
-// ── Atlassian Statuspage — OpenAI, Anthropic, Mistral, Groq ──────────────────
+// ── Atlassian Statuspage — OpenAI, Anthropic, Groq ───────────────────────────
 async function checkAtlassian(baseUrl, label) {
   try {
     const res  = await fetch(`${baseUrl}/api/v2/summary.json`, {
@@ -66,6 +66,74 @@ async function checkAtlassian(baseUrl, label) {
     };
   } catch (e) {
     console.warn(`⚠ ${label} : ${e.message}`);
+    return { overall: 'unknown', description: 'Page de statut inaccessible', components: [] };
+  }
+}
+
+// ── Mistral — Checkly Status Page ────────────────────────────────────────────
+// Mistral n'utilise pas Atlassian mais Checkly (stack Nuxt).
+// Les endpoints sont exposés directement par le serveur Nuxt de status.mistral.ai.
+async function checkMistral() {
+  const BASE = 'https://status.mistral.ai/api/status-page/mistral-ai';
+  try {
+    const [incRes, uptimeRes] = await Promise.all([
+      fetch(`${BASE}/unresolved-incidents`, {
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        headers: { 'Accept': 'application/json' }
+      }),
+      fetch(`${BASE}/uptime`, {
+        signal: AbortSignal.timeout(TIMEOUT_MS),
+        headers: { 'Accept': 'application/json' }
+      }),
+    ]);
+    if (!incRes.ok)    throw new Error(`incidents HTTP ${incRes.status}`);
+    if (!uptimeRes.ok) throw new Error(`uptime HTTP ${uptimeRes.status}`);
+
+    const { incidents }          = await incRes.json();
+    const { metadata, uptime }   = await uptimeRes.json();
+
+    // Aplatir les groupes de services en liste de composants
+    const components = (metadata || []).flatMap(group =>
+      (group.services || []).map(svc => ({
+        name:       svc.name,
+        status:     'operational',   // valeur par défaut, corrigée ci-dessous
+        updated_at: null,
+        group:      group.name || null,
+      }))
+    );
+
+    // Mapper les incidents actifs sur les composants concernés
+    const activeIncidents = (incidents || []).filter(inc => !inc.resolvedAt);
+    for (const inc of activeIncidents) {
+      const severity = inc.severity === 'MAJOR' ? 'outage'
+                     : inc.severity === 'MINOR' ? 'degraded'
+                     : 'degraded';
+      for (const affected of (inc.affectedServices || [])) {
+        const comp = components.find(c => c.name === affected.name);
+        if (comp) {
+          comp.status     = severity;
+          comp.updated_at = inc.startedAt || null;
+        }
+      }
+    }
+
+    // Statut global
+    let overall;
+    if (activeIncidents.some(i => i.severity === 'MAJOR')) {
+      overall = 'outage';
+    } else if (activeIncidents.length > 0) {
+      overall = 'degraded';
+    } else {
+      overall = 'operational';
+    }
+
+    const description = activeIncidents.length === 0
+      ? 'All Systems Operational'
+      : `${activeIncidents.length} incident(s) actif(s)`;
+
+    return { overall, description, components };
+  } catch (e) {
+    console.warn(`⚠ Mistral : ${e.message}`);
     return { overall: 'unknown', description: 'Page de statut inaccessible', components: [] };
   }
 }
@@ -125,11 +193,11 @@ async function checkGoogle() {
 console.log('🔍 Vérification des statuts API…');
 
 const [openai, anthropic, google, mistral, groq] = await Promise.all([
-  checkAtlassian('https://status.openai.com',   'OpenAI'),
+  checkAtlassian('https://status.openai.com',    'OpenAI'),
   checkAtlassian('https://status.anthropic.com', 'Anthropic'),
   checkGoogle(),
-  checkAtlassian('https://status.mistral.ai',    'Mistral'),
-  checkAtlassian('https://groqstatus.com',        'Groq'),
+  checkMistral(),
+  checkAtlassian('https://groqstatus.com',       'Groq'),
 ]);
 
 const now    = new Date().toISOString();
