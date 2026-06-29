@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-29T04:06:15.014Z",
+  "last_updated": "2026-06-29T09:05:49.911Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -325,6 +325,12 @@
         },
         {
           "name": "Vibe",
+          "status": "operational",
+          "updated_at": null,
+          "group": "Services"
+        },
+        {
+          "name": "Document Library",
           "status": "operational",
           "updated_at": null,
           "group": "Services"
