@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-06-30T12:32:12.349Z",
+  "last_updated": "2026-06-30T15:18:05.002Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -164,37 +164,37 @@
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-06-24T14:56:21.743Z",
+          "updated_at": "2026-06-30T14:45:50.403Z",
           "group": null
         },
         {
           "name": "Claude Console (platform.claude.com)",
           "status": "operational",
-          "updated_at": "2026-06-24T14:56:21.760Z",
+          "updated_at": "2026-06-30T14:45:50.422Z",
           "group": null
         },
         {
           "name": "Claude API (api.anthropic.com)",
           "status": "operational",
-          "updated_at": "2026-06-29T14:13:31.520Z",
+          "updated_at": "2026-06-30T14:45:50.439Z",
           "group": null
         },
         {
           "name": "Claude Code",
           "status": "operational",
-          "updated_at": "2026-06-24T14:56:21.789Z",
+          "updated_at": "2026-06-30T14:45:50.455Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
           "status": "operational",
-          "updated_at": "2026-06-24T14:56:21.806Z",
+          "updated_at": "2026-06-30T14:45:50.471Z",
           "group": null
         },
         {
           "name": "Claude for Government",
           "status": "operational",
-          "updated_at": "2026-05-08T10:26:46.717Z",
+          "updated_at": "2026-06-30T14:45:50.487Z",
           "group": null
         }
       ]
@@ -231,7 +231,7 @@
     },
     "mistral": {
       "overall": "degraded",
-      "description": "1 incident(s) actif(s)",
+      "description": "2 incident(s) actif(s)",
       "components": [
         {
           "name": "Chat Completions API",
