@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-02T14:37:44.548Z",
+  "last_updated": "2026-07-02T16:25:48.449Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -344,130 +344,9 @@
       ]
     },
     "groq": {
-      "overall": "operational",
-      "description": "All Systems Operational",
-      "components": [
-        {
-          "name": "openai/gpt-oss-20b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-guard-4-12b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "groq/compound-mini",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "Canopy Labs Orpheus Arabic Saudi",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-4-scout-17b-16e-instruct",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-prompt-guard-2-86m",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "moonshotai/kimi-k2-instruct-0905",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "openai/gpt-oss-safeguard-20b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "qwen/qwen3-32b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "Website",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "llama-3.1-8b-instant",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "API",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "Canopy Labs Orpheus English",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-prompt-guard-2-22m",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "whisper-large-v3",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "groq/compound",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "whisper-large-v3-turbo",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "openai/gpt-oss-120b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-4-maverick-17b-128e-instruct",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "llama-3.3-70b-versatile",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        }
-      ]
+      "overall": "unknown",
+      "description": "Page de statut inaccessible",
+      "components": []
     }
   }
 }
