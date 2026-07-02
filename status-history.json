@@ -749,6 +749,16 @@
         "mistral": "degraded",
         "groq": "operational"
       }
+    },
+    {
+      "timestamp": "2026-07-02T19:48:25.764Z",
+      "services": {
+        "openai": "degraded",
+        "anthropic": "operational",
+        "google": "operational",
+        "mistral": "degraded",
+        "groq": "operational"
+      }
     }
   ]
 }
