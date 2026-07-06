@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-06T16:43:56.725Z",
+  "last_updated": "2026-07-06T18:31:15.887Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -259,12 +259,6 @@
         },
         {
           "name": "Conversations API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Fine-tuning API",
           "status": "operational",
           "updated_at": null,
           "group": "API"
