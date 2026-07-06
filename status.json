@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-06T20:32:44.634Z",
+  "last_updated": "2026-07-06T22:01:32.080Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -158,8 +158,8 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
@@ -181,8 +181,8 @@
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-07-06T19:46:02.433Z",
+          "status": "degraded",
+          "updated_at": "2026-07-06T21:49:14.441Z",
           "group": null
         },
         {
