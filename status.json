@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-06T18:31:15.887Z",
+  "last_updated": "2026-07-06T20:32:44.634Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -164,7 +164,7 @@
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-07-06T09:13:37.237Z",
+          "updated_at": "2026-07-06T19:46:02.392Z",
           "group": null
         },
         {
@@ -182,7 +182,7 @@
         {
           "name": "Claude Code",
           "status": "operational",
-          "updated_at": "2026-07-06T09:13:37.274Z",
+          "updated_at": "2026-07-06T19:46:02.433Z",
           "group": null
         },
         {
