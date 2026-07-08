@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-08T15:32:01.200Z",
+  "last_updated": "2026-07-08T17:05:40.873Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -230,8 +230,8 @@
       ]
     },
     "mistral": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "1 incident(s) actif(s)",
       "components": [
         {
           "name": "Chat Completions API",
