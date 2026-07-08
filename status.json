@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-08T17:05:40.873Z",
+  "last_updated": "2026-07-08T18:41:37.911Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-07-08T06:40:31.409Z",
+          "status": "degraded",
+          "updated_at": "2026-07-08T18:00:18.116Z",
           "group": null
         },
         {
@@ -175,20 +175,20 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-07-08T06:40:31.422Z",
+          "status": "degraded",
+          "updated_at": "2026-07-08T18:00:18.131Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-07-08T06:40:31.435Z",
+          "status": "degraded",
+          "updated_at": "2026-07-08T18:00:18.145Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-07-08T06:40:31.448Z",
+          "status": "degraded",
+          "updated_at": "2026-07-08T18:00:18.160Z",
           "group": null
         },
         {
@@ -230,8 +230,8 @@
       ]
     },
     "mistral": {
-      "overall": "degraded",
-      "description": "1 incident(s) actif(s)",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions API",
