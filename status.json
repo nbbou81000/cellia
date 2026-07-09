@@ -1,158 +1,158 @@
 {
-  "last_updated": "2026-07-09T18:24:41.855Z",
+  "last_updated": "2026-07-09T20:14:17.938Z",
   "services": {
     "openai": {
       "overall": "degraded",
       "description": "Partial System Degradation",
       "components": [
         {
-          "name": "FedRAMP",
-          "status": "degraded",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
           "name": "Batch",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Audio",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Login",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Compliance API",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Search",
+          "name": "Embeddings",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "GPTs",
+          "name": "Moderations",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "Image Generation",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Atlas",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "Ads API",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "Fine-tuning",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Files",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Responses",
+          "name": "Login",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
-          "group": null
-        },
-        {
-          "name": "Realtime",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
-          "group": null
-        },
-        {
-          "name": "Sora",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Conversations",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Voice mode",
+          "name": "ChatGPT Work",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Deep Research",
+          "name": "Codex in ChatGPT Desktop",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "Images",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:13Z",
-          "group": null
-        },
-        {
-          "name": "Codex Web",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
-          "group": null
-        },
-        {
-          "name": "File uploads",
-          "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Agent",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "App",
+          "name": "Sites",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Codex API",
           "status": "operational",
-          "updated_at": "2026-06-23T18:25:14Z",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "VS Code extension",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "FedRAMP",
+          "status": "degraded",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Ads Manager",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Search",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "GPTs",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Image Generation",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Atlas",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Connectors/Apps",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Ads API",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Fine-tuning",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Responses",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         }
       ]
