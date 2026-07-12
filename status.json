@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-12T11:29:58.705Z",
+  "last_updated": "2026-07-12T12:28:53.341Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -25,7 +25,7 @@
         },
         {
           "name": "Login",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
