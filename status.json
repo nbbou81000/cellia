@@ -1,16 +1,10 @@
 {
-  "last_updated": "2026-07-14T15:01:31.874Z",
+  "last_updated": "2026-07-14T16:36:18.444Z",
   "services": {
     "openai": {
       "overall": "operational",
       "description": "All Systems Operational",
       "components": [
-        {
-          "name": "Conversations",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
         {
           "name": "Batch",
           "status": "operational",
@@ -25,6 +19,12 @@
         },
         {
           "name": "Login",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Conversations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
