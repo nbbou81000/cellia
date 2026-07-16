@@ -1,10 +1,28 @@
 {
-  "last_updated": "2026-07-16T20:32:37.200Z",
+  "last_updated": "2026-07-16T21:42:42.675Z",
   "services": {
     "openai": {
       "overall": "operational",
       "description": "All Systems Operational",
       "components": [
+        {
+          "name": "Codex in ChatGPT Desktop",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Work",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Sites",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
         {
           "name": "Batch",
           "status": "operational",
@@ -133,24 +151,6 @@
         },
         {
           "name": "ChatGPT Atlas",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Codex in ChatGPT Desktop",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Work",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Sites",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
