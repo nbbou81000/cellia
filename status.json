@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-16T22:37:29.054Z",
+  "last_updated": "2026-07-16T23:35:31.688Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Codex in ChatGPT Desktop",
@@ -145,7 +145,7 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
