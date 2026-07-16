@@ -1,13 +1,19 @@
 {
-  "last_updated": "2026-07-16T08:30:46.258Z",
+  "last_updated": "2026-07-16T10:32:42.687Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Batch",
           "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Login",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -19,7 +25,7 @@
         },
         {
           "name": "Login",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -49,12 +55,6 @@
         },
         {
           "name": "Files",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Login",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -158,37 +158,37 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-07-15T15:02:05.298Z",
+          "updated_at": "2026-07-16T10:27:48.485Z",
           "group": null
         },
         {
           "name": "Claude Console (platform.claude.com)",
           "status": "operational",
-          "updated_at": "2026-07-15T15:02:05.315Z",
+          "updated_at": "2026-07-16T10:27:48.502Z",
           "group": null
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-07-15T15:02:05.329Z",
+          "status": "degraded",
+          "updated_at": "2026-07-16T08:58:05.941Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-07-15T15:02:05.344Z",
+          "status": "degraded",
+          "updated_at": "2026-07-16T08:58:05.956Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-07-15T15:02:05.359Z",
+          "status": "degraded",
+          "updated_at": "2026-07-16T08:58:05.972Z",
           "group": null
         },
         {
