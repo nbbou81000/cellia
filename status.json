@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-16T14:18:16.135Z",
+  "last_updated": "2026-07-16T15:52:21.761Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Batch",
@@ -13,7 +13,7 @@
         },
         {
           "name": "Login",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -25,7 +25,7 @@
         },
         {
           "name": "Login",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
