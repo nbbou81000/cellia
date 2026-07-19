@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-19T16:36:33.009Z",
+  "last_updated": "2026-07-19T17:39:28.918Z",
   "services": {
     "openai": {
-      "overall": "outage",
-      "description": "Partial System Outage",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Codex in ChatGPT Desktop",
@@ -19,7 +19,7 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "partial_outage",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -49,7 +49,7 @@
         },
         {
           "name": "Conversations",
-          "status": "partial_outage",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -145,7 +145,7 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "partial_outage",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
