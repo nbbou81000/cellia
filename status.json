@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-20T07:50:59.586Z",
+  "last_updated": "2026-07-20T10:39:23.900Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -181,8 +181,8 @@
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-07-20T07:35:29.208Z",
+          "status": "degraded",
+          "updated_at": "2026-07-20T07:57:06.131Z",
           "group": null
         },
         {
