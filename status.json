@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-21T19:02:09.834Z",
+  "last_updated": "2026-07-21T20:33:20.931Z",
   "services": {
     "openai": {
       "overall": "outage",
@@ -7,6 +7,12 @@
       "components": [
         {
           "name": "Codex in ChatGPT Desktop",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Images",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -145,12 +151,6 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Atlas",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
