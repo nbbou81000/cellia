@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-22T07:18:47.637Z",
+  "last_updated": "2026-07-22T09:44:33.851Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Codex in ChatGPT Desktop",
@@ -121,7 +121,7 @@
         },
         {
           "name": "Image Generation",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -176,13 +176,13 @@
         {
           "name": "Claude API (api.anthropic.com)",
           "status": "operational",
-          "updated_at": "2026-07-21T17:07:34.890Z",
+          "updated_at": "2026-07-22T08:45:27.024Z",
           "group": null
         },
         {
           "name": "Claude Code",
           "status": "operational",
-          "updated_at": "2026-07-21T18:03:46.965Z",
+          "updated_at": "2026-07-22T08:45:27.041Z",
           "group": null
         },
         {
