@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-22T16:42:11.314Z",
+  "last_updated": "2026-07-22T17:52:55.827Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -164,7 +164,7 @@
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-07-22T16:12:32.262Z",
+          "updated_at": "2026-07-22T17:45:37.436Z",
           "group": null
         },
         {
@@ -188,7 +188,7 @@
         {
           "name": "Claude Cowork",
           "status": "operational",
-          "updated_at": "2026-07-22T16:12:32.334Z",
+          "updated_at": "2026-07-22T17:45:37.453Z",
           "group": null
         },
         {
