@@ -1,16 +1,10 @@
 {
-  "last_updated": "2026-07-23T16:52:47.417Z",
+  "last_updated": "2026-07-23T18:06:59.532Z",
   "services": {
     "openai": {
       "overall": "degraded",
       "description": "Partial System Degradation",
       "components": [
-        {
-          "name": "Codex in ChatGPT Desktop",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
         {
           "name": "Images",
           "status": "operational",
@@ -19,7 +13,7 @@
         },
         {
           "name": "Sites",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -43,13 +37,13 @@
         },
         {
           "name": "Login",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Compliance API",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -79,19 +73,13 @@
         },
         {
           "name": "Conversations",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Work",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Search",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -127,13 +115,7 @@
         },
         {
           "name": "GPTs",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Image Generation",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -151,7 +133,25 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "operational",
+          "status": "degraded",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Atlas",
+          "status": "degraded",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Work",
+          "status": "degraded",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Image Generation",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         }
