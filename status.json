@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-23T19:42:43.010Z",
+  "last_updated": "2026-07-23T20:41:10.067Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Images",
@@ -73,7 +73,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -103,13 +103,13 @@
         },
         {
           "name": "VS Code extension",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Codex API",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -133,7 +133,7 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -145,7 +145,7 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
