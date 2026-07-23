@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-23T15:22:01.345Z",
+  "last_updated": "2026-07-23T16:52:47.417Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Codex in ChatGPT Desktop",
@@ -19,12 +19,6 @@
         },
         {
           "name": "Sites",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Work",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -54,12 +48,6 @@
           "group": null
         },
         {
-          "name": "Conversations",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Compliance API",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -72,26 +60,8 @@
           "group": null
         },
         {
-          "name": "Moderations",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Files",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Codex API",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "VS Code extension",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -108,7 +78,49 @@
           "group": null
         },
         {
+          "name": "Conversations",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Work",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
           "name": "Search",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Moderations",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Responses",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Sora",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "VS Code extension",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Codex API",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -138,19 +150,7 @@
           "group": null
         },
         {
-          "name": "Responses",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Atlas",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
