@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-24T09:30:55.937Z",
+  "last_updated": "2026-07-24T11:21:57.662Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -103,13 +103,13 @@
         },
         {
           "name": "VS Code extension",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Codex API",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -145,7 +145,7 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -158,37 +158,37 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
-          "status": "degraded",
-          "updated_at": "2026-07-24T09:09:56.989Z",
+          "status": "operational",
+          "updated_at": "2026-07-24T09:35:08.442Z",
           "group": null
         },
         {
           "name": "Claude Console (platform.claude.com)",
-          "status": "degraded",
-          "updated_at": "2026-07-24T09:09:57.005Z",
+          "status": "operational",
+          "updated_at": "2026-07-24T09:35:08.458Z",
           "group": null
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "degraded",
-          "updated_at": "2026-07-24T09:09:57.021Z",
+          "status": "operational",
+          "updated_at": "2026-07-24T09:35:08.473Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "degraded",
-          "updated_at": "2026-07-24T09:09:57.039Z",
+          "status": "operational",
+          "updated_at": "2026-07-24T09:35:08.489Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "degraded",
-          "updated_at": "2026-07-24T09:09:57.054Z",
+          "status": "operational",
+          "updated_at": "2026-07-24T09:35:08.504Z",
           "group": null
         },
         {
