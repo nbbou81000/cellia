@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-07-24T11:21:57.662Z",
+  "last_updated": "2026-07-24T12:52:08.106Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Images",
@@ -145,7 +145,7 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
