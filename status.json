@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-25T11:34:38.303Z",
+  "last_updated": "2026-07-25T12:41:48.294Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -18,6 +18,12 @@
           "group": null
         },
         {
+          "name": "Batch",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
           "name": "Moderations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -31,12 +37,6 @@
         },
         {
           "name": "Codex in ChatGPT Desktop",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Batch",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
