@@ -1,79 +1,79 @@
 {
-  "last_updated": "2026-07-25T10:14:31.131Z",
+  "last_updated": "2026-07-25T11:34:38.303Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Images",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Sites",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Moderations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Responses",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Codex in ChatGPT Desktop",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Batch",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Login",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Audio",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Login",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Compliance API",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Embeddings",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Files",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -91,37 +91,37 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Search",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Sora",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "VS Code extension",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Codex API",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "GPTs",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -133,25 +133,25 @@
         },
         {
           "name": "Fine-tuning",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "Connectors/Apps",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "ChatGPT Atlas",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
           "name": "ChatGPT Work",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         }
