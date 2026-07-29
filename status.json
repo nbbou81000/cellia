@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-29T18:37:57.295Z",
+  "last_updated": "2026-07-29T19:57:27.784Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "outage",
+      "description": "Partial System Outage",
       "components": [
         {
           "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-07-27T14:36:43.637Z",
+          "status": "outage",
+          "updated_at": "2026-07-29T19:49:45.435Z",
           "group": null
         },
         {
@@ -175,20 +175,20 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-07-27T14:36:43.657Z",
+          "status": "outage",
+          "updated_at": "2026-07-29T19:49:45.454Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-07-27T14:36:43.676Z",
+          "status": "outage",
+          "updated_at": "2026-07-29T19:49:45.472Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-07-27T14:36:43.695Z",
+          "status": "outage",
+          "updated_at": "2026-07-29T19:49:45.491Z",
           "group": null
         },
         {
@@ -230,8 +230,8 @@
       ]
     },
     "mistral": {
-      "overall": "degraded",
-      "description": "2 incident(s) actif(s)",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions API",
