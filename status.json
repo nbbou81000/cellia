@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-07-31T17:10:07.762Z",
+  "last_updated": "2026-07-31T18:42:41.033Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -13,18 +13,6 @@
         },
         {
           "name": "Sites",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Batch",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Moderations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -66,12 +54,6 @@
           "group": null
         },
         {
-          "name": "Embeddings",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Files",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -108,18 +90,6 @@
           "group": null
         },
         {
-          "name": "VS Code extension",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Codex API",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "GPTs",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -138,19 +108,49 @@
           "group": null
         },
         {
-          "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "ChatGPT Atlas",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "ChatGPT Work",
+          "name": "Deep Research",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Image Generation",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Agent",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Realtime",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Batch",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Embeddings",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
