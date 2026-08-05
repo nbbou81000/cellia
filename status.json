@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-05T15:34:50.704Z",
+  "last_updated": "2026-08-05T17:08:29.926Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -55,7 +55,7 @@
         },
         {
           "name": "Files",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -73,7 +73,7 @@
         },
         {
           "name": "Conversations",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -85,12 +85,6 @@
         },
         {
           "name": "Sora",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "GPTs",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -151,6 +145,12 @@
         },
         {
           "name": "Embeddings",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Moderations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
