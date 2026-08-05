@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-05T11:34:43.777Z",
+  "last_updated": "2026-08-05T13:19:56.319Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
-          "status": "degraded",
-          "updated_at": "2026-08-05T07:05:54.554Z",
+          "status": "operational",
+          "updated_at": "2026-08-05T13:08:34.169Z",
           "group": null
         },
         {
@@ -175,20 +175,20 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "degraded",
-          "updated_at": "2026-08-05T07:05:54.568Z",
+          "status": "operational",
+          "updated_at": "2026-08-05T13:08:34.185Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "degraded",
-          "updated_at": "2026-08-05T07:05:54.586Z",
+          "status": "operational",
+          "updated_at": "2026-08-05T13:08:34.200Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "degraded",
-          "updated_at": "2026-08-05T07:05:54.601Z",
+          "status": "operational",
+          "updated_at": "2026-08-05T13:08:34.215Z",
           "group": null
         },
         {
