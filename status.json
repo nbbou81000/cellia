@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-05T18:47:09.745Z",
+  "last_updated": "2026-08-05T20:20:27.632Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -73,7 +73,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
