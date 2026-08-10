@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-08-10T06:06:09.234Z",
+  "last_updated": "2026-08-10T08:01:34.358Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Images",
@@ -14,6 +14,12 @@
         {
           "name": "Sites",
           "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Conversations",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -67,12 +73,6 @@
         },
         {
           "name": "Ads Manager",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Conversations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
