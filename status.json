@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-08-10T08:01:34.358Z",
+  "last_updated": "2026-08-10T09:45:16.208Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Images",
@@ -19,7 +19,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
