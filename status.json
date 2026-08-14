@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-14T01:19:23.944Z",
+  "last_updated": "2026-08-14T03:33:07.680Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,46 +158,9 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
-      "components": [
-        {
-          "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-08-13T17:59:00.384Z",
-          "group": null
-        },
-        {
-          "name": "Claude Console (platform.claude.com)",
-          "status": "operational",
-          "updated_at": "2026-08-04T11:37:04.814Z",
-          "group": null
-        },
-        {
-          "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-08-13T17:59:27.929Z",
-          "group": null
-        },
-        {
-          "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-08-13T17:59:38.723Z",
-          "group": null
-        },
-        {
-          "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-08-14T00:51:24.067Z",
-          "group": null
-        },
-        {
-          "name": "Claude for Government",
-          "status": "operational",
-          "updated_at": "2026-06-30T14:45:50.487Z",
-          "group": null
-        }
-      ]
+      "overall": "unknown",
+      "description": "Page de statut inaccessible",
+      "components": []
     },
     "google": {
       "overall": "operational",
