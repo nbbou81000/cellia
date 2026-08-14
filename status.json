@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-08-13T23:56:37.961Z",
+  "last_updated": "2026-08-14T01:19:23.944Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Images",
@@ -49,7 +49,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -188,7 +188,7 @@
         {
           "name": "Claude Cowork",
           "status": "operational",
-          "updated_at": "2026-08-13T17:59:48.969Z",
+          "updated_at": "2026-08-14T00:51:24.067Z",
           "group": null
         },
         {
