@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-14T20:20:51.405Z",
+  "last_updated": "2026-08-14T20:52:17.469Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,8 +158,8 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Minor Service Outage",
       "components": [
         {
           "name": "claude.ai",
@@ -175,20 +175,20 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-08-13T17:59:27.929Z",
+          "status": "partial_outage",
+          "updated_at": "2026-08-14T20:30:36.322Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-08-13T17:59:38.723Z",
+          "status": "partial_outage",
+          "updated_at": "2026-08-14T20:30:36.337Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-08-14T00:51:24.067Z",
+          "status": "partial_outage",
+          "updated_at": "2026-08-14T20:30:36.353Z",
           "group": null
         },
         {
