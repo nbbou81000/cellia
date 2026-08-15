@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-14T23:57:33.279Z",
+  "last_updated": "2026-08-15T00:58:38.658Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Minor Service Outage",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
-          "status": "partial_outage",
-          "updated_at": "2026-08-14T23:57:16.595Z",
+          "status": "operational",
+          "updated_at": "2026-08-15T00:21:20.161Z",
           "group": null
         },
         {
