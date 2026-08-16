@@ -1,16 +1,6 @@
 {
   "entries": [
     {
-      "timestamp": "2026-08-13T23:56:37.961Z",
-      "services": {
-        "openai": "degraded",
-        "anthropic": "operational",
-        "google": "operational",
-        "mistral": "degraded",
-        "groq": "operational"
-      }
-    },
-    {
       "timestamp": "2026-08-14T01:19:23.944Z",
       "services": {
         "openai": "operational",
@@ -952,6 +942,16 @@
     },
     {
       "timestamp": "2026-08-16T08:28:16.249Z",
+      "services": {
+        "openai": "operational",
+        "anthropic": "operational",
+        "google": "operational",
+        "mistral": "degraded",
+        "groq": "operational"
+      }
+    },
+    {
+      "timestamp": "2026-08-16T08:56:19.893Z",
       "services": {
         "openai": "operational",
         "anthropic": "operational",
