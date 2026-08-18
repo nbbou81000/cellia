@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-08-18T19:04:27.616Z",
+  "last_updated": "2026-08-18T19:37:08.783Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Responses",
@@ -13,12 +13,6 @@
         },
         {
           "name": "Images",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Sites",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -151,6 +145,12 @@
         },
         {
           "name": "Connectors/Apps",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "VS Code extension",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
