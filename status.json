@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-19T14:15:55.637Z",
+  "last_updated": "2026-08-19T14:58:55.227Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -294,13 +294,13 @@
           "group": "API"
         },
         {
-          "name": "AI Registry Prompts API",
+          "name": "Prompts API",
           "status": "operational",
           "updated_at": null,
           "group": "API"
         },
         {
-          "name": "AI Registry Skills API",
+          "name": "Skills API",
           "status": "operational",
           "updated_at": null,
           "group": "API"
