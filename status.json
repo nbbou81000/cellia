@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-20T14:05:53.751Z",
+  "last_updated": "2026-08-20T14:52:04.962Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -96,12 +96,6 @@
           "group": null
         },
         {
-          "name": "Image Generation",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Agent",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -151,6 +145,12 @@
         },
         {
           "name": "VS Code extension",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Codex API",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
