@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-21T19:54:42.242Z",
+  "last_updated": "2026-08-21T20:13:22.049Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -32,12 +32,6 @@
         {
           "name": "Audio",
           "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Login",
-          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -151,6 +145,12 @@
         },
         {
           "name": "Codex API",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Sites",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
