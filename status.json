@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-24T16:52:48.518Z",
+  "last_updated": "2026-08-24T17:21:29.869Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -164,7 +164,7 @@
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-08-24T08:30:47.515Z",
+          "updated_at": "2026-08-24T17:16:02.868Z",
           "group": null
         },
         {
