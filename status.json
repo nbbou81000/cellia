@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-08-27T16:47:41.245Z",
+  "last_updated": "2026-08-28T01:12:36.637Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -90,12 +90,6 @@
           "group": null
         },
         {
-          "name": "Agent",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Realtime",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -151,6 +145,12 @@
         },
         {
           "name": "Sites",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Agent",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
