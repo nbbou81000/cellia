@@ -5,7 +5,7 @@ on:
     - cron: '0 4 * * *'    # 6h Paris
     - cron: '0 7 * * *'    # 9h Paris
     - cron: '0 10 * * *'   # 12h Paris
-    - cron: '0 12 * * *'   # 14h Paris  ← nouveau
+    - cron: '0 12 * * *'   # 14h Paris
     - cron: '0 14 * * *'   # 16h Paris
     - cron: '0 18 * * *'   # 20h Paris
   workflow_dispatch:
@@ -31,7 +31,7 @@ on:
         default: 'false'
         type: boolean
       mistral_boost:
-        description: 'CRON Mistral latest — mistral-small-latest JSON 3000 tok · 20 articles'
+        description: 'CRON Mistral Boost — mistral-small-2506 JSON 8000 tok · 20 articles'
         required: false
         default: 'false'
         type: boolean
@@ -40,7 +40,7 @@ jobs:
   fetch-and-deploy:
     name: Fetch RSS → Mistral → GitHub Pages
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 45
     permissions:
       contents: write
 
@@ -54,6 +54,48 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: '20'
+
+      # ── Détecter le mode et enregistrer l'heure de démarrage ──────────────
+      - name: Init statut
+        id: init
+        run: |
+          START=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+          echo "started_at=$START" >> $GITHUB_OUTPUT
+
+          # Détecter le mode actif
+          if [ "${{ github.event_name }}" = "schedule" ]; then
+            MODE="Scheduled Mistral"
+          elif [ "${{ github.event.inputs.mistral_boost }}" = "true" ]; then
+            MODE="Mistral Boost"
+          elif [ "${{ github.event.inputs.paid_mode }}" = "true" ]; then
+            MODE="Mode Payant"
+          elif [ "${{ github.event.inputs.korben_mode }}" = "true" ]; then
+            MODE="Spécial Korben"
+          elif [ "${{ github.event.inputs.fond_mode }}" = "true" ]; then
+            MODE="Article de Fond"
+          elif [ "${{ github.event.inputs.dev_mode }}" = "true" ]; then
+            MODE="Dev"
+          else
+            MODE="Standard"
+          fi
+          echo "mode=$MODE" >> $GITHUB_OUTPUT
+
+          # Écrire statut "running" sur GitHub Pages
+          git config user.name  "CelliA Bot"
+          git config user.email "cellia-bot@noreply.github.com"
+          cat > workflow-status.json << JSON
+          {
+            "status": "running",
+            "mode": "$MODE",
+            "started_at": "$START",
+            "finished_at": null,
+            "articles": null,
+            "duration_min": null
+          }
+          JSON
+          git add workflow-status.json
+          git commit -m "status: 🔄 running — $MODE"
+          git push
 
       - name: Install dependencies
         working-directory: scripts
@@ -78,6 +120,9 @@ jobs:
             node fetch.js
           fi
 
+      - name: Generate share preview pages
+        run: node gen-og.js
+
       - name: Verify
         run: |
           if [ ! -f dist/articles.json ] || [ ! -f dist/articles-full.json ]; then exit 1; fi
@@ -86,10 +131,10 @@ jobs:
 
       - name: Commit articles
         run: |
-          git config user.name  "CelliA Bot"
-          git config user.email "cellia-bot@noreply.github.com"
           git add dist/articles.json dist/articles-full.json
           git add dist/articles-fond.json 2>/dev/null || true
+          git add dist/articles/ 2>/dev/null || true
+          git add dist/a/ 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Rien à commiter"
           else
@@ -107,6 +152,44 @@ jobs:
             -H "Tags: newspaper" \
             -d "✅ $COUNT articles disponibles" \
             https://ntfy.sh/${{ secrets.NTFY_TOPIC }} || true
+
+      # ── Écrire le statut final (toujours exécuté) ─────────────────────────
+      - name: Écriture statut final
+        if: always()
+        run: |
+          END=$(date -u '+%Y-%m-%dT%H:%M:%SZ')
+          START="${{ steps.init.outputs.started_at }}"
+          MODE="${{ steps.init.outputs.mode }}"
+          JOB_STATUS="${{ job.status }}"
+          COUNT=$(node -e "console.log(require('./dist/articles.json').count)" 2>/dev/null || echo "0")
+
+          # Calculer la durée en minutes
+          START_S=$(date -d "$START" +%s 2>/dev/null || date -j -f "%Y-%m-%dT%H:%M:%SZ" "$START" +%s 2>/dev/null || echo "0")
+          END_S=$(date +%s)
+          DURATION=$(( (END_S - START_S) / 60 ))
+
+          # Emoji selon statut
+          if [ "$JOB_STATUS" = "success" ]; then
+            EMOJI="✅"
+          else
+            EMOJI="❌"
+          fi
+
+          cat > workflow-status.json << JSON
+          {
+            "status": "$JOB_STATUS",
+            "emoji": "$EMOJI",
+            "mode": "$MODE",
+            "started_at": "$START",
+            "finished_at": "$END",
+            "articles": $COUNT,
+            "duration_min": $DURATION
+          }
+          JSON
+
+          git add workflow-status.json
+          git commit -m "status: $EMOJI $JOB_STATUS — $COUNT articles — $MODE"
+          git push
 
       - name: Summary
         if: always()
