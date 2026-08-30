@@ -467,6 +467,20 @@
     .state-message h2 { font-size: 22px; font-weight: 700; color: var(--text-hi); margin-bottom: 10px; }
     .state-message p  { font-size: 15px; line-height: 1.6; max-width: 380px; margin: 0 auto; }
 
+    /* ── Révélation progressive du contenu de l'article ──────────────────
+       La classe .reveal n'est posée que par JavaScript. Sans JS, sans CSS,
+       ou si l'animation échoue, le texte reste entièrement visible.        */
+    @keyframes articleReveal {
+      from { opacity: 0; transform: translateY(9px); }
+      to   { opacity: 1; transform: none; }
+    }
+    .article-body.reveal > * {
+      animation: articleReveal 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .article-body.reveal > * { animation: none; opacity: 1; transform: none; }
+    }
+
     /* ── Responsive ── */
     @media (max-width: 640px) {
       .related-grid { grid-template-columns: 1fr; }
@@ -767,77 +781,22 @@
       });
     }
 
-    // ── Animation typewriter + haptique ───────────────────────────────────
+    // ── Révélation progressive du contenu (CSS) ───────────────────────────
+    // Le texte est présent dans le DOM dès la première frame : seule l'opacité
+    // est animée. Un traducteur de page, le mode Reader de Safari ou une
+    // extension ne peuvent donc plus laisser l'article tronqué.
     function animateArticleBody(container, htmlContent) {
-      // Respect prefers-reduced-motion (accessibilité)
-      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
-        container.innerHTML = htmlContent;
-        return;
-      }
+      container.innerHTML = htmlContent;   // contenu complet, immédiatement
 
-      // Injecter le HTML pour construire le DOM (structure visible mais texte vide)
-      container.innerHTML = htmlContent;
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
-      // Collecter tous les nœuds texte avec leur contenu complet
-      const textPairs = [];
-      const walker    = document.createTreeWalker(container, NodeFilter.SHOW_TEXT);
-      let   node;
-      while ((node = walker.nextNode())) {
-        const full = node.textContent;
-        if (full.length > 0) {
-          textPairs.push({ node, full });
-          node.textContent = ''; // vider pour l'animation
-        }
-      }
+      const blocks = Array.from(container.children);
+      if (!blocks.length) return;
 
-      if (!textPairs.length) { container.innerHTML = htmlContent; return; }
-
-      // Vitesse adaptative : toujours ~3 secondes, quelle que soit la longueur
-      const totalChars    = textPairs.reduce((acc, p) => acc + p.full.length, 0);
-      const TARGET_FRAMES = 180; // ~3s à 60fps
-      const charsPerFrame = Math.max(6, Math.ceil(totalChars / TARGET_FRAMES));
-
-      let ni = 0, ci = 0;
-
-      // ── Haptique : légère vibration pendant l'animation ──────────────────
-      let hapticId = null;
-      if ('vibrate' in navigator) {
-        hapticId = setInterval(() => navigator.vibrate(1), 80);
-      }
-
-      function frame() {
-        let toReveal = charsPerFrame;
-
-        while (toReveal > 0 && ni < textPairs.length) {
-          const pair      = textPairs[ni];
-          const remaining = pair.full.length - ci;
-
-          if (toReveal >= remaining) {
-            // Ce nœud est terminé → passer au suivant
-            pair.node.textContent = pair.full;
-            ni++;
-            ci       = 0;
-            toReveal -= remaining;
-          } else {
-            // Révéler partiellement ce nœud
-            ci += toReveal;
-            pair.node.textContent = pair.full.slice(0, ci);
-            toReveal = 0;
-          }
-        }
-
-        if (ni < textPairs.length) {
-          requestAnimationFrame(frame);
-        } else {
-          // Animation terminée → couper le haptique
-          if (hapticId) {
-            clearInterval(hapticId);
-            if ('vibrate' in navigator) navigator.vibrate(0);
-          }
-        }
-      }
-
-      requestAnimationFrame(frame);
+      // Cascade resserrée quand l'article est long (plafond ~1s au total)
+      const step = Math.min(85, Math.max(30, 1000 / blocks.length));
+      blocks.forEach((el, i) => { el.style.animationDelay = Math.round(i * step) + 'ms'; });
+      container.classList.add('reveal');
     }
 
     // ── Barre de progression lecture ──────────────────────────────────────
