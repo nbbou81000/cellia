@@ -14,7 +14,17 @@ import path from 'path';
 import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const ROOT      = path.join(__dirname, '..');
+
+// Le script est prévu pour vivre dans scripts/, mais on tolère la racine :
+// on retient le premier emplacement où dist/articles.json existe réellement.
+const CANDIDATES = [
+  path.join(__dirname, '..'),   // scripts/gen-og.js  → racine du dépôt
+  __dirname,                    // gen-og.js à la racine
+  process.cwd(),                // lancé depuis ailleurs
+];
+const ROOT = CANDIDATES.find(dir => fs.existsSync(path.join(dir, 'dist', 'articles.json')))
+          || path.join(__dirname, '..');
+
 const FEED      = path.join(ROOT, 'dist', 'articles.json');
 const OUT_DIR   = path.join(ROOT, 'dist', 'a');
 const BASE      = 'https://nbbou81000.github.io/cellia';
