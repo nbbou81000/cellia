@@ -967,7 +967,12 @@
       const shareLabel = document.getElementById('share-label');
 
       btnShare.addEventListener('click', async () => {
-        const shareUrl   = location.href;
+        // On partage la page d'aperçu statique (dist/a/<id>.html) : elle porte
+        // les vraies balises og: lues par les robots. Elle redirige ensuite
+        // l'humain vers ce lecteur. Repli sur l'URL courante si elle manque.
+        const shareUrl   = article.id
+          ? `${BASE}/a/${encodeURIComponent(article.id)}.html`
+          : location.href;
         const shareTitle = article.title;
 
         if (navigator.share) {
