@@ -121,6 +121,7 @@ jobs:
           fi
 
       - name: Generate share preview pages
+        working-directory: scripts
         run: node gen-og.js
 
       - name: Verify
