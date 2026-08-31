@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-08-31T19:39:22.905Z",
+  "last_updated": "2026-08-31T23:22:20.997Z",
   "services": {
     "openai": {
-      "overall": "outage",
-      "description": "Partial System Outage",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
-          "name": "Responses",
+          "name": "Images",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Images",
-          "status": "operational",
+          "name": "Responses",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
-          "status": "degraded",
-          "updated_at": "2026-08-31T19:21:32.172Z",
+          "status": "operational",
+          "updated_at": "2026-08-31T20:36:00.214Z",
           "group": null
         },
         {
@@ -181,8 +181,8 @@
         },
         {
           "name": "Claude Code",
-          "status": "degraded",
-          "updated_at": "2026-08-31T19:21:32.187Z",
+          "status": "operational",
+          "updated_at": "2026-08-31T20:36:00.249Z",
           "group": null
         },
         {
