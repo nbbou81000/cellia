@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-01T23:52:08.449Z",
+  "last_updated": "2026-09-02T01:51:38.703Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,8 +158,8 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
@@ -169,8 +169,8 @@
         },
         {
           "name": "Claude Console (platform.claude.com)",
-          "status": "degraded",
-          "updated_at": "2026-09-01T23:26:49.023Z",
+          "status": "operational",
+          "updated_at": "2026-09-02T01:24:22.227Z",
           "group": null
         },
         {
