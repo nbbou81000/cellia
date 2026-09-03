@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-02T23:26:11.765Z",
+  "last_updated": "2026-09-03T01:15:49.768Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -18,12 +18,6 @@
           "group": null
         },
         {
-          "name": "Codex in ChatGPT Desktop",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Login",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -36,12 +30,6 @@
           "group": null
         },
         {
-          "name": "Compliance API",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Files",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -49,12 +37,6 @@
         },
         {
           "name": "FedRAMP",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Search",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -78,25 +60,7 @@
           "group": null
         },
         {
-          "name": "ChatGPT Atlas",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Deep Research",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Realtime",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Voice mode",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -126,12 +90,6 @@
           "group": null
         },
         {
-          "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "VS Code extension",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -150,7 +108,49 @@
           "group": null
         },
         {
+          "name": "Chat Completions",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "File uploads",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Search",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Compliance API",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
           "name": "Agent",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Deep Research",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Connectors/Apps",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
