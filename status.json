@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-04T05:50:37.541Z",
+  "last_updated": "2026-09-04T10:07:20.962Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Images",
@@ -91,7 +91,7 @@
         },
         {
           "name": "Codex Web",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -151,7 +151,7 @@
         },
         {
           "name": "File uploads",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         }
