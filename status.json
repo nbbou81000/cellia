@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-09-08T13:51:13.872Z",
+  "last_updated": "2026-09-08T17:39:08.991Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
-          "name": "Images",
+          "name": "Responses",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "Responses",
-          "status": "operational",
+          "name": "Images",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
@@ -151,7 +151,7 @@
         },
         {
           "name": "File uploads",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         }
