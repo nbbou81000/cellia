@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-09T17:58:01.372Z",
+  "last_updated": "2026-09-09T20:21:58.331Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -230,112 +230,9 @@
       ]
     },
     "mistral": {
-      "overall": "outage",
-      "description": "1 incident(s) actif(s)",
-      "components": [
-        {
-          "name": "Chat Completions API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Embeddings API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "OCR API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Agents API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Conversations API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Audio API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Integrations API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Files API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Batch API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Workflows API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Prompts API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Skills API",
-          "status": "operational",
-          "updated_at": null,
-          "group": "API"
-        },
-        {
-          "name": "Le Console (developer tools)",
-          "status": "operational",
-          "updated_at": null,
-          "group": "Services"
-        },
-        {
-          "name": "Documentation",
-          "status": "operational",
-          "updated_at": null,
-          "group": "Services"
-        },
-        {
-          "name": "Vibe",
-          "status": "operational",
-          "updated_at": null,
-          "group": "Services"
-        },
-        {
-          "name": "Document Library",
-          "status": "operational",
-          "updated_at": null,
-          "group": "Services"
-        },
-        {
-          "name": "Mistral.ai Website",
-          "status": "operational",
-          "updated_at": null,
-          "group": "Services"
-        }
-      ]
+      "overall": "unknown",
+      "description": "Page de statut inaccessible",
+      "components": []
     },
     "groq": {
       "overall": "operational",
