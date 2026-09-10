@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-10T19:53:20.571Z",
+  "last_updated": "2026-09-10T22:02:40.577Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Responses",
@@ -175,8 +175,8 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-09-03T16:23:11.985Z",
+          "status": "degraded",
+          "updated_at": "2026-09-10T21:43:40.243Z",
           "group": null
         },
         {
