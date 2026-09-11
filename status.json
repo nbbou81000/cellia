@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-10T22:02:40.577Z",
+  "last_updated": "2026-09-11T00:06:15.927Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -175,8 +175,8 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "degraded",
-          "updated_at": "2026-09-10T21:43:40.243Z",
+          "status": "operational",
+          "updated_at": "2026-09-10T23:24:22.949Z",
           "group": null
         },
         {
