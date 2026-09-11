@@ -11,6 +11,28 @@ const IS_KORBEN         = process.env.USE_KORBEN === 'true';
 const IS_FOND           = process.env.USE_FOND === 'true';
 const IS_MISTRAL_BOOST  = process.env.USE_MISTRAL_BOOST === 'true';
 const IS_SCHEDULED      = process.env.IS_SCHEDULED === 'true';
+
+// $ par million de tokens — tarif public Mistral Small au 11/09/2026 (docs.mistral.ai/inference/pricing)
+// Ajustable sans toucher au code via Settings → Secrets and variables → Actions → onglet Variables
+const PRICE_IN     = parseFloat(process.env.MISTRAL_PRICE_INPUT_PER_1M)  || 0.15;
+const PRICE_CACHED = parseFloat(process.env.MISTRAL_PRICE_CACHED_PER_1M) || 0.015;
+const PRICE_OUT    = parseFloat(process.env.MISTRAL_PRICE_OUTPUT_PER_1M) || 0.60;
+const CACHE_KEY    = 'cellia-veille-tech';  // clé stable : augmente les chances de cache hit sur le system prompt
+
+// Compteurs de tokens Mistral (CelliA appelle aussi Gemini/Groq selon le mode, non trackés ici)
+const runStats = { calls: 0, retries429: 0, promptTokens: 0, cachedTokens: 0, completionTokens: 0, totalTokens: 0 };
+function trackMistralUsage(usage) {
+  if (!usage) return;
+  runStats.calls++;
+  const cached = usage.prompt_tokens_details?.cached_tokens || 0;
+  runStats.promptTokens     += usage.prompt_tokens     || 0;
+  runStats.cachedTokens     += cached;
+  runStats.completionTokens += usage.completion_tokens || 0;
+  runStats.totalTokens      += usage.total_tokens || ((usage.prompt_tokens || 0) + (usage.completion_tokens || 0));
+}
+function costOfMistral(promptTok, cachedTok, compTok) {
+  return ((promptTok - cachedTok) / 1e6) * PRICE_IN + (cachedTok / 1e6) * PRICE_CACHED + (compTok / 1e6) * PRICE_OUT;
+}
 const MAX_ARTICLES = IS_DEV ? 3
   : IS_PAID || IS_FOND    ? 15
   : IS_KORBEN             ? 20
@@ -26,7 +48,7 @@ let PROVIDERS = [
     envKey:    'MISTRAL_API_KEY',
     type:      'openai',
     url:       'https://api.mistral.ai/v1/chat/completions',
-    model:     'mistral-small-2506',
+    model:     'mistral-small-latest',
     maxTokens: 2000,
   },
   {
@@ -59,7 +81,7 @@ const MISTRAL_BOOST_PROVIDER = {
   envKey:      'MISTRAL_API_KEY',
   type:        'openai',
   url:         'https://api.mistral.ai/v1/chat/completions',
-  model:       'mistral-small-2506',
+  model:       'mistral-small-latest',
   maxTokens:   8000,
   temperature: 0.7,
   jsonMode:    true,
@@ -208,16 +230,18 @@ Réponds UNIQUEMENT avec le numéro de l'article (entre 0 et ${articles.length-1
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
       body: JSON.stringify({
-        model: 'mistral-small-2506',
+        model: 'mistral-small-latest',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 10,
         temperature: 0.1,
+        prompt_cache_key: CACHE_KEY,
       }),
       signal: AbortSignal.timeout(30000)
     }
   );
   if (!resp.ok) throw new Error(`Scoring HTTP ${resp.status}`);
   const data  = await resp.json();
+  trackMistralUsage(data.usage);
   const text  = data?.choices?.[0]?.message?.content || '0';
   const match = text.match(/\d+/);
   const idx   = match ? Math.min(parseInt(match[0]), articles.length - 1) : 0;
@@ -259,16 +283,18 @@ Génère l'article maintenant :`;
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${MISTRAL_KEY}` },
       body: JSON.stringify({
-        model: 'mistral-small-2506',
+        model: 'mistral-small-latest',
         messages: [{ role: 'user', content: prompt }],
         max_tokens: 8000,
         temperature: 0.75,
+        prompt_cache_key: CACHE_KEY,
       }),
       signal: AbortSignal.timeout(120000)
     }
   );
   if (!resp.ok) throw new Error(`Fond HTTP ${resp.status}`);
   const data = await resp.json();
+  trackMistralUsage(data.usage);
   const text = data?.choices?.[0]?.message?.content || '';
   if (!text) throw new Error('Réponse fond vide');
   return text.trim();
@@ -545,6 +571,7 @@ async function callProvider(provider, systemPrompt, userPrompt) {
         temperature: provider.temperature ?? 0.85,
         max_tokens:  provider.maxTokens||1400,
         ...(provider.jsonMode ? { response_format: { type: 'json_object' } } : {}),
+        ...(provider.envKey === 'MISTRAL_API_KEY' ? { prompt_cache_key: CACHE_KEY } : {}),
       }),
     },
     provider.callTimeout || 30000
@@ -824,10 +851,14 @@ async function rewriteWithFallback(article) {
       if (IS_MISTRAL_BOOST && sourceWords < 120) dim(`  Source courte (${sourceWords} mots) → prompt 350 mots (Mistral JSON)`);
       const response   = await callProvider(provider, SYSTEM_PROMPT, userPrompt);
 
-      if (response.status===429) { warn(`  ${provider.name} : 429 → suivant`); continue; }
+      if (response.status===429) {
+        if (provider.envKey === 'MISTRAL_API_KEY') runStats.retries429++;
+        warn(`  ${provider.name} : 429 → suivant`); continue;
+      }
       if (!response.ok)          { warn(`  ${provider.name} : HTTP ${response.status} → suivant`); continue; }
 
       const data = await response.json();
+      if (provider.envKey === 'MISTRAL_API_KEY') trackMistralUsage(data.usage);
       const text = extractText(provider, data);
       if (!text||text.length<50) { warn(`  ${provider.name} : réponse vide → suivant`); continue; }
 
@@ -849,6 +880,7 @@ async function rewriteWithFallback(article) {
           const r2 = await callProvider(provider, SYSTEM_PROMPT, retryPrompt);
           if (r2.ok) {
             const d2 = await r2.json();
+            if (provider.envKey === 'MISTRAL_API_KEY') trackMistralUsage(d2.usage);
             const t2 = extractText(provider, d2);
             if (t2&&t2.length>50) {
               const r2parsed = parsePaidResponse(t2, article);
@@ -888,7 +920,7 @@ async function main() {
   // Mode Mistral Boost : mistral-small-latest, JSON, 3000 tokens, 20 articles
   if (IS_MISTRAL_BOOST) {
     PROVIDERS = [MISTRAL_BOOST_PROVIDER];
-    console.log(`${c.cyan}${c.bold}  ★ MODE MISTRAL BOOST — mistral-small-2506 — JSON — 4000 tokens — ${MAX_ARTICLES} articles${c.reset}\n`);
+    console.log(`${c.cyan}${c.bold}  ★ MODE MISTRAL BOOST — mistral-small-latest — JSON — 8000 tokens — ${MAX_ARTICLES} articles${c.reset}\n`);
   }
 
   const disponibles = PROVIDERS.filter(p=>process.env[p.envKey]).map(p=>p.name);
@@ -1257,6 +1289,37 @@ async function main() {
       err(`Mode fond échoué : ${e.message}`);
     }
   }
+  // ── Historique des tokens Mistral : run courant + cumul depuis toujours ──────
+  // (même schéma que dist/usage.json de CelliA Lab, pour une lecture combinée — écrit
+  // en tout dernier pour inclure aussi les appels Mistral du mode FOND ci-dessus)
+  try {
+    const usagePath = path.join(__dirname, '..', 'dist', 'usage.json');
+    let usageData = { history: [] };
+    try { usageData = JSON.parse(await fs.readFile(usagePath, 'utf-8')); } catch {}
+    const runCost = costOfMistral(runStats.promptTokens, runStats.cachedTokens, runStats.completionTokens);
+    const entry = {
+      date: new Date().toISOString(),
+      model: IS_MISTRAL_BOOST ? MISTRAL_BOOST_PROVIDER.model : PROVIDERS[0]?.model,
+      articles_published: newCount, articles_rejected: 0,
+      calls: runStats.calls, retries429: runStats.retries429,
+      promptTokens: runStats.promptTokens, cachedTokens: runStats.cachedTokens,
+      completionTokens: runStats.completionTokens, totalTokens: runStats.totalTokens,
+      estCostUSD: Number(runCost.toFixed(4)),
+    };
+    const USAGE_HISTORY_MAX = 300;   // CelliA tourne jusqu'à 6x/jour — ~2 mois d'historique
+    const history = [entry, ...(usageData.history || [])].slice(0, USAGE_HISTORY_MAX);
+    const life = usageData.lifetime || { since: entry.date, runs: 0, calls: 0, promptTokens: 0, cachedTokens: 0, completionTokens: 0, totalTokens: 0, estCostUSD: 0 };
+    life.runs++; life.calls += runStats.calls;
+    life.promptTokens += runStats.promptTokens; life.cachedTokens = (life.cachedTokens || 0) + runStats.cachedTokens;
+    life.completionTokens += runStats.completionTokens; life.totalTokens += runStats.totalTokens;
+    life.estCostUSD = Number((life.estCostUSD + runCost).toFixed(4));
+    await fs.writeFile(usagePath, JSON.stringify({
+      history, lifetime: life, baseline: usageData.baseline || null,
+      pricing: { model: entry.model, inputPer1M: PRICE_IN, cachedPer1M: PRICE_CACHED, outputPer1M: PRICE_OUT },
+    }), 'utf-8');
+    if (runStats.calls > 0) ok(`Tokens Mistral : ${runStats.totalTokens.toLocaleString('fr-FR')} (dont ${runStats.cachedTokens.toLocaleString('fr-FR')} en cache) · ${runCost.toFixed(4)} $ ce run · ${life.estCostUSD.toFixed(2)} $ cumulés`);
+  } catch (e) { warn(`Écriture usage.json échouée : ${e.message}`); }
+
   process.exit(0);
 }
 

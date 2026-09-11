@@ -203,3 +203,25 @@ jobs:
           else
             echo "❌ Échec" >> $GITHUB_STEP_SUMMARY
           fi
+
+          if [ -f dist/usage.json ]; then
+            node -e "
+              const d = require('./dist/usage.json');
+              const r = d.history[0], l = d.lifetime;
+              if (!r || !r.calls) process.exit(0);
+              const fr = n => n.toLocaleString('fr-FR');
+              console.log('');
+              console.log('### 📊 Tokens Mistral (' + r.model + ')');
+              console.log('');
+              console.log('|   | Ce run | Depuis le début (' + l.runs + ' runs) |');
+              console.log('|---|---|---|');
+              console.log('| Entrée | ' + fr(r.promptTokens) + ' | ' + fr(l.promptTokens) + ' |');
+              console.log('| dont en cache | ' + fr(r.cachedTokens) + ' | ' + fr(l.cachedTokens || 0) + ' |');
+              console.log('| Sortie | ' + fr(r.completionTokens) + ' | ' + fr(l.completionTokens) + ' |');
+              console.log('| **Total** | **' + fr(r.totalTokens) + '** | **' + fr(l.totalTokens) + '** |');
+              console.log('| Coût estimé | ' + r.estCostUSD.toFixed(4) + ' \$ | ' + l.estCostUSD.toFixed(2) + ' \$ |');
+              console.log('');
+              console.log('_' + r.calls + ' appels Mistral' + (r.retries429 ? ', ' + r.retries429 + ' attente(s) 429' : '') + ' · tarif ' + d.pricing.inputPer1M + ' \$ / ' + d.pricing.cachedPer1M + ' \$ (cache) / ' + d.pricing.outputPer1M + ' \$ par million de tokens, à vérifier sur mistral.ai/pricing si le modèle change._'
+              );
+            " >> $GITHUB_STEP_SUMMARY
+          fi
