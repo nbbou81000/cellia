@@ -1,16 +1,10 @@
 {
-  "last_updated": "2026-09-11T09:07:34.061Z",
+  "last_updated": "2026-09-11T13:31:14.168Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
-        {
-          "name": "Responses",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
         {
           "name": "Images",
           "status": "operational",
@@ -144,13 +138,19 @@
           "group": null
         },
         {
-          "name": "Chat Completions",
+          "name": "File uploads",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "File uploads",
+          "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Atlas",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
