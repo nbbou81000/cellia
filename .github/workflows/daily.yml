@@ -136,6 +136,7 @@ jobs:
           git add dist/articles-fond.json 2>/dev/null || true
           git add dist/articles/ 2>/dev/null || true
           git add dist/a/ 2>/dev/null || true
+          git add dist/usage.json 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "Rien à commiter"
           else
