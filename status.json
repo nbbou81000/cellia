@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-11T19:41:31.404Z",
+  "last_updated": "2026-09-11T21:54:54.402Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -188,7 +188,7 @@
         {
           "name": "Claude Cowork",
           "status": "partial_outage",
-          "updated_at": "2026-09-11T14:19:51.592Z",
+          "updated_at": "2026-09-11T19:54:52.331Z",
           "group": null
         },
         {
