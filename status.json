@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-14T16:33:06.645Z",
+  "last_updated": "2026-09-14T20:32:43.947Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -158,8 +158,8 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
@@ -187,8 +187,8 @@
         },
         {
           "name": "Claude Cowork",
-          "status": "degraded",
-          "updated_at": "2026-09-12T20:33:34.732Z",
+          "status": "operational",
+          "updated_at": "2026-09-14T19:14:45.939Z",
           "group": null
         },
         {
