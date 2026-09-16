@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IoT : updater ses devices sans se faire espionner, c&#39;est possible ? — CelliA</title>
-<meta name="description" content="Firmware à jour, mais vie privée préservée. La quadrature du cercle ? Presque.">
-<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=9ba0fe9646">
+<title>Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ? — CelliA</title>
+<meta name="description" content="Réimporter des To de données parce que le client a buggé ? Arrêtez le massacre.">
+<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=3cbb7faa9f">
 
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon-32.png" sizes="32x32" type="image/png">
@@ -15,36 +15,36 @@
 <meta property="og:type"           content="article">
 <meta property="og:site_name"      content="CelliA">
 <meta property="og:locale"         content="fr_FR">
-<meta property="og:title"          content="IoT : updater ses devices sans se faire espionner, c&#39;est possible ?">
-<meta property="og:description"    content="Firmware à jour, mais vie privée préservée. La quadrature du cercle ? Presque.">
-<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/9ba0fe9646.html">
+<meta property="og:title"          content="Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ?">
+<meta property="og:description"    content="Réimporter des To de données parce que le client a buggé ? Arrêtez le massacre.">
+<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/3cbb7faa9f.html">
 <meta property="og:image"          content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
 <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
-<meta property="og:image:alt"      content="IoT : updater ses devices sans se faire espionner, c&#39;est possible ?">
-<meta property="article:published_time" content="2026-09-11T15:58:25.619+02:00">
+<meta property="og:image:alt"      content="Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ?">
+<meta property="article:published_time" content="2026-09-16T22:55:01.040+02:00">
 <meta property="article:section"   content="maker">
 
 <!-- Twitter / X -->
 <meta name="twitter:card"          content="summary_large_image">
-<meta name="twitter:title"         content="IoT : updater ses devices sans se faire espionner, c&#39;est possible ?">
-<meta name="twitter:description"   content="Firmware à jour, mais vie privée préservée. La quadrature du cercle ? Presque.">
+<meta name="twitter:title"         content="Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ?">
+<meta name="twitter:description"   content="Réimporter des To de données parce que le client a buggé ? Arrêtez le massacre.">
 <meta name="twitter:image"         content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
-<meta name="twitter:image:alt"     content="IoT : updater ses devices sans se faire espionner, c&#39;est possible ?">
+<meta name="twitter:image:alt"     content="Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ?">
 
 <!-- Données structurées : logo du site pour Google Discover / résultats enrichis -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "NewsArticle",
-  "headline": "IoT : updater ses devices sans se faire espionner, c'est possible ?",
-  "description": "Firmware à jour, mais vie privée préservée. La quadrature du cercle ? Presque.",
+  "headline": "Les sauvegardes locales avec le client de synchronisation : comment ne pas tout réimporter ?",
+  "description": "Réimporter des To de données parce que le client a buggé ? Arrêtez le massacre.",
   "image": [
     "https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&q=75&auto=format"
   ],
-  "datePublished": "2026-09-11T15:58:25.619+02:00",
+  "datePublished": "2026-09-16T22:55:01.040+02:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://nbbou81000.github.io/cellia/article.html?id=9ba0fe9646"
+    "@id": "https://nbbou81000.github.io/cellia/article.html?id=3cbb7faa9f"
   },
   "publisher": {
     "@type": "Organization",
@@ -58,7 +58,7 @@
 </script>
 
 <!-- Un humain est renvoyé vers le lecteur ; les robots restent sur cette page -->
-<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=9ba0fe9646">
+<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=3cbb7faa9f">
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
        background:#1a1c22;color:#f0f2f8;font-family:system-ui,-apple-system,sans-serif;
@@ -70,8 +70,8 @@
   <div>
     <p style="font-size:15px;font-weight:700;letter-spacing:-.02em">Celli<span style="color:#ff5a4e">A</span></p>
     <p style="font-size:13px;opacity:.6">Ouverture de l'article…</p>
-    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=9ba0fe9646">Cliquer ici si rien ne se passe</a></p>
+    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=3cbb7faa9f">Cliquer ici si rien ne se passe</a></p>
   </div>
-  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=9ba0fe9646");</script>
+  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=3cbb7faa9f");</script>
 </body>
 </html>
