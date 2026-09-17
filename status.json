@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-17T20:25:19.866Z",
+  "last_updated": "2026-09-17T22:56:41.302Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -13,12 +13,6 @@
         },
         {
           "name": "Login",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Audio",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -114,19 +108,7 @@
           "group": null
         },
         {
-          "name": "Batch",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Embeddings",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Moderations",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -151,6 +133,24 @@
         },
         {
           "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Atlas",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Login",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "CLI",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
