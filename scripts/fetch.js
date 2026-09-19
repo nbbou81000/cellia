@@ -1284,6 +1284,15 @@ async function main() {
       };
       await fs.writeFile(distPath, JSON.stringify(updatedIndex), 'utf-8');
 
+      // 8. Fichier individuel dist/articles/<id>.json — sans lui, article.html
+      //    renvoie « Article non trouvé » sur l'article de fond, puisqu'il lit
+      //    désormais les fichiers unitaires et non plus articles-full.json.
+      await fs.writeFile(
+        path.join(articlesDir, `${articleFond.id}.json`),
+        JSON.stringify(fondForFull),
+        'utf-8'
+      );
+
       ok(`Article de fond injecté en tête du site`);
     } catch(e) {
       err(`Mode fond échoué : ${e.message}`);
