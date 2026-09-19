@@ -763,8 +763,11 @@
 
   <script src="prefs.js"></script>
   <script>
-    const FEED_FULL  = 'dist/articles-full.json';
-    const FEED_INDEX = 'dist/articles.json';
+    // Un fichier par article (généré à chaque run par scripts/fetch.js) — on ne
+    // télécharge plus dist/articles-full.json, qui pèse plusieurs mégaoctets et
+    // ne sert que de cache interne au script Node.
+    const ARTICLE_DIR = 'dist/articles/';
+    const FEED_INDEX  = 'dist/articles.json';
 
     function getParam(name) {
       return new URLSearchParams(window.location.search).get(name);
@@ -1022,16 +1025,23 @@
       }
 
       try {
-        // Charger articles-full.json et trouver l'article par ID
-        const res  = await fetch(FEED_FULL + '?t=' + Date.now());
-        if (!res.ok) throw new Error('not_found');
-        const data = await res.json();
-        const all  = data.articles || [];
-        const art  = all.find(a => a.id === id);
-        if (!art) throw new Error('not_found');
+        // Deux requêtes en parallèle : l'article demandé seul, et l'index léger
+        // (sans les corps) qui alimente les cartes « Sur le même sujet ».
+        const stamp = '?t=' + Date.now();
+        const [resArt, resIndex] = await Promise.all([
+          fetch(ARTICLE_DIR + encodeURIComponent(id) + '.json' + stamp),
+          fetch(FEED_INDEX + stamp),
+        ]);
 
-        // Articles liés depuis l'index léger
-        let allForRelated = all;
+        if (!resArt.ok) throw new Error('not_found');
+        const art = await resArt.json();
+        if (!art || !art.id) throw new Error('not_found');
+
+        // L'index n'est pas indispensable : sans lui on perd juste les suggestions.
+        let allForRelated = [];
+        if (resIndex.ok) {
+          try { allForRelated = (await resIndex.json()).articles || []; } catch {}
+        }
 
         renderArticle(art, allForRelated);
       } catch (e) {
