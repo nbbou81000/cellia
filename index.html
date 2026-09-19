@@ -1167,15 +1167,59 @@
     /* ── Footer chips ── */
     .footer { position:relative;z-index:1;text-align:center;padding:36px 24px 52px;border-top:1px solid var(--border-soft);margin-top:40px;display:flex;flex-direction:column;gap:14px; }
     .footer-row { display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap; }
-    .footer-chip { display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:rgba(255,255,255,.7);text-decoration:none;padding:5px 12px;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);transition:color .15s,border-color .15s,background .15s; }
-    .footer-chip:hover { color:#fff;border-color:rgba(255,255,255,.3);background:rgba(255,255,255,.1); }
+    .footer-chip { display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:500;color:var(--text-dim);text-decoration:none;padding:5px 12px;border-radius:20px;border:1px solid var(--border-soft);background:var(--glass-card);transition:color .15s,border-color .15s,background .15s; }
+    .footer-chip:hover { color:var(--text-hi);border-color:var(--border);background:var(--glass-hover); }
     .footer-chip svg { flex-shrink:0; }
-    .footer-sep { color:rgba(255,255,255,.2);font-size:14px; }
-    .footer-copy { font-size:11px;color:rgba(255,255,255,.45);letter-spacing:.04em; }
+    .footer-sep { color:var(--text-dimmer);font-size:14px; }
+    .footer-copy { font-size:11px;color:var(--text-dim);letter-spacing:.04em; }
+
+    /* ── Bannière CelliA Lab ─────────────────────────────────────────────
+       Construite sur les variables de thème (--red, --glass-card, --border…)
+       plutôt que sur des rgba fixes : elle suit donc les quatre combinaisons
+       thème × clair/sombre sans règle supplémentaire.                      */
+    .lab-banner {
+      display:flex;align-items:center;gap:13px;
+      width:100%;max-width:440px;margin:0 auto 4px;
+      padding:12px 15px;
+      border:1px solid var(--border-soft);
+      border-radius:14px;
+      background:linear-gradient(135deg, var(--red-glow) 0%, transparent 58%), var(--glass-card);
+      text-decoration:none;
+      transition:border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .lab-banner:hover {
+      border-color:var(--red-dim);
+      transform:translateY(-2px);
+      box-shadow:0 8px 26px var(--shadow-md);
+    }
+    .lab-banner-mark {
+      display:flex;align-items:center;justify-content:center;
+      width:34px;height:34px;flex-shrink:0;
+      border-radius:10px;
+      background:var(--red-glow);
+      color:var(--red);
+    }
+    .lab-banner-text { display:flex;flex-direction:column;gap:2px;text-align:left;min-width:0; }
+    .lab-banner-title {
+      font-size:13px;font-weight:700;letter-spacing:-.02em;
+      color:var(--text-hi);line-height:1.2;
+    }
+    .lab-banner-sub { font-size:11.5px;line-height:1.35;color:var(--text-dim); }
+    .lab-banner-arrow {
+      margin-left:auto;flex-shrink:0;
+      color:var(--text-dimmer);
+      transition:transform .2s, color .2s;
+    }
+    .lab-banner:hover .lab-banner-arrow { color:var(--red);transform:translateX(3px); }
+    @media (prefers-reduced-motion: reduce) {
+      .lab-banner, .lab-banner-arrow { transition:none; }
+      .lab-banner:hover { transform:none; }
+      .lab-banner:hover .lab-banner-arrow { transform:none; }
+    }
     /* ── Animation vague ── */
     @keyframes fwave {
-      0%,100% { color: rgba(255,255,255,.55); }
-      50%      { color: #ff5a4e; }
+      0%,100% { color: var(--text-dim); }
+      50%      { color: var(--red); }
     }
     .fw { display:inline-block; animation:fwave 5s ease-in-out infinite; }
     /* ── Vague titres de cards (option préférences) ── */
@@ -1412,6 +1456,12 @@
     html.theme-quantum .footer-chip { font-family:var(--font-mono);font-size:10.5px;letter-spacing:.04em;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text-dimmer); }
     html.theme-quantum .footer-chip:hover { border-color:rgba(62,207,142,.3);color:var(--accent-q);background:rgba(62,207,142,.05); }
     html.theme-quantum .footer-copy { font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase; }
+    html.theme-quantum .lab-banner { border-radius:8px;border:1px solid var(--border);
+      background:linear-gradient(135deg, rgba(62,207,142,.10) 0%, transparent 58%), var(--glass-card); }
+    html.theme-quantum .lab-banner:hover { border-color:rgba(62,207,142,.35); }
+    html.theme-quantum .lab-banner-mark { border-radius:6px;background:rgba(62,207,142,.1);color:var(--accent-q); }
+    html.theme-quantum .lab-banner-title { font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase; }
+    html.theme-quantum .lab-banner:hover .lab-banner-arrow { color:var(--accent-q); }
     html.theme-quantum .fw { color:var(--accent-q); }
 
     /* Wave désactivé en Quantum */
@@ -1609,6 +1659,27 @@
   </button>
 
   <footer class="footer">
+
+    <!-- Bannière : renvoi vers CelliA Lab -->
+    <a class="lab-banner" href="https://nbbou81000.github.io/cellia-lab/" rel="noopener">
+      <span class="lab-banner-mark" aria-hidden="true">
+        <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+             stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 3h6"/>
+          <path d="M10 3v6.6L4.8 18a2 2 0 0 0 1.7 3h11a2 2 0 0 0 1.7-3L14 9.6V3"/>
+          <path d="M7.6 15h8.8"/>
+        </svg>
+      </span>
+      <span class="lab-banner-text">
+        <span class="lab-banner-title">CelliA&nbsp;Lab</span>
+        <span class="lab-banner-sub">Pour l'actu IA uniquement, c'est par là</span>
+      </span>
+      <svg class="lab-banner-arrow" width="15" height="15" viewBox="0 0 16 16" fill="none"
+           stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"
+           aria-hidden="true">
+        <path d="M3 8h9M8.5 4.5L12 8l-3.5 3.5"/>
+      </svg>
+    </a>
 
     <!-- Ligne 1 : liens avec logos -->
     <div class="footer-row">
