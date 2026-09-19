@@ -394,6 +394,190 @@ async function fetchFeed(source, keywords, config) {
   return items;
 }
 
+// ─── Illustrations du corps de l'article ──────────────────────────────────────
+// Les images ne sont JAMAIS téléchargées : on ne retient que leur URL, leur
+// légende et le crédit. Coût pour le dépôt : ~300 octets par image dans le JSON.
+// Une source peut refuser ce traitement avec "images": false dans sources.json.
+const NO_IMG_SOURCES = new Set();
+const MAX_FIGURES    = 3;
+
+const IMG_BLOCKLIST = /(logo|avatar|icon|sprite|badge|banner|pixel|spacer|tracker|gravatar|emoji|favicon|placeholder|advert|sponsor|1x1)/i;
+const IMG_BAD_EXT   = /\.(svg|gif)(\?|#|$)/i;
+// Légende qui n'est qu'un crédit d'agence : inutile au lecteur
+const CAPTION_CREDIT_ONLY = /^\s*(photo|photographie|image|illustration|picture|credit|cr[ée]dit|source|©)\s*([:\-–]|by\b)/i;
+// Au-delà de ce marqueur, les vignettes appartiennent à d'autres articles
+const RELATED_BLOCK = /(à lire aussi|lire également|read more|related[ -]posts?|sur le même sujet|recommended|vous aimerez)/i;
+
+function decodeEntities(s) {
+  return (s || '')
+    .replace(/&#x([0-9a-f]+);/gi, (_m, h) => String.fromCodePoint(parseInt(h, 16)))
+    .replace(/&#(\d+);/g,          (_m, d) => String.fromCodePoint(parseInt(d, 10)))
+    .replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>')
+    .replace(/&quot;/g, '"').replace(/&apos;/g, "'")
+    .replace(/&nbsp;/g, ' ').replace(/&rsquo;/g, '\u2019')
+    .replace(/&laquo;|&raquo;/g, '"').replace(/&hellip;/g, '\u2026')
+    .replace(/&[a-z]+;/gi, ' ')
+    .replace(/\s+/g, ' ').trim();
+}
+
+// Certains sites ne servent qu'une vignette : on demande la version large
+function upgradeThumb(url) {
+  return url
+    .replace(/([?&])(w|width)=(\d{2,3})\b/gi, (_m, p, k) => `${p}${k}=1200`)
+    .replace(/\.width-\d{2,3}\./, '.width-1200.')
+    .replace(/\/(?:m|lw|w)\d{2,4}\//, '/lw1200/')          // Springer / Nature
+    .replace(/\/(?:thumb|thumbs|small|medium)\//i, '/large/');
+}
+
+function pickSrc(chunk) {
+  const srcset = (chunk.match(/\bsrcset=["']([^"']+)["']/i)?.[1] || '')
+    .split(',').pop().trim().split(/\s+/)[0];
+  const raw = chunk.match(/\bsrc=["']([^"']+)["']/i)?.[1]
+           || chunk.match(/\bdata-(?:src|lazy-src|original)=["']([^"']+)["']/i)?.[1]
+           || srcset;
+  return raw ? normalizeImgUrl(decodeEntities(raw)) : null;
+}
+
+function pushFigure(figures, seen, src, caption) {
+  if (!src || figures.length >= MAX_FIGURES) return;
+  if (IMG_BLOCKLIST.test(src) || IMG_BAD_EXT.test(src)) return;
+  const key = src.split('?')[0];
+  if (seen.has(key)) return;
+  if (!caption || caption.length < 12)      return;  // pas de légende exploitable
+  if (CAPTION_CREDIT_ONLY.test(caption))    return;  // « Photo by … / Getty Images »
+  if (caption.length > 300) caption = caption.slice(0, 297).trim() + '\u2026';
+  seen.add(key);
+  figures.push({ url: upgradeThumb(src), caption });
+}
+
+// Repère les illustrations utiles dans le HTML DÉJÀ récupéré par fetchFullText :
+// aucune requête réseau supplémentaire.
+function extractFigures(html, article) {
+  if (NO_IMG_SOURCES.has(article.source)) return [];
+
+  let zone = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)?.[1]
+          || html.match(/<main[^>]*>([\s\S]*?)<\/main>/i)?.[1]
+          || html;
+
+  const relIdx = zone.search(RELATED_BLOCK);
+  if (relIdx > 400) zone = zone.slice(0, relIdx);
+
+  const figures = [];
+  const seen    = new Set();
+  if (article.image) seen.add(article.image.split('?')[0]);  // pas de doublon du hero
+
+  // 1. <figure> légendée — le cas idéal (figures scientifiques, schémas)
+  const figRe = /<figure[^>]*>([\s\S]*?)<\/figure>/gi;
+  let m;
+  while (figures.length < MAX_FIGURES && (m = figRe.exec(zone)) !== null) {
+    const block = m[1];
+    const cap   = decodeEntities(cleanText(
+      block.match(/<figcaption[^>]*>([\s\S]*?)<\/figcaption>/i)?.[1] || ''
+    ));
+    pushFigure(figures, seen, pickSrc(block), cap);
+  }
+
+  // 2. À défaut, <img> portant un alt réellement descriptif
+  if (!figures.length) {
+    const imgRe = /<img[^>]+>/gi;
+    while (figures.length < MAX_FIGURES && (m = imgRe.exec(zone)) !== null) {
+      const alt = decodeEntities(m[0].match(/\balt=["']([^"']*)["']/i)?.[1] || '');
+      if (alt.split(/\s+/).filter(Boolean).length < 4) continue;  // alt vide ou mot-clé SEO
+      pushFigure(figures, seen, pickSrc(m[0]), alt);
+    }
+  }
+
+  return figures;
+}
+
+// Traduction des légendes — appel Mistral ISOLÉ, volontairement séparé de la
+// réécriture : un échec ici coûte les légendes françaises, jamais l'article.
+async function translateCaptions(article) {
+  const figs = article.srcImages || [];
+  if (!figs.length) return;
+  const KEY = process.env.MISTRAL_API_KEY;
+  if (!KEY) return;
+  try {
+    const resp = await fetchWithTimeout(
+      'https://api.mistral.ai/v1/chat/completions',
+      {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${KEY}` },
+        body: JSON.stringify({
+          model: 'mistral-small-latest',
+          messages: [{ role: 'user', content:
+`Traduis en français ces légendes d'illustrations d'un article tech.
+Garde le sens technique exact, reste bref, ne commente pas, n'ajoute rien.
+Si une légende est déjà en français, recopie-la telle quelle.
+Réponds UNIQUEMENT par un tableau JSON de ${figs.length} chaîne(s), dans le même ordre.
+
+${figs.map((f, i) => `${i + 1}. ${f.caption}`).join('\n')}` }],
+          max_tokens:       400,
+          temperature:      0.2,
+          prompt_cache_key: CACHE_KEY,
+        }),
+      },
+      25000
+    );
+    if (!resp.ok) { dim(`  Légendes : HTTP ${resp.status}`); return; }
+    const data = await resp.json();
+    trackMistralUsage(data.usage);
+    const raw = data?.choices?.[0]?.message?.content || '';
+    const arr = JSON.parse(raw.slice(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+    if (!Array.isArray(arr)) return;
+    figs.forEach((f, i) => {
+      if (typeof arr[i] === 'string' && arr[i].trim()) f.caption = arr[i].trim();
+    });
+  } catch (e) {
+    dim(`  Légendes non traduites : ${e.message}`);
+  }
+}
+
+function escapeAttr(s) {
+  return (s || '')
+    .replace(/&/g, '&amp;').replace(/"/g, '&quot;')
+    .replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function figureHTML(fig, article) {
+  return '<figure class="article-fig">'
+    + `<img src="${escapeAttr(fig.url)}" alt="" loading="lazy" referrerpolicy="no-referrer">`
+    + `<figcaption>${escapeAttr(fig.caption)}`
+    + `<span class="fig-credit">Image : <a href="${escapeAttr(article.url)}" target="_blank" rel="noopener noreferrer">${escapeAttr(article.source)}</a></span>`
+    + '</figcaption></figure>';
+}
+
+// Placement déterministe : les figures sont réparties régulièrement entre les
+// blocs de premier niveau du corps, jamais avant le 2e bloc ni après le dernier,
+// et jamais collées sous un <h2>. Le prompt de réécriture n'est pas touché.
+function placeFigures(body, figs, article) {
+  if (!figs?.length || !body) return body;
+
+  const ends = [];
+  const re   = /<\/(p|h2|ul|ol|blockquote)>/gi;
+  let m;
+  while ((m = re.exec(body)) !== null) ends.push({ end: re.lastIndex, tag: m[1].toLowerCase() });
+  if (ends.length < 3) return body;                    // corps trop court pour aérer
+
+  const n = Math.min(figs.length, Math.floor(ends.length / 2));
+  if (n < 1) return body;
+
+  const step  = ends.length / (n + 1);
+  const slots = [];
+  for (let i = 1; i <= n; i++) {
+    let idx = Math.max(1, Math.min(ends.length - 2, Math.round(i * step) - 1));
+    while (idx < ends.length - 2 && (slots.includes(idx) || ends[idx].tag === 'h2')) idx++;
+    if (!slots.includes(idx)) slots.push(idx);
+  }
+
+  let out = body;
+  for (let i = slots.length - 1; i >= 0; i--) {
+    const at = ends[slots[i]].end;
+    out = out.slice(0, at) + figureHTML(figs[i], article) + out.slice(at);
+  }
+  return out;
+}
+
 // ─── fetchFullText + extraction og:image ─────────────────────────────────────
 async function fetchFullText(article) {
   try {
@@ -415,6 +599,9 @@ async function fetchFullText(article) {
       const imgUrl = normalizeImgUrl(meta?.[1]);
       if (imgUrl) article.image = imgUrl;
     }
+
+    // ── Illustrations du corps — même HTML, zéro requête en plus ──────────────
+    try { article.srcImages = extractFigures(html, article); } catch { article.srcImages = []; }
     let container = html.match(/<article[^>]*>([\s\S]*?)<\/article>/i)?.[1]
       || html.match(/<main[^>]*>([\s\S]*?)<\/main>/i)?.[1]
       || html;
@@ -937,6 +1124,13 @@ async function main() {
   const config = { ...(Array.isArray(rawConfig) ? {} : rawConfig), sources: activeSrcs };
   log(`${config.sources.length} sources configurées`);
 
+  // Sources dont on ne reprend pas les illustrations ("images": false)
+  NO_IMG_SOURCES.clear();
+  for (const s of allSources) {
+    if (s.images === false) NO_IMG_SOURCES.add(s.source_name || extractDomain(s.url));
+  }
+  if (NO_IMG_SOURCES.size) ok(`Illustrations désactivées sur ${NO_IMG_SOURCES.size} source(s)`);
+
   // Cache — lecture depuis articles-full.json (avec bodies) ou articles.json en fallback
   const fullPath  = path.join(__dirname,'..','dist','articles-full.json');
   const distPath  = path.join(__dirname,'..','dist','articles.json');
@@ -1136,10 +1330,19 @@ async function main() {
       const result=await rewriteWithFallback(article);
       article.title=result.title; article.summary=result.summary;
       article.body=result.body;   article.readingTime=result.readingTime;
+      // Illustrations : traduction des légendes puis insertion dans le corps.
+      // readingTime reste celui du texte seul, calculé avant les figures.
+      if (article.srcImages?.length) {
+        await translateCaptions(article);
+        const before = article.body;
+        article.body = placeFigures(article.body, article.srcImages, article);
+        if (article.body !== before) info(`${article.srcImages.length} illustration(s) placée(s)`);
+      }
       newCount++;
       await sleep(IS_MISTRAL_BOOST ? 2000 : IS_PAID ? 3000 : 5000);
     }
     delete article.fullText;
+    delete article.srcImages;
   }
 
   // Images
@@ -1231,7 +1434,10 @@ async function main() {
       // 2. Récupérer le texte complet si pas encore fait
       if (!choisi.fullText || choisi.fullText.length < 200) {
         log('  Extraction du texte complet…');
-        choisi.fullText = await fetchFullText(choisi.url);
+        // fetchFullText attend l'OBJET article (il lit .url, .image, .snippet).
+        // Lui passer choisi.url renvoyait undefined : le mode fond travaillait
+        // alors depuis le snippet de 800 caractères au lieu du texte complet.
+        choisi.fullText = await fetchFullText(choisi);
       }
 
       // 3. Réécriture longue forme
