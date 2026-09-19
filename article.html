@@ -680,6 +680,42 @@
 
     /* Reading mode en Quantum */
     body.reading-mode.theme-quantum .article-body p { font-size:17px;line-height:1.9; }
+    /* ── Illustrations dans le corps de l'article ────────────────────────
+       Insérées par scripts/fetch.js sous forme de <figure class="article-fig">.
+       Ce sont des enfants directs de .article-body : elles héritent donc
+       automatiquement de l'animation de révélation définie plus bas.        */
+    .article-body figure.article-fig { margin: 30px 0; }
+
+    .article-body figure.article-fig img {
+      width: 100%; height: auto; display: block;
+      border-radius: 14px;
+      background: var(--glass-card);
+      box-shadow: 0 6px 28px var(--shadow-md);
+    }
+
+    .article-body figcaption {
+      font-size: 12.5px; line-height: 1.5;
+      color: var(--text-dim);
+      margin-top: 10px;
+      padding-left: 11px;
+      border-left: 2px solid var(--border-soft);
+    }
+
+    .article-body .fig-credit {
+      display: block; margin-top: 3px;
+      font-size: 11px; color: var(--text-dimmer);
+    }
+    .article-body .fig-credit a { text-decoration: underline; text-underline-offset: 2px; }
+    .article-body .fig-credit a:hover { color: var(--red); }
+
+    /* Les overrides sombres ciblent nommément p/h2/strong : les légendes
+       resteraient sinon en couleur de thème clair sur fond sombre. */
+    [data-theme="dark"] .article-body figcaption  { color: #8b95ad; }
+    [data-theme="dark"] .article-body .fig-credit { color: #5e6579; }
+
+    body.reading-mode .article-body figure.article-fig { margin: 36px 0; }
+    body.reading-mode .article-body figcaption         { font-size: 13px; }
+
   </style>
   <script data-goatcounter="https://cellia.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </head>
@@ -790,6 +826,15 @@
     // extension ne peuvent donc plus laisser l'article tronqué.
     function animateArticleBody(container, htmlContent) {
       container.innerHTML = htmlContent;   // contenu complet, immédiatement
+
+      // Les illustrations sont servies par le site d'origine : certaines refusent
+      // le hotlink ou ont été retirées depuis. On masque alors la figure entière,
+      // légende comprise, plutôt que de laisser un cadre vide.
+      container.querySelectorAll('figure.article-fig img').forEach(img => {
+        const hide = () => { const f = img.closest('figure'); if (f) f.style.display = 'none'; };
+        img.addEventListener('error', hide);
+        if (img.complete && img.naturalWidth === 0) hide();
+      });
 
       if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
 
@@ -1002,8 +1047,10 @@
       const bodyHtml = article.body || `<p>${safeText(article.snippet || '')}</p>`;
       if (bodyEl) animateArticleBody(bodyEl, bodyHtml);
 
-      // Recalculer depuis le texte brut du body (plus précis que la valeur stockée)
-      const rawText  = bodyHtml.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      // Recalculer depuis le texte brut du body (plus précis que la valeur stockée).
+      // Les <figure> sont retirées : une légende n'est pas du temps de lecture.
+      const rawText  = bodyHtml.replace(/<figure[\s\S]*?<\/figure>/gi, ' ')
+                               .replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
       const words    = rawText.split(' ').filter(w => w.length > 0).length;
       const realTime = Math.max(1, Math.ceil(words / 200));
       const timeEl   = document.getElementById('article-reading-time');
