@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-22T11:31:15.313Z",
+  "last_updated": "2026-09-22T15:40:17.764Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Ads Manager",
