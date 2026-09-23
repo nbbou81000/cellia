@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-09-23T21:40:01.980Z",
+  "last_updated": "2026-09-23T23:56:38.710Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -48,7 +48,25 @@
           "group": null
         },
         {
+          "name": "Login",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
           "name": "Fine-tuning",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Compliance API",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "Deep Research",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -66,19 +84,7 @@
           "group": null
         },
         {
-          "name": "Compliance API",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "Agent",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Deep Research",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -91,12 +97,6 @@
         },
         {
           "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
-          "name": "Codex in ChatGPT Desktop",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
@@ -120,12 +120,6 @@
           "group": null
         },
         {
-          "name": "Sites",
-          "status": "operational",
-          "updated_at": "2026-07-09T19:25:56Z",
-          "group": null
-        },
-        {
           "name": "File uploads",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
@@ -144,13 +138,19 @@
           "group": null
         },
         {
-          "name": "Login",
+          "name": "CLI",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
         },
         {
-          "name": "CLI",
+          "name": "Conversations",
+          "status": "operational",
+          "updated_at": "2026-07-09T19:25:56Z",
+          "group": null
+        },
+        {
+          "name": "GPTs",
           "status": "operational",
           "updated_at": "2026-07-09T19:25:56Z",
           "group": null
