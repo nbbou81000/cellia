@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-25T20:35:07.154Z",
+  "last_updated": "2026-09-25T23:31:41.922Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "outage",
+      "description": "Major System Outage",
       "components": [
         {
           "name": "Ads Manager",
@@ -55,19 +55,7 @@
         },
         {
           "name": "Codex Web",
-          "status": "operational",
-          "updated_at": "2026-09-24T23:39:27Z",
-          "group": null
-        },
-        {
-          "name": "Codex API",
-          "status": "operational",
-          "updated_at": "2026-09-24T23:39:27Z",
-          "group": null
-        },
-        {
-          "name": "VS Code extension",
-          "status": "operational",
+          "status": "unknown",
           "updated_at": "2026-09-24T23:39:27Z",
           "group": null
         },
@@ -133,7 +121,7 @@
         },
         {
           "name": "CLI",
-          "status": "operational",
+          "status": "unknown",
           "updated_at": "2026-09-24T23:39:27Z",
           "group": null
         },
@@ -152,6 +140,18 @@
         {
           "name": "Image Generation",
           "status": "operational",
+          "updated_at": "2026-09-24T23:39:27Z",
+          "group": null
+        },
+        {
+          "name": "VS Code extension",
+          "status": "unknown",
+          "updated_at": "2026-09-24T23:39:27Z",
+          "group": null
+        },
+        {
+          "name": "Codex API",
+          "status": "unknown",
           "updated_at": "2026-09-24T23:39:27Z",
           "group": null
         }
