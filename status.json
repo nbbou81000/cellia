@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-09-30T11:32:01.375Z",
+  "last_updated": "2026-09-30T16:59:31.854Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Realtime",
