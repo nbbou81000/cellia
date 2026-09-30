@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-09-29T21:01:34.040Z",
+  "last_updated": "2026-09-30T00:23:20.128Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Realtime",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Compliance API",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -25,121 +25,121 @@
         },
         {
           "name": "Search",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Agent",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Connectors/Apps",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "File uploads",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "CLI",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "GPTs",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Image Generation",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "ChatGPT Work",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Batch",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Images",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Chat Completions",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Fine-tuning",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Embeddings",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Responses",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Audio",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Moderations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Files",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Login",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Agents",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
