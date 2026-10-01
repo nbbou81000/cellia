@@ -1,94 +1,10 @@
 {
-  "last_updated": "2026-10-01T13:52:28.009Z",
+  "last_updated": "2026-10-01T19:07:09.746Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "outage",
+      "description": "Partial System Outage",
       "components": [
-        {
-          "name": "Realtime",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Compliance API",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Ads API",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Search",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Agent",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Connectors/Apps",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "File uploads",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "CLI",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Conversations",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "GPTs",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Image Generation",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "ChatGPT Work",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Batch",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Images",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
         {
           "name": "Chat Completions",
           "status": "operational",
@@ -96,43 +12,7 @@
           "group": null
         },
         {
-          "name": "Fine-tuning",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Embeddings",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
           "name": "Responses",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Audio",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Moderations",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Files",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Login",
           "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
@@ -150,7 +30,127 @@
           "group": null
         },
         {
-          "name": "dots",
+          "name": "Fine-tuning",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Embeddings",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Images",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Batch",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Audio",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Moderations",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Realtime",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Files",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Login",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Conversations",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Login",
+          "status": "partial_outage",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "ChatGPT Work",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Codex in ChatGPT Desktop",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Compliance API",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Search",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "File uploads",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Voice mode",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "GPTs",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Image Generation",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Deep Research",
+          "status": "operational",
+          "updated_at": "2026-09-29T18:29:41Z",
+          "group": null
+        },
+        {
+          "name": "Agent",
           "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
@@ -170,13 +170,13 @@
         {
           "name": "Claude Console (platform.claude.com)",
           "status": "operational",
-          "updated_at": "2026-09-29T15:30:44.450Z",
+          "updated_at": "2026-10-01T18:23:02.671Z",
           "group": null
         },
         {
           "name": "Claude API (api.anthropic.com)",
           "status": "operational",
-          "updated_at": "2026-09-29T16:27:21.330Z",
+          "updated_at": "2026-10-01T18:23:02.697Z",
           "group": null
         },
         {
@@ -239,13 +239,55 @@
       "description": "All Systems Operational",
       "components": [
         {
-          "name": "openai/gpt-oss-20b",
+          "name": "API",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "llama-3.1-8b-instant",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "llama-3.3-70b-versatile",
           "status": "operational",
           "updated_at": "2026-01-01T17:30:35Z",
           "group": null
         },
         {
           "name": "meta-llama/llama-guard-4-12b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "openai/gpt-oss-120b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "openai/gpt-oss-20b",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "whisper-large-v3",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "whisper-large-v3-turbo",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "groq/compound",
           "status": "operational",
           "updated_at": "2026-01-01T17:30:35Z",
           "group": null
@@ -263,7 +305,25 @@
           "group": null
         },
         {
+          "name": "Canopy Labs Orpheus English",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-4-maverick-17b-128e-instruct",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
           "name": "meta-llama/llama-4-scout-17b-16e-instruct",
+          "status": "operational",
+          "updated_at": "2026-01-01T17:30:35Z",
+          "group": null
+        },
+        {
+          "name": "meta-llama/llama-prompt-guard-2-22m",
           "status": "operational",
           "updated_at": "2026-01-01T17:30:35Z",
           "group": null
@@ -294,66 +354,6 @@
         },
         {
           "name": "Website",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "llama-3.1-8b-instant",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "API",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "Canopy Labs Orpheus English",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-prompt-guard-2-22m",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "whisper-large-v3",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "groq/compound",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "whisper-large-v3-turbo",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "openai/gpt-oss-120b",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "meta-llama/llama-4-maverick-17b-128e-instruct",
-          "status": "operational",
-          "updated_at": "2026-01-01T17:30:35Z",
-          "group": null
-        },
-        {
-          "name": "llama-3.3-70b-versatile",
           "status": "operational",
           "updated_at": "2026-01-01T17:30:35Z",
           "group": null
