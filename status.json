@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-05T23:21:17.158Z",
+  "last_updated": "2026-10-06T03:09:28.215Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -139,7 +139,7 @@
         },
         {
           "name": "Image Generation",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
