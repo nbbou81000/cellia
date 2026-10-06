@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-06T03:09:28.215Z",
+  "last_updated": "2026-10-06T10:10:59.347Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions",
@@ -85,7 +85,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -97,13 +97,13 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
         {
           "name": "Codex in ChatGPT Desktop",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -139,7 +139,7 @@
         },
         {
           "name": "Image Generation",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
