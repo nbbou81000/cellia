@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-07T06:40:23.121Z",
+  "last_updated": "2026-10-07T13:54:04.880Z",
   "services": {
     "openai": {
-      "overall": "outage",
-      "description": "Partial System Outage",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions",
@@ -103,7 +103,7 @@
         },
         {
           "name": "Codex in ChatGPT Desktop",
-          "status": "partial_outage",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -158,8 +158,8 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Minor Service Outage",
       "components": [
         {
           "name": "claude.ai",
@@ -169,8 +169,8 @@
         },
         {
           "name": "Claude Console (platform.claude.com)",
-          "status": "operational",
-          "updated_at": "2026-10-07T02:33:38.618Z",
+          "status": "partial_outage",
+          "updated_at": "2026-10-07T13:25:04.215Z",
           "group": null
         },
         {
