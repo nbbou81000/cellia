@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-07T19:37:51.474Z",
+  "last_updated": "2026-10-07T23:48:01.929Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Chat Completions",
@@ -159,7 +159,7 @@
     },
     "anthropic": {
       "overall": "degraded",
-      "description": "Minor Service Outage",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
@@ -169,8 +169,8 @@
         },
         {
           "name": "Claude Console (platform.claude.com)",
-          "status": "partial_outage",
-          "updated_at": "2026-10-07T13:25:04.215Z",
+          "status": "degraded",
+          "updated_at": "2026-10-07T21:44:41.416Z",
           "group": null
         },
         {
