@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-07T23:48:01.929Z",
+  "last_updated": "2026-10-08T03:27:13.869Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -85,7 +85,7 @@
         },
         {
           "name": "Conversations",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -97,7 +97,7 @@
         },
         {
           "name": "ChatGPT Work",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -133,7 +133,7 @@
         },
         {
           "name": "GPTs",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
