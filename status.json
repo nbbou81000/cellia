@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-09T21:03:28.012Z",
+  "last_updated": "2026-10-10T00:45:50.010Z",
   "services": {
     "openai": {
-      "overall": "outage",
-      "description": "Partial System Outage",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Chat Completions",
@@ -85,7 +85,7 @@
         },
         {
           "name": "Conversations",
-          "status": "partial_outage",
+          "status": "operational",
           "updated_at": "2026-09-29T18:29:41Z",
           "group": null
         },
@@ -235,8 +235,8 @@
       "components": []
     },
     "groq": {
-      "overall": "maintenance",
-      "description": "Under Maintenance",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "API",
@@ -318,7 +318,7 @@
         },
         {
           "name": "minimaxai/minimax-m2.7",
-          "status": "maintenance",
+          "status": "operational",
           "updated_at": "2026-10-08T17:09:29Z",
           "group": null
         },
