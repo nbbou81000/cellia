@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Side Quest : l&#39;IA qui vous envoie marcher sans jamais vous localiser — CelliA</title>
-<meta name="description" content="Une chasse au trésor urbaine générée par IA, sans suivi de position, pour redécouvrir la ville à pied.">
-<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=e28bc0ed73">
+<title>Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué — CelliA</title>
+<meta name="description" content="Un drag mal calculé, un iPhone en mode tortue, et hop : 500 lignes de logs pour un point à l’infini. La folie.">
+<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=d6ab04374a">
 
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon-32.png" sizes="32x32" type="image/png">
@@ -15,36 +15,36 @@
 <meta property="og:type"           content="article">
 <meta property="og:site_name"      content="CelliA">
 <meta property="og:locale"         content="fr_FR">
-<meta property="og:title"          content="Side Quest : l&#39;IA qui vous envoie marcher sans jamais vous localiser">
-<meta property="og:description"    content="Une chasse au trésor urbaine générée par IA, sans suivi de position, pour redécouvrir la ville à pied.">
-<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/e28bc0ed73.html">
+<meta property="og:title"          content="Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué">
+<meta property="og:description"    content="Un drag mal calculé, un iPhone en mode tortue, et hop : 500 lignes de logs pour un point à l’infini. La folie.">
+<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/d6ab04374a.html">
 <meta property="og:image"          content="https://assets.dev.to/assets/github-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg">
 <meta property="og:image:secure_url" content="https://assets.dev.to/assets/github-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg">
-<meta property="og:image:alt"      content="Side Quest : l&#39;IA qui vous envoie marcher sans jamais vous localiser">
-<meta property="article:published_time" content="2026-10-08T19:04:38.845+02:00">
+<meta property="og:image:alt"      content="Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué">
+<meta property="article:published_time" content="2026-10-14T14:41:29.735+02:00">
 <meta property="article:section"   content="web">
 
 <!-- Twitter / X -->
 <meta name="twitter:card"          content="summary_large_image">
-<meta name="twitter:title"         content="Side Quest : l&#39;IA qui vous envoie marcher sans jamais vous localiser">
-<meta name="twitter:description"   content="Une chasse au trésor urbaine générée par IA, sans suivi de position, pour redécouvrir la ville à pied.">
+<meta name="twitter:title"         content="Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué">
+<meta name="twitter:description"   content="Un drag mal calculé, un iPhone en mode tortue, et hop : 500 lignes de logs pour un point à l’infini. La folie.">
 <meta name="twitter:image"         content="https://assets.dev.to/assets/github-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg">
-<meta name="twitter:image:alt"     content="Side Quest : l&#39;IA qui vous envoie marcher sans jamais vous localiser">
+<meta name="twitter:image:alt"     content="Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué">
 
 <!-- Données structurées : logo du site pour Google Discover / résultats enrichis -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "NewsArticle",
-  "headline": "Side Quest : l'IA qui vous envoie marcher sans jamais vous localiser",
-  "description": "Une chasse au trésor urbaine générée par IA, sans suivi de position, pour redécouvrir la ville à pied.",
+  "headline": "Ce bug Xcode qui bouffait des heures de dévs — et comment on l’a tué",
+  "description": "Un drag mal calculé, un iPhone en mode tortue, et hop : 500 lignes de logs pour un point à l’infini. La folie.",
   "image": [
     "https://assets.dev.to/assets/github-logo-5a155e1f9a670af7944dd5e12375bc76ed542ea80224905ecaf878b9157cdefc.svg"
   ],
-  "datePublished": "2026-10-08T19:04:38.845+02:00",
+  "datePublished": "2026-10-14T14:41:29.735+02:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://nbbou81000.github.io/cellia/article.html?id=e28bc0ed73"
+    "@id": "https://nbbou81000.github.io/cellia/article.html?id=d6ab04374a"
   },
   "publisher": {
     "@type": "Organization",
@@ -58,7 +58,7 @@
 </script>
 
 <!-- Un humain est renvoyé vers le lecteur ; les robots restent sur cette page -->
-<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=e28bc0ed73">
+<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=d6ab04374a">
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
        background:#1a1c22;color:#f0f2f8;font-family:system-ui,-apple-system,sans-serif;
@@ -70,8 +70,8 @@
   <div>
     <p style="font-size:15px;font-weight:700;letter-spacing:-.02em">Celli<span style="color:#ff5a4e">A</span></p>
     <p style="font-size:13px;opacity:.6">Ouverture de l'article…</p>
-    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=e28bc0ed73">Cliquer ici si rien ne se passe</a></p>
+    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=d6ab04374a">Cliquer ici si rien ne se passe</a></p>
   </div>
-  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=e28bc0ed73");</script>
+  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=d6ab04374a");</script>
 </body>
 </html>
