@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-16T19:45:10.516Z",
+  "last_updated": "2026-10-16T22:12:24.752Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -8,151 +8,151 @@
         {
           "name": "Chat Completions",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Responses",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Agents",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Decisions",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Fine-tuning",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Embeddings",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Images",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Batch",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Audio",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Moderations",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Realtime",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Files",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Login",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
+          "group": null
+        },
+        {
+          "name": "Live",
+          "status": "operational",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Conversations",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Login",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "ChatGPT Work",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Codex in ChatGPT Desktop",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Compliance API",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Search",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "File uploads",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Voice mode",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "GPTs",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Image Generation",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Deep Research",
           "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
-          "group": null
-        },
-        {
-          "name": "Agent",
-          "status": "operational",
-          "updated_at": "2026-09-29T18:29:41Z",
+          "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         }
       ]
