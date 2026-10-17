@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires — CelliA</title>
-<meta name="description" content="Quand plusieurs entreprises utilisent la même IA en local, les choix techniques deviennent critiques.">
-<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=891950ab1d">
+<title>wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie — CelliA</title>
+<meta name="description" content="Raspberry Pi OS Bookworm et Docker qui s’entretuent sur la gestion réseau ? Voici comment sauver wg-easy.">
+<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=b562530f0e">
 
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon.svg" type="image/svg+xml">
 <link rel="icon" href="https://nbbou81000.github.io/cellia/favicon-32.png" sizes="32x32" type="image/png">
@@ -15,36 +15,36 @@
 <meta property="og:type"           content="article">
 <meta property="og:site_name"      content="CelliA">
 <meta property="og:locale"         content="fr_FR">
-<meta property="og:title"          content="Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires">
-<meta property="og:description"    content="Quand plusieurs entreprises utilisent la même IA en local, les choix techniques deviennent critiques.">
-<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/891950ab1d.html">
+<meta property="og:title"          content="wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie">
+<meta property="og:description"    content="Raspberry Pi OS Bookworm et Docker qui s’entretuent sur la gestion réseau ? Voici comment sauver wg-easy.">
+<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/b562530f0e.html">
 <meta property="og:image"          content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
 <meta property="og:image:secure_url" content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
-<meta property="og:image:alt"      content="Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires">
-<meta property="article:published_time" content="2026-10-11T23:39:51.994+02:00">
+<meta property="og:image:alt"      content="wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie">
+<meta property="article:published_time" content="2026-10-17T18:36:58.828+02:00">
 <meta property="article:section"   content="maker">
 
 <!-- Twitter / X -->
 <meta name="twitter:card"          content="summary_large_image">
-<meta name="twitter:title"         content="Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires">
-<meta name="twitter:description"   content="Quand plusieurs entreprises utilisent la même IA en local, les choix techniques deviennent critiques.">
+<meta name="twitter:title"         content="wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie">
+<meta name="twitter:description"   content="Raspberry Pi OS Bookworm et Docker qui s’entretuent sur la gestion réseau ? Voici comment sauver wg-easy.">
 <meta name="twitter:image"         content="https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&amp;q=75&amp;auto=format">
-<meta name="twitter:image:alt"     content="Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires">
+<meta name="twitter:image:alt"     content="wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie">
 
 <!-- Données structurées : logo du site pour Google Discover / résultats enrichis -->
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "NewsArticle",
-  "headline": "Héberger ses propres modèles IA en entreprise : le casse-tête des APIs multi-locataires",
-  "description": "Quand plusieurs entreprises utilisent la même IA en local, les choix techniques deviennent critiques.",
+  "headline": "wg-easy sous Docker sur Pi OS : la guerre iptables vs nftables en mode survie",
+  "description": "Raspberry Pi OS Bookworm et Docker qui s’entretuent sur la gestion réseau ? Voici comment sauver wg-easy.",
   "image": [
     "https://images.unsplash.com/photo-1581092160562-f4e7ce8b3e29?w=400&q=75&auto=format"
   ],
-  "datePublished": "2026-10-11T23:39:51.994+02:00",
+  "datePublished": "2026-10-17T18:36:58.828+02:00",
   "mainEntityOfPage": {
     "@type": "WebPage",
-    "@id": "https://nbbou81000.github.io/cellia/article.html?id=891950ab1d"
+    "@id": "https://nbbou81000.github.io/cellia/article.html?id=b562530f0e"
   },
   "publisher": {
     "@type": "Organization",
@@ -58,7 +58,7 @@
 </script>
 
 <!-- Un humain est renvoyé vers le lecteur ; les robots restent sur cette page -->
-<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=891950ab1d">
+<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=b562530f0e">
 <style>
   body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
        background:#1a1c22;color:#f0f2f8;font-family:system-ui,-apple-system,sans-serif;
@@ -70,8 +70,8 @@
   <div>
     <p style="font-size:15px;font-weight:700;letter-spacing:-.02em">Celli<span style="color:#ff5a4e">A</span></p>
     <p style="font-size:13px;opacity:.6">Ouverture de l'article…</p>
-    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=891950ab1d">Cliquer ici si rien ne se passe</a></p>
+    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=b562530f0e">Cliquer ici si rien ne se passe</a></p>
   </div>
-  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=891950ab1d");</script>
+  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=b562530f0e");</script>
 </body>
 </html>
