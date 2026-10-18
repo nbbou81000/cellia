@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-18T04:49:58.366Z",
+  "last_updated": "2026-10-18T09:12:49.685Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -235,8 +235,8 @@
       "components": []
     },
     "groq": {
-      "overall": "maintenance",
-      "description": "Under Maintenance",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "API",
@@ -324,7 +324,7 @@
         },
         {
           "name": "Website",
-          "status": "maintenance",
+          "status": "operational",
           "updated_at": "2026-10-10T10:09:41Z",
           "group": null
         }
