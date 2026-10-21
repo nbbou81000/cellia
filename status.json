@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-10-21T16:00:02.571Z",
+  "last_updated": "2026-10-21T19:57:44.242Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Responses",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-10-06T12:43:02.833Z",
+          "status": "degraded",
+          "updated_at": "2026-10-21T19:49:06.545Z",
           "group": null
         },
         {
@@ -175,20 +175,20 @@
         },
         {
           "name": "Claude API (api.anthropic.com)",
-          "status": "operational",
-          "updated_at": "2026-10-06T12:43:02.867Z",
+          "status": "degraded",
+          "updated_at": "2026-10-21T19:49:06.567Z",
           "group": null
         },
         {
           "name": "Claude Code",
-          "status": "operational",
-          "updated_at": "2026-10-06T12:43:02.904Z",
+          "status": "degraded",
+          "updated_at": "2026-10-21T19:49:06.589Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-10-06T12:43:02.939Z",
+          "status": "degraded",
+          "updated_at": "2026-10-21T19:49:06.616Z",
           "group": null
         },
         {
