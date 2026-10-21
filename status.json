@@ -1,19 +1,19 @@
 {
-  "last_updated": "2026-10-21T11:16:25.596Z",
+  "last_updated": "2026-10-21T16:00:02.571Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Chat Completions",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
         {
           "name": "Responses",
-          "status": "operational",
+          "status": "degraded",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
