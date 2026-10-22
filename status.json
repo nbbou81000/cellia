@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-10-22T06:14:33.295Z",
+  "last_updated": "2026-10-22T11:53:31.599Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions",
@@ -13,7 +13,7 @@
         },
         {
           "name": "Responses",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
@@ -91,7 +91,7 @@
         },
         {
           "name": "Conversations",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "degraded",
-      "description": "Partially Degraded Service",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "claude.ai",
-          "status": "degraded",
-          "updated_at": "2026-10-22T03:50:12.683Z",
+          "status": "operational",
+          "updated_at": "2026-10-22T08:07:03.810Z",
           "group": null
         },
         {
@@ -187,8 +187,8 @@
         },
         {
           "name": "Claude Cowork",
-          "status": "degraded",
-          "updated_at": "2026-10-22T03:50:12.708Z",
+          "status": "operational",
+          "updated_at": "2026-10-22T08:07:03.836Z",
           "group": null
         },
         {
