@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ruby corrige sa machine à regex et désamorce des failles GitLab explosives — CelliA</title>
+<meta name="description" content="Trois bugs, quatre RCE, un moteur d’expressions régulières en PLS. La preuve que même les outils vieux de 30 ans ont encore des surprises.">
+<link rel="canonical" href="https://nbbou81000.github.io/cellia/article.html?id=ce370a80c5">
+
+<link rel="icon" href="https://nbbou81000.github.io/cellia/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="https://nbbou81000.github.io/cellia/favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="https://nbbou81000.github.io/cellia/favicon-192.png">
+
+<!-- Open Graph -->
+<meta property="og:type"           content="article">
+<meta property="og:site_name"      content="CelliA">
+<meta property="og:locale"         content="fr_FR">
+<meta property="og:title"          content="Ruby corrige sa machine à regex et désamorce des failles GitLab explosives">
+<meta property="og:description"    content="Trois bugs, quatre RCE, un moteur d’expressions régulières en PLS. La preuve que même les outils vieux de 30 ans ont encore des surprises.">
+<meta property="og:url"            content="https://nbbou81000.github.io/cellia/a/ce370a80c5.html">
+<meta property="og:image"          content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjA5n8ST_yuElQgTwbfq1oFnVAoiTvZCW_Ct1b8lT_OQ9dnyeXfocrqzTUJJ1t920YaEa-7Sonxl9KlthV4x7lXI3dmJxc9_S11NjWRJ6dcgfsX4UGhv0KFWZsZrzXKpjh92JPyDdHPlCPQh1AHd0YKM44sVcc9d-57r8_BdrIb3V06MWfk8bRAy4kDU6I/s1600/ruby-rce.jpg">
+<meta property="og:image:secure_url" content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjA5n8ST_yuElQgTwbfq1oFnVAoiTvZCW_Ct1b8lT_OQ9dnyeXfocrqzTUJJ1t920YaEa-7Sonxl9KlthV4x7lXI3dmJxc9_S11NjWRJ6dcgfsX4UGhv0KFWZsZrzXKpjh92JPyDdHPlCPQh1AHd0YKM44sVcc9d-57r8_BdrIb3V06MWfk8bRAy4kDU6I/s1600/ruby-rce.jpg">
+<meta property="og:image:alt"      content="Ruby corrige sa machine à regex et désamorce des failles GitLab explosives">
+<meta property="article:published_time" content="2026-10-23T20:00:29.107+02:00">
+<meta property="article:section"   content="secu">
+
+<!-- Twitter / X -->
+<meta name="twitter:card"          content="summary_large_image">
+<meta name="twitter:title"         content="Ruby corrige sa machine à regex et désamorce des failles GitLab explosives">
+<meta name="twitter:description"   content="Trois bugs, quatre RCE, un moteur d’expressions régulières en PLS. La preuve que même les outils vieux de 30 ans ont encore des surprises.">
+<meta name="twitter:image"         content="https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjA5n8ST_yuElQgTwbfq1oFnVAoiTvZCW_Ct1b8lT_OQ9dnyeXfocrqzTUJJ1t920YaEa-7Sonxl9KlthV4x7lXI3dmJxc9_S11NjWRJ6dcgfsX4UGhv0KFWZsZrzXKpjh92JPyDdHPlCPQh1AHd0YKM44sVcc9d-57r8_BdrIb3V06MWfk8bRAy4kDU6I/s1600/ruby-rce.jpg">
+<meta name="twitter:image:alt"     content="Ruby corrige sa machine à regex et désamorce des failles GitLab explosives">
+
+<!-- Données structurées : logo du site pour Google Discover / résultats enrichis -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "NewsArticle",
+  "headline": "Ruby corrige sa machine à regex et désamorce des failles GitLab explosives",
+  "description": "Trois bugs, quatre RCE, un moteur d’expressions régulières en PLS. La preuve que même les outils vieux de 30 ans ont encore des surprises.",
+  "image": [
+    "https://blogger.googleusercontent.com/img/b/R29vZ2xl/AVvXsEjA5n8ST_yuElQgTwbfq1oFnVAoiTvZCW_Ct1b8lT_OQ9dnyeXfocrqzTUJJ1t920YaEa-7Sonxl9KlthV4x7lXI3dmJxc9_S11NjWRJ6dcgfsX4UGhv0KFWZsZrzXKpjh92JPyDdHPlCPQh1AHd0YKM44sVcc9d-57r8_BdrIb3V06MWfk8bRAy4kDU6I/s1600/ruby-rce.jpg"
+  ],
+  "datePublished": "2026-10-23T20:00:29.107+02:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://nbbou81000.github.io/cellia/article.html?id=ce370a80c5"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "CelliA",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://nbbou81000.github.io/cellia/favicon-192.png"
+    }
+  }
+}
+</script>
+
+<!-- Un humain est renvoyé vers le lecteur ; les robots restent sur cette page -->
+<meta http-equiv="refresh" content="0; url=https://nbbou81000.github.io/cellia/article.html?id=ce370a80c5">
+<style>
+  body{margin:0;min-height:100vh;display:flex;align-items:center;justify-content:center;
+       background:#1a1c22;color:#f0f2f8;font-family:system-ui,-apple-system,sans-serif;
+       text-align:center;padding:24px;}
+  a{color:#ff5a4e;}
+</style>
+</head>
+<body>
+  <div>
+    <p style="font-size:15px;font-weight:700;letter-spacing:-.02em">Celli<span style="color:#ff5a4e">A</span></p>
+    <p style="font-size:13px;opacity:.6">Ouverture de l'article…</p>
+    <p><a href="https://nbbou81000.github.io/cellia/article.html?id=ce370a80c5">Cliquer ici si rien ne se passe</a></p>
+  </div>
+  <script>location.replace("https://nbbou81000.github.io/cellia/article.html?id=ce370a80c5");</script>
+</body>
+</html>
