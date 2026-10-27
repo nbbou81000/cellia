@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-10-27T07:49:48.089Z",
+  "last_updated": "2026-10-27T13:43:21.422Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -164,7 +164,7 @@
         {
           "name": "claude.ai",
           "status": "operational",
-          "updated_at": "2026-10-25T08:30:46.949Z",
+          "updated_at": "2026-10-27T09:38:11.312Z",
           "group": null
         },
         {
@@ -176,19 +176,19 @@
         {
           "name": "Claude API (api.anthropic.com)",
           "status": "operational",
-          "updated_at": "2026-10-25T08:30:46.975Z",
+          "updated_at": "2026-10-27T09:38:11.341Z",
           "group": null
         },
         {
           "name": "Claude Code",
           "status": "operational",
-          "updated_at": "2026-10-25T08:30:47.000Z",
+          "updated_at": "2026-10-27T09:38:11.365Z",
           "group": null
         },
         {
           "name": "Claude Cowork",
           "status": "operational",
-          "updated_at": "2026-10-25T08:30:47.026Z",
+          "updated_at": "2026-10-27T09:38:11.392Z",
           "group": null
         },
         {
