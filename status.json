@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-03T01:14:18.064Z",
+  "last_updated": "2026-11-03T07:55:02.629Z",
   "services": {
     "openai": {
-      "overall": "degraded",
-      "description": "Partial System Degradation",
+      "overall": "operational",
+      "description": "All Systems Operational",
       "components": [
         {
           "name": "Chat Completions",
@@ -127,7 +127,7 @@
         },
         {
           "name": "File uploads",
-          "status": "degraded",
+          "status": "operational",
           "updated_at": "2026-10-16T20:01:40Z",
           "group": null
         },
