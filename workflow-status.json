@@ -1,9 +1,8 @@
 {
-  "status": "success",
-  "emoji": "✅",
+  "status": "running",
   "mode": "Scheduled Mistral",
-  "started_at": "2026-11-08T18:32:43Z",
-  "finished_at": "2026-11-08T18:34:21Z",
-  "articles": 500,
-  "duration_min": 1
+  "started_at": "2026-11-08T21:50:48Z",
+  "finished_at": null,
+  "articles": null,
+  "duration_min": null
 }
