@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-09T09:44:49.791Z",
+  "last_updated": "2026-11-09T20:08:13.066Z",
   "services": {
     "openai": {
       "overall": "operational",
@@ -168,16 +168,34 @@
           "group": null
         },
         {
+          "name": "Claude Platform on AWS",
+          "status": "operational",
+          "updated_at": "2026-11-09T18:33:14.695Z",
+          "group": "Claude on Cloud Platforms"
+        },
+        {
           "name": "Claude Console (platform.claude.com)",
           "status": "operational",
           "updated_at": "2026-10-13T18:00:04.315Z",
           "group": null
         },
         {
+          "name": "Claude in Microsoft Foundry",
+          "status": "operational",
+          "updated_at": "2026-11-09T18:33:58.603Z",
+          "group": "Claude on Cloud Platforms"
+        },
+        {
           "name": "Claude API (api.anthropic.com)",
           "status": "operational",
           "updated_at": "2026-11-08T08:54:43.585Z",
           "group": null
+        },
+        {
+          "name": "Claude Models on Google Cloud (Anthropic managed)",
+          "status": "operational",
+          "updated_at": "2026-11-09T18:34:46.597Z",
+          "group": "Claude on Cloud Platforms"
         },
         {
           "name": "Claude Code",
