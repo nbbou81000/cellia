@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-11T17:42:28.659Z",
+  "last_updated": "2026-11-11T23:42:22.620Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "outage",
+      "description": "Major System Outage",
       "components": [
         {
           "name": "Chat Completions",
