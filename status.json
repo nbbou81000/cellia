@@ -1,9 +1,9 @@
 {
-  "last_updated": "2026-11-12T12:59:56.813Z",
+  "last_updated": "2026-11-12T20:40:46.376Z",
   "services": {
     "openai": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partial System Degradation",
       "components": [
         {
           "name": "Chat Completions",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Minor Service Outage",
       "components": [
         {
           "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-11-08T08:54:43.557Z",
+          "status": "partial_outage",
+          "updated_at": "2026-11-12T17:52:44.988Z",
           "group": null
         },
         {
@@ -205,8 +205,8 @@
         },
         {
           "name": "Claude Cowork",
-          "status": "operational",
-          "updated_at": "2026-11-08T08:54:43.631Z",
+          "status": "partial_outage",
+          "updated_at": "2026-11-12T18:34:20.015Z",
           "group": null
         },
         {
