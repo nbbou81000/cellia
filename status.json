@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-12T20:40:46.376Z",
+  "last_updated": "2026-11-13T01:27:53.683Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -159,12 +159,12 @@
     },
     "anthropic": {
       "overall": "degraded",
-      "description": "Minor Service Outage",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
-          "status": "partial_outage",
-          "updated_at": "2026-11-12T17:52:44.988Z",
+          "status": "degraded",
+          "updated_at": "2026-11-12T22:24:07.620Z",
           "group": null
         },
         {
@@ -205,8 +205,8 @@
         },
         {
           "name": "Claude Cowork",
-          "status": "partial_outage",
-          "updated_at": "2026-11-12T18:34:20.015Z",
+          "status": "degraded",
+          "updated_at": "2026-11-12T22:24:27.949Z",
           "group": null
         },
         {
