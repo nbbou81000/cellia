@@ -1,5 +1,5 @@
 {
-  "last_updated": "2026-11-14T02:21:30.998Z",
+  "last_updated": "2026-11-14T09:10:11.763Z",
   "services": {
     "openai": {
       "overall": "degraded",
@@ -158,13 +158,13 @@
       ]
     },
     "anthropic": {
-      "overall": "operational",
-      "description": "All Systems Operational",
+      "overall": "degraded",
+      "description": "Partially Degraded Service",
       "components": [
         {
           "name": "claude.ai",
-          "status": "operational",
-          "updated_at": "2026-11-13T21:49:43.972Z",
+          "status": "degraded",
+          "updated_at": "2026-11-14T07:36:11.569Z",
           "group": null
         },
         {
